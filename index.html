@@ -557,7 +557,7 @@ html{scroll-padding-bottom:100px}
 #calc-section .thumb-slider-knob:active{cursor:grabbing}
 #calc-section .thumb-slider:has(input:focus-visible){outline:2px solid var(--navy-2);outline-offset:2px;border-radius:8px}
 </style>
-<meta name="preview-version" content="unified-v4.12"><script>
+<meta name="preview-version" content="unified-v4.13"><script>
 function sliderFraction(value,min,max,power=1){if(max<=min)return 0;return Math.pow(Math.max(0,Math.min(1,(value-min)/(max-min))),1/power);}
 function sliderValue(fraction,min,max,power=1){return min+(max-min)*Math.pow(Math.max(0,Math.min(1,fraction)),power);}
 function financeNumber(el){const v=String(el.value).replace(/\s/g,'');return /^\d+$/.test(v)?Number(v):NaN}
@@ -677,10 +677,16 @@ button,input,select,textarea{font-size:inherit}
  #about .about-box{gap:12px!important}
 }
 @media(max-width:350px){#offer-compare .offer-card .field{grid-template-columns:minmax(0,1fr) minmax(96px,43%);column-gap:5px}#offer-compare .offer-card .field>input:not([type=range]){padding-inline:5px!important}}
+</style><style id="compact-v413">
+.demo-submit-result{margin-top:9px;padding:12px;background:#e7f5ef;border:1px solid #c4e3d4;border-radius:10px;color:#164e3b;font-size:14px;line-height:1.4}.demo-submit-result p{margin:5px 0!important}.demo-submit-result .btn{margin-top:4px}.demo-consent-note{margin:4px 0 0!important;font-size:11.5px!important;line-height:1.35}
+main form .field{margin:0 0 7px!important}main form .field label{margin:0 0 4px!important;line-height:1.3}main form .grid-2{gap:7px!important;margin-top:5px!important}main form .consent-block{margin:8px 0!important;padding:9px 10px!important}main form .consent-choice{gap:8px}main form .consent-choice label{font-size:14px;min-height:0;line-height:1.35}main form .consent-links{margin:4px 0 3px 29px;gap:1px 6px;font-size:12px;line-height:1.35}main form .consent-links a{padding:3px 0}main form .thumb-slider{height:44px;margin:0}main form .finance-limits{margin:-4px 0 3px;line-height:1.2}
+main .thumb-slider:has(input:focus-visible){outline:none!important}main .thumb-slider:not(.is-pointer-drag):has(input:focus-visible) .thumb-slider-knob::before{outline:2px solid #16445e;outline-offset:3px}
+main .thumb-slider-knob{width:44px;height:44px}main .thumb-slider-knob::before{width:22px;height:22px;left:11px;top:11px;border-width:2px}main .thumb-slider-rail::before{height:4px}
+@media(max-width:767px){main>.section:not(#why-broker):not(#services):not(#calc-section){padding-block:14px!important}#calc-section{padding-block:16px!important}main>.section .section-sub{margin-bottom:7px!important}main form.card{padding:12px!important;gap:7px!important}main form h3,main form h4{margin:0 0 5px!important;line-height:1.25}main form .field{margin-bottom:5px!important}main form .field label{font-size:13px!important;margin-bottom:3px!important}main form .field input:not([type=range]):not([type=checkbox]),main form .field select{min-height:38px!important;height:38px!important;padding:6px 8px!important;font-size:16px!important;line-height:1.2!important}main form .field textarea{min-height:52px!important;padding:7px 8px!important;font-size:16px!important}main form .grid-2{gap:5px!important;margin-top:4px!important}main form .consent-block{margin:6px 0!important}main form .consent-links{margin-left:0}main form .btn{min-height:44px}#contacts>.container>.grid-2,#b2b>.container>.grid-2{gap:9px!important}#contacts .card{padding:12px!important;gap:8px!important}#contacts .card h3{margin-bottom:6px!important}#contacts .card p{line-height:1.4;margin:0 0 7px!important}#contacts .card div[style*="display:grid;gap:12px"]{gap:5px!important;margin:8px 0!important}#contacts .card div[style*="display:flex;flex-wrap:wrap"]{gap:5px!important;margin-top:8px!important}#contacts .card .btn-sm{min-width:0;padding:5px!important}#about .about-box{padding:12px!important;gap:10px!important}#about .avatar-placeholder{min-height:0!important;padding:14px!important}#about .brand-emblem{width:66px!important;height:66px!important}#about .brand-emblem svg{width:52px!important;height:52px!important}#offer-compare .offer-card .field{margin-bottom:3px!important}#offer-compare .offer-card .field>input:not([type=range]){height:36px;min-height:36px!important}#offer-compare .offer-grid{gap:8px!important}#offer-compare .offer-card{padding:7px 10px 9px!important}#offer-compare .schedule-detail,#offer-compare .discount-detail,#offer-compare .offer-visual{margin-block:4px!important;padding:0 9px 3px!important}#offer-compare .offer-result{margin-top:6px!important;padding:9px!important}#offer-compare .offer-total{padding:8px!important}#b2b .tabs{margin-bottom:6px!important}}
 </style></head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
-<div class="preview-notice"><div class="container"><span class="preview-dot"></span><strong>Вариант №4 · V4.12</strong><span>Предпросмотр · заявки пока не принимаются</span></div></div>
+<div class="preview-notice"><div class="container"><span class="preview-dot"></span><strong>Вариант №4 · V4.13</strong><span>Предпросмотр · заявки пока не принимаются</span></div></div>
 
 <div id="toast" class="toast">Заявка отправлена!</div>
 
@@ -713,7 +719,7 @@ button,input,select,textarea{font-size:inherit}
   <div class="mobile-menu" id="mobileMenu">
     <a href="#services">Услуги</a>
     <a href="#calc-section">Калькулятор и Квиз</a>
-    <a href="./self-service.html?v=214">Подготовить заявку</a>
+    <a href="./self-service.html?v=413">Подготовить заявку</a>
     <a href="./cabinet.html?v=214">Кабинет клиента</a>
     <a href="#cases">Кейсы экономии</a>
     <a href="#b2b">Партнерам (B2B)</a>
@@ -739,7 +745,7 @@ button,input,select,textarea{font-size:inherit}
 <div class="container route-section"><div class="cabinet-banner"><div><strong>Личный кабинет клиента</strong></div><a class="btn btn-outline" href="./cabinet.html?v=214">Войти в тестовый кабинет →</a></div><h2 class="route-title">С чего начнём?</h2><div class="quick-paths" aria-label="Выбор задачи">
   <a href="#services"><span class="route-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4zM8 9h8M8 13h3M15 13h1"/></svg></span><span class="route-copy"><strong>Нужен новый лизинг</strong><small>Выбрать имущество</small></span><b>→</b></a>
   <a href="#offer-compare"><span class="route-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V4M4 20h16M8 15l4-5 4 2 4-7"/></svg></span><span class="route-copy"><strong>Есть предложение от лизинговой компании</strong><small>Сравнить полную стоимость</small></span><b>→</b></a>
-  <a href="./self-service.html?v=214"><span class="route-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 9l2 2 4-4M9 15h6M9 18h4"/></svg></span><span class="route-copy"><strong>Подготовить заявку</strong><small>Бюджет, документы, кредитная история</small></span><b>→</b></a>
+  <a href="./self-service.html?v=413"><span class="route-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 9l2 2 4-4M9 15h6M9 18h4"/></svg></span><span class="route-copy"><strong>Подготовить заявку</strong><small>Бюджет, документы, кредитная история</small></span><b>→</b></a>
   <a href="#support-route"><span class="route-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-5 8-8 9-3-1-8-4-8-9V6l8-3Zm-4 9 3 3 5-6"/></svg></span><span class="route-copy"><strong>Уже есть договор</strong><small>Выкуп, страхование, график</small></span><b>→</b></a>
 </div></div>
 
@@ -1170,11 +1176,11 @@ button,input,select,textarea{font-size:inherit}
       <div class="card">
         <div>
           <h3>Прямая связь по всей России</h3>
-          <p>Рабочий телефон указан ниже. Онлайн-заявки пока не принимаются; режим обслуживания уточняется.</p>
+          <p>Связаться с нами можно по телефону. Онлайн-заявки пока в демонстрационном режиме.</p>
           <div style="display:grid;gap:12px;margin:18px 0;font-size:16px;">
             <div><strong>Телефон:</strong> <a href="tel:+79604844141" data-bind="phone" style="color:var(--navy);font-weight:800;">+7 (960) 484-41-41</a></div>
             <div><strong>E-mail:</strong> <a href="mailto:lizingkompas@mail.ru" data-bind="email" style="color:var(--navy-2);font-weight:700;">lizingkompas@mail.ru</a></div>
-            <div><strong>Реквизиты:</strong> <span data-bind="ipName">ИП Гасанов Тариэль Алиевич</span>, ИНН <span data-bind="ipInn">231207234403</span>, ОГРНИП <span data-bind="ipOgrnip">323237500416632</span></div>
+            <div><strong>Реквизиты:</strong> ИНН <span data-bind="ipInn">231207234403</span>, ОГРНИП <span data-bind="ipOgrnip">323237500416632</span></div>
           </div>
           <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;">
             <a class="btn btn-sm" style="background:#0088CC;color:#fff;" data-bind-href="tg" target="_blank" rel="noopener" aria-label="Telegram"><span class="app-symbol app-telegram"><img src="telegram.svg" alt="" aria-hidden="true"></span><span class="app-name">Telegram</span></a>
@@ -1224,7 +1230,7 @@ button,input,select,textarea{font-size:inherit}
       </div>
       <div>
         <h4>Навигация</h4>
-        <ul><li><a href="#services">Услуги</a></li><li><a href="#calc-section">Калькулятор</a></li><li><a href="./self-service.html?v=214">Подготовить заявку</a></li><li><a href="#about">О компании</a></li><li><a href="#b2b">Партнёрам</a></li><li><a href="#contacts">Контакты и реквизиты</a></li></ul>
+        <ul><li><a href="#services">Услуги</a></li><li><a href="#calc-section">Калькулятор</a></li><li><a href="./self-service.html?v=413">Подготовить заявку</a></li><li><a href="#about">О компании</a></li><li><a href="#b2b">Партнёрам</a></li><li><a href="#contacts">Контакты и реквизиты</a></li></ul>
       </div>
       <div>
         <h4>Правовая информация</h4>
@@ -1284,7 +1290,7 @@ button,input,select,textarea{font-size:inherit}
     heroTitle: "Лизинг для бизнеса. Выбирайте осознанно.",
     phone: "+7 (960) 484-41-41",
     email: "lizingkompas@mail.ru",
-    ipName: "ИП Гасанов Тариэль Алиевич",
+
     ipInn: "231207234403",
     ipOgrnip: "323237500416632",
     tg: "leasing_kompas",
@@ -1500,9 +1506,19 @@ button,input,select,textarea{font-size:inherit}
   // Lead Submission + Optional Telegram Bot / Webhook + Sample KP download
   async function submitForm(e, source, downloadSample = false) {
     e.preventDefault();
-    if(!e.target.querySelector('[name="pdConsent"]:checked')){showToast('Подтвердите согласие отдельно.');return;}
-    showToast("Демонстрация: заявка не отправляется.");
-    if (downloadSample) downloadSampleKP();
+    const form=e.currentTarget||e.target;
+    let status=form.querySelector('.demo-submit-result');
+    if(!status){status=document.createElement('div');status.className='demo-submit-result';status.setAttribute('role','status');status.tabIndex=-1;form.append(status);}
+    status.replaceChildren();
+    const title=document.createElement('strong');title.textContent='Демонстрационный расчёт подготовлен';
+    const note=document.createElement('p');note.textContent='Заявка не отправлена: сервис работает в тестовом режиме. Для индивидуального предложения свяжитесь с нами.';
+    status.append(title);
+    if(source==='Калькулятор пяти сценариев'){paintCalc();const p=document.createElement('p');p.textContent='Платёж в месяц: '+document.getElementById('resMonthly').textContent+' · Всего: '+document.getElementById('resTax').textContent;status.append(p);}
+    else if(source==='Расширенная форма КП'){title.textContent='Параметры заявки подготовлены';}
+    else if(source==='B2B Партнер'){title.textContent='Демонстрация партнёрской заявки';}
+    else {title.textContent='Параметры подбора подготовлены';}
+    status.append(note);const link=document.createElement('a');link.href='tel:+79604844141';link.className='btn btn-outline btn-sm';link.textContent='Позвонить специалисту';status.append(link);status.focus({preventScroll:true});status.scrollIntoView({block:'nearest',behavior:'smooth'});
+    if(downloadSample)downloadSampleKP();
   }
 
   function downloadSampleKP() {
@@ -1551,7 +1567,7 @@ document.querySelectorAll('form').forEach(f=>{
   f.querySelectorAll('[required]:not([name="pdConsent"])').forEach(x=>x.removeAttribute('required'));
 });
 document.querySelectorAll('[data-bind-href="tg"],[data-bind-href="max"],a[href="https://vk.com/"],a[href="https://rutube.ru/"],a[href="https://youtube.com/"]').forEach(x=>{x.removeAttribute('href');x.removeAttribute('target');x.setAttribute('aria-disabled','true');});
-document.querySelectorAll('[data-bind="ipName"]').forEach(x=>x.textContent='ИП Гасанов Тариэль Алиевич');
+
 
 
 document.querySelector('#cases .section-title').textContent='Кейсы и примеры экономии';
@@ -1599,9 +1615,9 @@ document.querySelectorAll('a[aria-disabled="true"]').forEach(el=>{el.tabIndex=0;
 document.querySelectorAll('form').forEach(form=>{
  const check=form.querySelector('[name="pdConsent"]');if(!check)return;
  const submit=form.querySelector('button[type="submit"]');if(!submit)return;
- const sync=()=>{submit.disabled=!check.checked;};check.checked=false;sync();
- check.addEventListener('change',sync);
- form.addEventListener('reset',()=>{queueMicrotask(sync);});
+ // No personal data is collected in this static demo. Consent is shown only as a preview.
+ check.checked=false;check.removeAttribute('required');submit.disabled=false;
+ const note=document.createElement('small');note.className='demo-consent-note';note.textContent='В демо согласие не требуется: личные данные не вводятся и не отправляются.';check.closest('.consent-block').append(note);
 });
 </script>
 <script>
