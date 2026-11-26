@@ -557,7 +557,7 @@ html{scroll-padding-bottom:100px}
 #calc-section .thumb-slider-knob:active{cursor:grabbing}
 #calc-section .thumb-slider:has(input:focus-visible){outline:2px solid var(--navy-2);outline-offset:2px;border-radius:8px}
 </style>
-<meta name="preview-version" content="unified-v4.11"><script>
+<meta name="preview-version" content="unified-v4.12"><script>
 function sliderFraction(value,min,max,power=1){if(max<=min)return 0;return Math.pow(Math.max(0,Math.min(1,(value-min)/(max-min))),1/power);}
 function sliderValue(fraction,min,max,power=1){return min+(max-min)*Math.pow(Math.max(0,Math.min(1,fraction)),power);}
 function financeNumber(el){const v=String(el.value).replace(/\s/g,'');return /^\d+$/.test(v)?Number(v):NaN}
@@ -616,10 +616,71 @@ button,input,select,textarea{font-size:inherit}
 </style><style id="comparison-fix-v49">#why-broker .comparison-full{display:block;width:100%;line-height:0;cursor:zoom-in}#why-broker .comparison-full img{display:block;width:100%;height:auto!important;object-fit:contain;max-height:none!important}#why-broker .comparison-full:focus-visible{outline:3px solid #087f5b;outline-offset:2px}</style><style id="compact-v410">#why-broker{padding-bottom:5px!important}#services{padding-top:7px!important}#services .section-title{margin-top:0!important;margin-bottom:8px!important}#services .section-sub{margin-bottom:12px!important}#why-broker .comparison-crops,#why-broker .comparison-full{min-width:0;max-width:100%}#why-broker>.container{box-sizing:border-box;max-width:100%}@media(max-width:767px){#why-broker{padding-bottom:4px!important}#services{padding-top:8px!important}}</style><style id="compact-calc-v411">
 #calcTab .compact-calc-controls>.field{margin:0 0 10px!important}#calcTab .compact-calc-controls>.field:last-child{margin-bottom:0!important}#calcTab .compact-calc-controls .field label{margin:0 0 4px!important;line-height:1.3}#calcTab .thumb-slider{height:44px!important;margin:0!important}#calcTab .thumb-slider-rail{inset:0 22px}#calcTab .thumb-slider-rail::before{height:4px!important}#calcTab .thumb-slider-knob{width:44px!important;height:44px!important}#calcTab .thumb-slider-knob::before{width:22px!important;height:22px!important;left:11px!important;top:11px!important;border-width:2px!important}#calcTab .thumb-slider:has(input:focus-visible){outline:none!important}#calcTab .thumb-slider:not(.is-pointer-drag):has(input:focus-visible) .thumb-slider-knob::before{outline:2px solid #16445e;outline-offset:3px}#calcTab .range-limits{margin:0!important;line-height:1.2;font-size:12px}#calcTab .unified-breakdown{gap:6px 10px;margin:9px 0;font-size:14px;line-height:1.4}#calcTab .unified-note{margin:8px 0 0;padding-top:8px;line-height:1.4}#calcTab .unified-result{margin-bottom:10px;padding:16px}#calcTab .unified-result .res-card.green{margin-top:9px!important;padding:8px 0!important}#calcTab .term-presets{margin-top:5px!important}.calc-live{display:none!important}
 @media(max-width:767px){#calc-section{padding:22px 0!important}#calc-section .section-sub{margin-bottom:8px!important}#calc-section .tabs{margin-bottom:8px!important}#calcTab .calc-box{padding:10px!important}#calcTab .calc-grid{gap:9px!important}#calcTab .compact-calc-controls>.field{margin-bottom:6px!important}#calcTab .compact-calc-controls .field label{font-size:13px!important;margin-bottom:3px!important}#calcTab .compact-calc-controls input[data-money],#calcTab .compact-calc-controls select{min-height:37px!important;height:37px!important;padding:5px 9px!important;font-size:16px!important;border-radius:9px!important;line-height:1.2!important}#calcTab .thumb-slider{height:44px!important}#calcTab .range-limits{font-size:11px!important;margin-top:-4px!important}#calcTab .term-presets{margin-top:4px!important;gap:4px!important}#calcTab .term-presets button{min-height:36px!important;padding:4px 2px!important;font-size:12px!important}#calcTab .unified-result{padding:13px!important;margin-bottom:8px!important}#calcTab .unified-result .res-card small{font-size:13px!important}#calcTab .unified-result .res-card strong{font-size:29px!important}#calcTab .unified-result .res-card.green strong{font-size:16px!important}#calcTab .unified-breakdown{font-size:13px!important;gap:4px 8px!important;margin:8px 0!important}#calcTab .unified-note{font-size:11px!important}#calcTab .calc-live:not([hidden]){display:grid!important;grid-template-columns:1fr 1fr;gap:10px;position:fixed;z-index:90;left:8px;right:8px;bottom:calc(var(--calc-dock-height,64px) + 5px);background:linear-gradient(120deg,#10253e,#123b43);color:#fff;border:1px solid #ffffff26;border-radius:12px;padding:8px 12px;box-shadow:0 4px 18px #10253e35;pointer-events:none;font-variant-numeric:tabular-nums}#calcTab .calc-live small{display:block;font-size:11px;line-height:1.2;color:#c6d7e5}#calcTab .calc-live strong{display:block;font-size:clamp(15px,4.6vw,20px);line-height:1.3;color:#5ce3b0;white-space:nowrap}#calcTab .calc-live>div+div strong{color:#fff}}
+</style><style id="compact-site-v412">
+/* Compact spacing, preserving full-size interactive targets. */
+#offer-compare .offer-grid{gap:12px;align-items:start}
+#offer-compare .offer-card{padding:12px 14px;margin:0;min-width:0}
+#offer-compare .offer-card legend{padding:0 5px;font-size:17px;line-height:1.3}
+#offer-compare .offer-card .field{display:grid;grid-template-columns:minmax(0,1fr) minmax(104px,40%);align-items:center;column-gap:8px;row-gap:0;margin:0 0 7px!important}
+#offer-compare .offer-card .field label{grid-column:1;margin:0!important;font-size:14px;line-height:1.25;overflow-wrap:anywhere}
+#offer-compare .offer-card .field>input:not([type=range]){grid-column:2;min-width:0;width:100%;height:40px;min-height:40px!important;padding:5px 8px!important;font-size:16px;line-height:1.2;border-radius:8px;font-variant-numeric:tabular-nums;text-align:right}
+#offer-compare .offer-card .thumb-slider,#offer-compare .offer-card .finance-limits{grid-column:1/-1}
+#offer-compare .thumb-slider{height:44px;margin:0!important}
+#offer-compare .thumb-slider-rail{inset:0 22px}
+#offer-compare .thumb-slider-rail::before{height:4px}
+#offer-compare .thumb-slider-knob{width:44px;height:44px}
+#offer-compare .thumb-slider-knob::before{width:22px;height:22px;left:11px;top:11px;border-width:2px}
+#offer-compare .thumb-slider:has(input:focus-visible){outline:none!important}
+#offer-compare .thumb-slider:not(.is-pointer-drag):has(input:focus-visible) .thumb-slider-knob::before{outline:2px solid #16445e;outline-offset:3px}
+#offer-compare .finance-limits{margin:-4px 0 0!important;font-size:11px;line-height:1.2}
+#offer-compare .schedule-detail,#offer-compare .discount-detail{margin:6px 0 8px;padding:0 10px 4px}
+#offer-compare .schedule-detail summary,#offer-compare .discount-detail summary{min-height:44px;line-height:1.3;font-size:14px}
+#offer-compare .offer-total{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:10px 12px}
+#offer-compare .offer-total small{font-size:13px;line-height:1.3}
+#offer-compare .offer-total strong{font-size:clamp(19px,3vw,25px);line-height:1.2;text-align:right}
+#offer-compare .offer-result{margin-top:10px;padding:11px 12px;line-height:1.45}
+#offer-compare .offer-visual{margin-top:8px;padding:10px 12px}
+#offer-compare .offer-visual summary{min-height:44px;align-content:center}
+#offer-compare .discount-detail[open]{padding-bottom:10px}
+#offer-compare .discount-detail .field{margin-bottom:8px}
+#offer-compare .section-sub{margin-bottom:12px}
+@media(max-width:767px){
+ main>.section:not(#why-broker):not(#services):not(#calc-section){padding-block:22px!important}
+ main>.section .eyebrow{margin-bottom:5px!important}
+ main>.section .section-title{margin-bottom:8px!important}
+ main>.section .section-sub{margin-bottom:10px!important;line-height:1.45}
+ #offer-compare .offer-grid{grid-template-columns:minmax(0,1fr);gap:13px}
+ #offer-compare .offer-card{padding:8px 12px 11px}
+ #offer-compare .offer-card .field{margin-bottom:5px!important}
+ #offer-compare .offer-card .field label{font-size:13px}
+ #offer-compare .offer-card .field>input:not([type=range]){height:40px;min-height:40px!important}
+ #offer-compare .offer-total strong{font-size:21px}
+ #offer-compare .schedule-detail,#offer-compare .discount-detail{margin-block:4px 7px}
+ #offer-compare .btn{margin-top:4px;min-height:44px}
+ main>.route-section{padding-top:12px!important}
+ main .route-title{margin-bottom:7px!important}
+ main .quick-paths{gap:7px!important}
+ main .quick-paths a,main .quick-paths a+a{padding:9px 10px!important;min-height:64px!important}
+ main .cabinet-banner{margin-bottom:10px!important;padding:10px!important}
+ main .steps-grid{gap:7px!important}
+ main .steps-grid .step-item{padding:10px 12px!important}
+ main .support-grid{gap:8px!important;margin-bottom:8px!important}
+ main .support-grid details{padding:6px 12px!important}
+ main .support-grid details summary{line-height:1.35;min-height:44px}
+ #casesGrid,#blogGrid{gap:9px!important}
+ #casesGrid .card,#blogGrid .card{padding:14px!important}
+ #leasing-market .market-tools{margin-bottom:9px!important}
+ #leasing-market .market-count{margin:9px 0 6px!important}
+ #leasing-market .market-note{margin-top:9px!important}
+ #calcTab .calc-lead-box{margin-top:10px!important;padding:12px!important}
+ #b2b .tabs{margin-bottom:9px!important}
+ #about .about-box{gap:12px!important}
+}
+@media(max-width:350px){#offer-compare .offer-card .field{grid-template-columns:minmax(0,1fr) minmax(96px,43%);column-gap:5px}#offer-compare .offer-card .field>input:not([type=range]){padding-inline:5px!important}}
 </style></head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
-<div class="preview-notice"><div class="container"><span class="preview-dot"></span><strong>Вариант №4 · V4.11</strong><span>Предпросмотр · заявки пока не принимаются</span></div></div>
+<div class="preview-notice"><div class="container"><span class="preview-dot"></span><strong>Вариант №4 · V4.12</strong><span>Предпросмотр · заявки пока не принимаются</span></div></div>
 
 <div id="toast" class="toast">Заявка отправлена!</div>
 
