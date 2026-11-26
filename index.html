@@ -557,7 +557,7 @@ html{scroll-padding-bottom:100px}
 #calc-section .thumb-slider-knob:active{cursor:grabbing}
 #calc-section .thumb-slider:has(input:focus-visible){outline:2px solid var(--navy-2);outline-offset:2px;border-radius:8px}
 </style>
-<meta name="preview-version" content="unified-v4.1"><script>
+<meta name="preview-version" content="unified-v4.2"><script>
 function sliderFraction(value,min,max,power=1){if(max<=min)return 0;return Math.pow(Math.max(0,Math.min(1,(value-min)/(max-min))),1/power);}
 function sliderValue(fraction,min,max,power=1){return min+(max-min)*Math.pow(Math.max(0,Math.min(1,fraction)),power);}
 function financeNumber(el){const v=String(el.value).replace(/\s/g,'');return /^\d+$/.test(v)?Number(v):NaN}
@@ -595,7 +595,7 @@ button,input,select,textarea{font-size:inherit}
 .steps-grid{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));grid-auto-flow:row!important;grid-auto-columns:auto!important;overflow:visible!important;gap:12px}.process-controls{display:none!important}.steps-grid .step-item{min-height:0!important}
 .layout-tools{margin:15px auto;padding:14px;border:1px solid var(--border);border-radius:12px;max-width:1160px;background:#fff}.layout-tools button,.layout-buttons button{padding:8px 12px;border:1px solid #cbd5e1;border-radius:8px;background:white;color:#0f2342;font-weight:600}.layout-buttons{display:flex;gap:8px;align-items:center;padding:8px 12px;background:#e4f1ec;border-bottom:1px solid #afd5c5;font-size:13px;flex-wrap:wrap}
 @media(max-width:767px){.unified-compare{grid-template-columns:1fr}.unified-result{padding:17px}.unified-breakdown{font-size:14px}.unified-advantages span{font-size:13px;padding:9px}.steps-grid{grid-template-columns:1fr!important}.steps-grid .step-item{display:grid;grid-template-columns:42px 1fr;gap:3px 12px;text-align:left;align-items:start;padding:16px!important}.step-item .step-num{grid-row:span 2}.step-item h4{margin:0!important}.step-item p{margin:0!important}#servicesGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px}#servicesGrid .card{padding:13px!important}#servicesGrid .card h3{font-size:16px!important;overflow-wrap:anywhere}#servicesGrid .card p{font-size:14px!important}#servicesGrid .card .btn{font-size:13px!important;padding:8px!important}#casesGrid{grid-template-columns:1fr!important}.partner-pill{font-size:13px!important;padding:9px 13px!important}.section{padding:36px 0!important}.unified-result .res-card strong{font-size:32px!important}.unified-result .res-card.green strong{font-size:18px!important}}
-</style></head>
+</style><style id="unified-v42">.hero .hero-grid{grid-template-columns:minmax(0,1fr);gap:0}.hero .hero-copy{max-width:850px}.hero .unified-advantages{max-width:720px}</style></head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
 <div class="preview-notice"><div class="container"><span class="preview-dot"></span><strong>Вариант №2 · V2.14</strong><span>Предпросмотр · заявки пока не принимаются</span></div></div>
@@ -655,17 +655,6 @@ button,input,select,textarea{font-size:inherit}
         <button type="button" class="btn btn-outline-light" onclick="downloadSampleKP()">↓ Скачать пример сводного КП</button>
       </div><div class="unified-advantages"><span>✓ Сравнение полной стоимости</span><span>✓ Без регистрации для расчёта</span><span>✓ Проверка условий договора</span><span>✓ Сопровождение после сделки</span></div>
       <div class="hero-assurance"><span><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="17" stroke="currentColor" stroke-width="1.4" opacity=".65"/><path d="m32.8 13.6-5.6 13.6-12 7.2 5.6-13.6 12-7.2Z" fill="#F28B49"/><path d="m32.8 13.6-5.6 13.6-6.4-6.4 12-7.2Z" fill="#fff"/><circle cx="24" cy="24" r="2.3" fill="#142b45"/><path d="M24 5v4M24 39v4M5 24h4M39 24h4" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg> <b>ООО и ИП</b></span><span>✓ Без регистрации для расчёта</span><span>✓ По всей России</span></div>
-    </div>
-    <div class="hero-card finance-preview">
-      <div class="finance-top"><span>ЛИЗИНГ · ПРИМЕР РАСЧЁТА</span><span class="finance-status">Демо</span></div>
-      <div class="finance-label">Ориентировочный платёж в месяц</div>
-      <div class="finance-amount" id="heroPayment">—</div>
-      <div class="finance-sub" id="heroSummary">Стоимость · аванс · срок</div>
-      <div class="finance-track"><span id="heroAdvBar"></span></div>
-      <div class="finance-legend"><span><i></i> Аванс</span><span><i></i> Финансирование</span></div>
-      <div class="finance-breakdown"><div><small>Аванс</small><strong id="heroAdv">—</strong></div><div><small>Общая сумма выплат</small><strong id="heroTotal">—</strong></div></div>
-      <a href="#calc-section" class="finance-link">Изменить параметры <span aria-hidden="true">↗</span></a>
-      <p class="finance-disclaimer">Учебная модель, не предложение лизинговой компании.</p>
     </div>
   </div>
 </section>
@@ -1364,11 +1353,6 @@ button,input,select,textarea{font-size:inherit}
     if(tbody.children.length!==rows.length){tbody.innerHTML=rows.map((x,i)=>'<tr class="'+(i===0?'best':'')+'"><td data-label="Сценарий"><strong>'+x.rate+'%</strong><small>'+(i===0?'Минимум в модели':'Условная ставка')+'</small></td><td data-label="Платёж/мес."></td><td data-label="Всего"></td><td data-label="Переплата"></td></tr>').join("");}
     rows.forEach((x,i)=>{const cells=tbody.children[i].cells;[fmt(x.mPay),fmt(x.total),fmt(x.overpay)].forEach((v,j)=>{if(cells[j+1].textContent!==v)cells[j+1].textContent=v;});});
     document.querySelectorAll("[data-term]").forEach(b=>b.setAttribute("aria-pressed",String(Number(b.dataset.term)===term)));
-    document.getElementById("heroPayment").textContent=fmt(best.mPay);
-    document.getElementById("heroSummary").textContent=fmt(price)+" · "+term+" мес. · "+best.rate+"% годовых (условно)";
-    document.getElementById("heroAdv").textContent=fmt(advRub);
-    document.getElementById("heroTotal").textContent=fmt(best.total);
-    document.getElementById("heroAdvBar").style.width=pct+"%";
   }
 
   // Tabs & Quiz
