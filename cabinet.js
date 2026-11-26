@@ -16,10 +16,28 @@ function select(label,values,value,fn,id){const d=el('div',undefined,'field'),l=
 function heading(v,title,sub){v.append(el('h2',title),el('p',sub,'muted'))}
 function buttons(v,...items){const d=el('div',undefined,'buttons');d.append(...items);v.append(d)}
 function msg(t){$('status').textContent=t;$('status').hidden=!t}
-function go(n){if(n<0||n>4)return;state.step=n;render();$('view').scrollIntoView({block:'start',behavior:'instant'})}
+// One browser-history entry per open stage, with the route as its parent.
+const routeUrl=location.pathname+location.search;
+const navKey='lkCabinetNav';
+function activeStage(){const n=history.state?.[navKey];return Number.isInteger(n)&&n>=0&&n<names.length?n:null}
+function showRoute(){state.step=0;render();$('dealRoute').scrollIntoView({block:'start',behavior:'instant'})}
+function go(n){
+ if(!Number.isInteger(n)||n<0||n>=names.length)return;
+ const mark={ [navKey]:n };
+ if(activeStage()===null)history.pushState(mark,'',routeUrl+'#stage-'+(n+1));
+ else history.replaceState(mark,'',routeUrl+'#stage-'+(n+1));
+ state.step=n;render();$('view').scrollIntoView({block:'start',behavior:'instant'});
+}
+function returnToRoute(){if(activeStage()!==null)history.back();else showRoute()}
+window.addEventListener('popstate',()=>{
+ const n=activeStage();
+ if(n===null)showRoute();
+ else {state.step=n;render();$('view').scrollIntoView({block:'start',behavior:'instant'})}
+});
+if('scrollRestoration' in history)history.scrollRestoration='manual';
 function advance(n){state.furthest=Math.max(state.furthest,n);go(n)}
 function saveFile(title,text){const blob=new Blob([text],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob),a=el('a');a.href=url;a.download=title;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
-function reset(){state=initial();render();msg('Учебная сессия очищена.')}
+function reset(){state=initial();if(activeStage()!==null){returnToRoute();return}showRoute();msg('Учебная сессия очищена.')}
 function clearAfterApplication(){state.submitted=false;state.creditConsent=false;state.credit='idle';state.selected=null;state.signed=false;state.closed=false;state.furthest=0}
 function clearAfterDocs(){state.creditConsent=false;state.credit='idle';state.selected=null;state.signed=false;state.closed=false;state.furthest=1}
 function validNumbers(){return Number.isFinite(state.price)&&state.price>=100000&&state.price<=150000000&&Number.isFinite(state.advance)&&state.advance>=0&&state.advance<=state.price*.49+.001&&Number.isInteger(state.term)&&state.term>=12&&state.term<=84}
@@ -60,6 +78,7 @@ function application(v){
 }
 function render(){
  const v=$('view');v.replaceChildren();renderRoute();msg('');
+ if(activeStage()!==null){const back=button('← К маршруту сделки',returnToRoute,false,false,'backToRoute');back.classList.add('route-back');v.append(back)}
  if(state.step>state.furthest){
  const previews=[
  null,
@@ -71,7 +90,7 @@ function render(){
  const [title,sub,items]=previews[state.step];heading(v,title,sub);
  v.append(el('p','Предварительный просмотр. Чтобы выполнить этот этап, завершите предыдущие шаги.','status'));
  items.forEach(([title,desc])=>{const d=el('div',undefined,'preview-item');d.append(el('strong',title),el('p',desc,'muted'));v.append(d)});
- buttons(v,button('Продолжить: '+names[state.furthest]+' →',()=>go(state.furthest),true));return;
+ buttons(v,button('Продолжить: '+names[state.furthest]+' →',()=>go(state.furthest),true),button('← К маршруту сделки',returnToRoute));return;
  }
  if(state.step===0)application(v);
  else if(state.step===1){
@@ -98,6 +117,10 @@ function render(){
  buttons(v,button(state.closed?'Сделка завершена':'Завершить учебную сделку',()=>{state.closed=true;entry('Учебная сделка завершена');render();msg('Учебный маршрут пройден.')},true,state.closed,'finishDeal'));
  if(state.closed){v.append(el('h3','Сопровождение'));buttons(v,...[['Изменить график','Изменение графика'],['Досрочный выкуп','Досрочный выкуп'],['Страховой случай','Страховой случай']].map(([a,b])=>button(a,()=>{entry('Учебное обращение: '+b);render();msg('Учебное обращение добавлено. Не отправлено брокеру.')})))}
  }
- if(state.step>0)buttons(v,button('← Назад',()=>go(state.step-1)));
+ if(activeStage()!==null)buttons(v,button('← К маршруту сделки',returnToRoute));
 }
-$('reset').onclick=reset;render();
+$('reset').onclick=reset;
+const restoredStage=activeStage();
+if(restoredStage===null){history.replaceState({[navKey]:'route'},'',routeUrl);render()}
+else{state.step=restoredStage;render();requestAnimationFrame(()=>$('view').scrollIntoView({block:'start',behavior:'instant'}))}
+
