@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+# Preview: HTML noindex,nofollow remains in force. Production sitemap is prepared separately.
