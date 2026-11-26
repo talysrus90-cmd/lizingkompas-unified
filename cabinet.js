@@ -16,7 +16,7 @@ function select(label,values,value,fn,id){const d=el('div',undefined,'field'),l=
 function heading(v,title,sub){v.append(el('h2',title),el('p',sub,'muted'))}
 function buttons(v,...items){const d=el('div',undefined,'buttons');d.append(...items);v.append(d)}
 function msg(t){$('status').textContent=t;$('status').hidden=!t}
-function go(n){if(n<0||n>4||n>state.furthest)return;state.step=n;render();$('view').scrollIntoView({block:'start',behavior:'instant'})}
+function go(n){if(n<0||n>4)return;state.step=n;render();$('view').scrollIntoView({block:'start',behavior:'instant'})}
 function advance(n){state.furthest=Math.max(state.furthest,n);go(n)}
 function saveFile(title,text){const blob=new Blob([text],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob),a=el('a');a.href=url;a.download=title;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 function reset(){state=initial();render();msg('Учебная сессия очищена.')}
@@ -25,7 +25,7 @@ function clearAfterDocs(){state.creditConsent=false;state.credit='idle';state.se
 function validNumbers(){return Number.isFinite(state.price)&&state.price>=100000&&state.price<=150000000&&Number.isFinite(state.advance)&&state.advance>=0&&state.advance<=state.price*.49+.001&&Number.isInteger(state.term)&&state.term>=12&&state.term<=84}
 function quote(rate){const m=rate/1200,principal=state.price-state.advance,payment=principal*m/(1-Math.pow(1+m,-state.term));return {payment,total:state.advance+payment*state.term}}
 function renderRoute(){
- $('steps').replaceChildren(...names.map((t,i)=>{const li=el('li'),b=button('',()=>go(i),false,i>state.furthest);b.className=i<state.furthest||state.closed?'done':'';const icon=el('span',i===4?'🤝':i<state.furthest||state.closed?'✓':String(i+1),'num'+(i===4?' handshake':''));icon.setAttribute('aria-hidden','true');b.append(icon,el('span',t,'step-name'));if(i===state.step)b.setAttribute('aria-current','step');li.append(b);return li}));
+ $('steps').replaceChildren(...names.map((t,i)=>{const li=el('li'),b=button('',()=>go(i),false);b.className=i<state.furthest||state.closed?'done':i>state.furthest?'upcoming':'';b.title=i>state.furthest?'Посмотреть этап':'Открыть этап';const icon=el('span',i===4?'🤝':i<state.furthest||state.closed?'✓':String(i+1),'num'+(i===4?' handshake':''));icon.setAttribute('aria-hidden','true');b.append(icon,el('span',t,'step-name'));if(i===state.step)b.setAttribute('aria-current','step');li.append(b);return li}));
  const completed=state.closed?5:state.furthest;
  $('progress').style.width=(completed/5*100)+'%';$('progress').parentElement.setAttribute('aria-valuenow',String(completed));$('progressText').textContent='Выполнено '+completed+' из 5 этапов';$('history').replaceChildren(...state.history.map(t=>el('li',t)));$('reset').hidden=state.step===0&&!state.submitted&&state.history.length===1;
 }
@@ -33,12 +33,12 @@ function numField(label,id,min,max,step,value){const d=el('div',undefined,'field
 function range(id,min,max,step,value,label){const n=el('input');n.id=id;n.type='range';n.min=min;n.max=max;n.step=step;n.value=value;n.setAttribute('aria-label',label);return n}
 function application(v){
  heading(v,'Ваша заявка','Выберите имущество и измените параметры. Расчёт обновляется сразу.');
- v.append(select('Категория клиента',labels,state.kind,x=>{state.kind=x;state.documents=[];state.inn='';state.pd=false;clearAfterApplication();entry('Изменена категория клиента');render()},'kind'),select('Тип имущества',{'Оборудование':'Оборудование','Автомобиль':'Легковой автомобиль','Спецтехника':'Спецтехника','Грузовой транспорт':'Грузовой транспорт','Недвижимость':'Коммерческая недвижимость'},state.asset,x=>{state.asset=x;state.documents=[];clearAfterApplication();render()},'asset'));
+ v.append(select('Категория клиента',labels,state.kind,x=>{state.kind=x;state.documents=[];state.inn='';state.pd=false;clearAfterApplication();entry('Изменена категория клиента');render()},'kind'),select('Тип имущества',{'Оборудование':'Оборудование','Автомобиль':'Легковой автомобиль','Спецтехника':'Спецтехника','Грузовой транспорт':'Грузовой транспорт','Недвижимость':'Коммерческая недвижимость','Иное':'Иное'},state.asset,x=>{state.asset=x;state.documents=[];clearAfterApplication();render()},'asset'));
  const price=numField('Стоимость имущества, ₽','price',100000,150000000,1,state.price);
  const pr=range('priceRange',100000,150000000,10000,state.price,'Стоимость имущества');
  price.d.append(pr);v.append(price.d);
  const adv=numField('Аванс','advance',0,state.advanceMode==='pct'?49:Math.floor(state.price*.49),state.advanceMode==='pct'?.01:1,state.advanceMode==='pct'?Math.round(state.advance/state.price*10000)/100:Math.round(state.advance));
- const mode=el('div',undefined,'mode-row'),pct=button('%',()=>setMode('pct'),false,false,'pctMode'),rub=button('₽',()=>setMode('rub'),false,false,'rubMode');mode.append(pct,rub);adv.d.insertBefore(mode,adv.n);
+ adv.d.classList.add('advance-field');const mode=el('div',undefined,'mode-row'),pct=button('%',()=>setMode('pct'),false,false,'pctMode'),rub=button('₽',()=>setMode('rub'),false,false,'rubMode');mode.append(pct,rub);adv.d.insertBefore(mode,adv.n);
  const ar=range('advanceRange',0,49,.1,state.advance/state.price*100,'Аванс в процентах');adv.d.append(ar);const avText=el('p','','legal');adv.d.append(avText);v.append(adv.d);
  const term=numField('Срок лизинга, месяцев','term',12,84,1,state.term),tr=range('termRange',12,84,1,state.term,'Срок лизинга');term.d.append(tr);const presets=el('div',undefined,'presets');[24,36,48,60].forEach(n=>{const b=button(n+' мес.',()=>{term.n.value=n;readTerm();sync()});b.dataset.term=n;presets.append(b)});term.d.append(presets);v.append(term.d);
  const result=el('div',undefined,'stats live-stats');for(const [id,title] of [['payment','Платёж в месяц'],['total','Всего с авансом']]){const d=el('div'),val=el('strong','—');val.id=id;d.append(el('small',title),val);result.append(d)}result.setAttribute('aria-live','polite');v.append(result,el('p','Условная ставка 18% годовых. Равные платежи; без отдельного выкупа, страховки, комиссий и налогового эффекта. Не предложение ЛК.','legal'));
@@ -60,12 +60,25 @@ function application(v){
 }
 function render(){
  const v=$('view');v.replaceChildren();renderRoute();msg('');
+ if(state.step>state.furthest){
+ const previews=[
+ null,
+ ['Документы','Подготовка документов для рассмотрения заявки.',docs[state.kind].map(t=>[t,'Добавление учебного образца после заявки.'])],
+ ['Предложение','Сравнение вариантов финансирования.',[['Условия лизинга','Аванс, ежемесячный платёж, срок и общая сумма.'],['Сравнение сценариев','Выбор наиболее подходящего варианта.'],['Выбор предложения','Переход к проекту договора.']]],
+ ['Договор','Проверка условий перед заключением сделки.',[['Проект договора','Просмотр и скачивание учебного проекта.'],['График и выкуп','Проверка платежей и условий выбранного сценария.'],['Подтверждение','Учебное подтверждение, не электронная подпись.']]],
+ ['Сделка','Завершение и сопровождение лизинга.',[['Передача имущества','Проверка готовности к завершению сделки.'],['Сопровождение','Изменение графика, досрочный выкуп, страховой случай.'],['История','Просмотр учебных действий.']]]
+ ];
+ const [title,sub,items]=previews[state.step];heading(v,title,sub);
+ v.append(el('p','Предварительный просмотр. Чтобы выполнить этот этап, завершите предыдущие шаги.','status'));
+ items.forEach(([title,desc])=>{const d=el('div',undefined,'preview-item');d.append(el('strong',title),el('p',desc,'muted'));v.append(d)});
+ buttons(v,button('Продолжить: '+names[state.furthest]+' →',()=>go(state.furthest),true));return;
+ }
  if(state.step===0)application(v);
  else if(state.step===1){
  heading(v,'Документы','Добавьте учебные образцы. Реальные файлы не принимаются.');
  docs[state.kind].forEach((t,i)=>{const d=el('div',undefined,'document'),a=el('div');a.append(el('strong',t),el('small',state.documents.includes(i)?'Учебный файл добавлен':'Ожидается'));d.append(a,button(state.documents.includes(i)?'Удалить':'Добавить образец',()=>{if(state.documents.includes(i)){state.documents=state.documents.filter(x=>x!==i);clearAfterDocs()}else state.documents.push(i);entry('Учебный документ: '+t);render()},false,false,'doc'+i));v.append(d)});
  buttons(v,button('Скачать образец',()=>saveFile('LK_DEMO_document.txt','УЧЕБНЫЙ ОБРАЗЕЦ\nНе является документом клиента.')));
- const d=el('details'),sum=el('summary','Проверка сведений и кредитная история');d.open=state.documents.length===docs[state.kind].length||state.creditConsent;d.append(sum,el('p','Отдельное согласие на учебный запрос БКИ. Получатель — планируемый пользователь ИП Гасанов Тариэль Алиевич, цель — рассмотрение заявки. Юридической силы нет.','legal'),choice('Согласие на получение кредитного отчёта (тест)',state.creditConsent,x=>{state.creditConsent=x;if(!x){clearAfterDocs();entry('Тестовое согласие отозвано')}render()},'creditConsent'));
+ const d=el('details'),sum=el('summary','Проверка сведений и кредитная история');d.open=state.documents.length===docs[state.kind].length||state.creditConsent;d.append(sum,el('p','Отдельное согласие на учебный запрос БКИ. Получатель — планируемый пользователь лизинговый брокер, цель — рассмотрение заявки. Юридической силы нет.','legal'),choice('Согласие на получение кредитного отчёта (тест)',state.creditConsent,x=>{state.creditConsent=x;if(!x){clearAfterDocs();entry('Тестовое согласие отозвано')}render()},'creditConsent'));
  const complete=state.documents.length===docs[state.kind].length;
  if(state.credit==='idle')buttons(d,button('Передать на проверку (тест)',()=>{if(!complete||!state.creditConsent||!state.pd||!state.submitted)return;state.credit='pending';entry('Учебный запрос создан');render()},true,!complete||!state.creditConsent,'requestCredit'));
  if(state.credit==='pending')buttons(d,button('Получить учебный ответ',()=>{state.credit='review';entry('Учебные сведения получены');render()},true,false,'receiveCredit'));
