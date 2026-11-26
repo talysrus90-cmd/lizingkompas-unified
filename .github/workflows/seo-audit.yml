@@ -1,0 +1,21 @@
+name: SEO regression check
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  seo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python seo/audit.py
+      - run: python seo/prepare_release.py --output /tmp/lk-seo-release --confirm-ready
+      - run: python seo/audit.py --root /tmp/lk-seo-release --production
