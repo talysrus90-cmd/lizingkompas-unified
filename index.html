@@ -557,7 +557,7 @@ html{scroll-padding-bottom:100px}
 #calc-section .thumb-slider-knob:active{cursor:grabbing}
 #calc-section .thumb-slider:has(input:focus-visible){outline:2px solid var(--navy-2);outline-offset:2px;border-radius:8px}
 </style>
-<meta name="preview-version" content="unified-v4.3"><script>
+<meta name="preview-version" content="unified-v4.4"><script>
 function sliderFraction(value,min,max,power=1){if(max<=min)return 0;return Math.pow(Math.max(0,Math.min(1,(value-min)/(max-min))),1/power);}
 function sliderValue(fraction,min,max,power=1){return min+(max-min)*Math.pow(Math.max(0,Math.min(1,fraction)),power);}
 function financeNumber(el){const v=String(el.value).replace(/\s/g,'');return /^\d+$/.test(v)?Number(v):NaN}
@@ -597,6 +597,15 @@ button,input,select,textarea{font-size:inherit}
 @media(max-width:767px){.unified-compare{grid-template-columns:1fr}.unified-result{padding:17px}.unified-breakdown{font-size:14px}.unified-advantages span{font-size:13px;padding:9px}.steps-grid{grid-template-columns:1fr!important}.steps-grid .step-item{display:grid;grid-template-columns:42px 1fr;gap:3px 12px;text-align:left;align-items:start;padding:16px!important}.step-item .step-num{grid-row:span 2}.step-item h4{margin:0!important}.step-item p{margin:0!important}#servicesGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px}#servicesGrid .card{padding:13px!important}#servicesGrid .card h3{font-size:16px!important;overflow-wrap:anywhere}#servicesGrid .card p{font-size:14px!important}#servicesGrid .card .btn{font-size:13px!important;padding:8px!important}#casesGrid{grid-template-columns:1fr!important}.partner-pill{font-size:13px!important;padding:9px 13px!important}.section{padding:36px 0!important}.unified-result .res-card strong{font-size:32px!important}.unified-result .res-card.green strong{font-size:18px!important}}
 </style><style id="unified-v42">.hero .hero-grid{grid-template-columns:minmax(0,1fr);gap:0}.hero .hero-copy{max-width:850px}.hero .unified-advantages{max-width:720px}</style><style id="market-v43">
 #leasing-market .section-sub{margin-bottom:18px}.market-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:17px}.market-search-label{width:100%;font-size:14px;font-weight:650;color:var(--navy)}#marketSearch{flex:1;min-width:0;max-width:490px;border:1px solid #cad5e0;border-radius:12px;padding:12px 14px;background:white;font-size:16px;color:var(--navy)}#marketClear{border:0;background:transparent;color:var(--navy);padding:8px;cursor:pointer;font-size:14px}.market-list{display:flex;flex-wrap:wrap;gap:9px;align-items:center}.market-chip{display:inline-flex;align-items:center;gap:8px;padding:10px 15px;border:1px solid #dfe6ed;border-radius:999px;background:#fff;color:#152e48;font-size:15px;font-weight:700;line-height:1.35;max-width:100%;overflow-wrap:anywhere}.market-brand{color:var(--brand);border-color:color-mix(in srgb,var(--brand) 24%,white)}.market-dot{width:8px;height:8px;border-radius:50%;background:var(--brand);flex:none}.market-chip[hidden],#marketClear[hidden],#marketMore[hidden]{display:none!important}.market-count{margin:14px 0 10px;font-size:13px;color:var(--muted)}.market-note{margin-top:17px;font-size:13px;color:var(--muted);line-height:1.5}.market-note a{text-decoration:underline;text-underline-offset:2px}#marketMore{min-height:44px}@media(max-width:767px){.market-chip{font-size:14px;padding:9px 12px;gap:6px}.market-list{gap:7px}.market-dot{width:7px;height:7px}}
+</style><style id="premium-v44">
+:root{--accent:#087f5b;--accent-hover:#056c4c;--green:#087f5b;--bg:#f2f6f8;--navy:#10253e;--border:#dfe7ed}
+.hero{background:radial-gradient(ellipse at 95% 0%,#1b6c6255,transparent 65%),linear-gradient(135deg,#10253e,#15384d)!important;position:relative;overflow:hidden}.hero-highlight{color:#64e2b4!important}.hero .hero-copy{max-width:900px}.hero .unified-advantages span{border-radius:12px;background:#ffffff0e;border:1px solid #ffffff25}.hero .btn-primary{background:#087f5b!important}.hero .btn-outline-light{background:white!important;color:#142b45!important;border-color:white!important}
+#services{background:linear-gradient(180deg,#fff,#f2f6f8)}#services .section-sub{margin-bottom:18px}.section-title{letter-spacing:-.02em}.accent-word{color:#087f5b}
+#servicesGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:16px!important}#servicesGrid .service-tile{position:relative;display:flex!important;flex-direction:column!important;overflow:hidden;background:white!important;border:1px solid #dce6ed!important;border-radius:18px!important;box-shadow:0 7px 22px #122a4310;padding:0!important;gap:0!important;min-width:0;transition:box-shadow .2s,border-color .2s,transform .2s;text-decoration:none;color:var(--navy)}
+.service-art{height:132px;display:flex;justify-content:center;align-items:center;background:linear-gradient(135deg,#f7fbfd,color-mix(in srgb,var(--tile) 15%,white));overflow:hidden}.service-art img{width:100%;height:100%;object-fit:contain;max-width:270px;padding:2px 10px 0}.service-copy{padding:15px;display:flex;flex-direction:column;flex:1;min-width:0}.service-copy h3{font-size:19px!important;line-height:1.22!important;color:#10253e!important;margin:0 0 8px!important}.service-copy p{font-size:14px!important;color:#536779!important;line-height:1.45;margin:0 0 14px!important}.service-link{font-size:14px;font-weight:750;color:#087f5b;display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:7px}.service-link span{font-size:20px}.service-tile:focus-visible{outline:3px solid #087f5b;outline-offset:3px}@media(hover:hover){#servicesGrid .service-tile:hover{border-color:#13936c!important;box-shadow:0 12px 30px #0e71572b;transform:translateY(-3px)}}
+#why-broker{background:linear-gradient(180deg,#f2f6f8,#fff)}.unified-compare article{position:relative;border-radius:20px!important;padding:20px!important}.unified-compare article.preferred{background:linear-gradient(145deg,#f0fcf7,#fff 75%);border:1px solid #15986e!important;box-shadow:0 10px 28px #0e71571c}.compare-symbol{height:38px;width:38px;display:grid;place-items:center;border-radius:12px;background:#e9eef3;color:#52677c;font-size:26px;font-weight:750;margin-bottom:12px}.preferred .compare-symbol{background:#087f5b;color:white}.unified-compare h3{font-size:21px;line-height:1.3}.unified-compare p{font-size:15px;line-height:1.55}.unified-compare .preferred p{border-color:#cee9df}.unified-result{background:radial-gradient(ellipse at 100% 0%,#155b5260,transparent 70%),#10253e!important}.card,.offer-card,.calc-box,.step-item{border-radius:16px}.market-chip{box-shadow:0 3px 8px #10253e07}.steps-grid .step-num{background:#10253e;color:#fff}.section .eyebrow{color:#087f5b}
+@media(max-width:767px){#servicesGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}.service-art{height:92px}.service-art img{padding:0 2px}.service-copy{padding:11px 10px 10px}.service-copy h3{font-size:16px!important;line-height:1.25!important}.service-copy p{font-size:13px!important;line-height:1.4!important}.service-link{font-size:13px;min-height:28px}.unified-compare article{padding:17px!important}.unified-compare h3{font-size:20px}.hero .unified-advantages span{font-size:13px}.section-title{font-size:clamp(26px,6.6vw,34px)}}
+@media(prefers-reduced-motion:reduce){.service-tile{transition:none!important}}
 </style></head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
@@ -660,6 +669,16 @@ button,input,select,textarea{font-size:inherit}
     </div>
   </div>
 </section>
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="eyebrow">01 / НАПРАВЛЕНИЯ</div>
+    <h2 class="section-title">Услуги</h2><p class="section-sub">Выберите направление — внутри виды имущества, условия и персональный расчёт.</p>
+    
+    <div class="grid-3" id="servicesGrid"></div>
+  </div>
+</section>
+
 <div class="container route-section"><div class="cabinet-banner"><div><strong>Личный кабинет клиента</strong></div><a class="btn btn-outline" href="./cabinet.html?v=214">Войти в тестовый кабинет →</a></div><h2 class="route-title">С чего начнём?</h2><div class="quick-paths" aria-label="Выбор задачи">
   <a href="#services"><span class="route-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4zM8 9h8M8 13h3M15 13h1"/></svg></span><span class="route-copy"><strong>Нужен новый лизинг</strong><small>Выбрать имущество</small></span><b>→</b></a>
   <a href="#offer-compare"><span class="route-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V4M4 20h16M8 15l4-5 4 2 4-7"/></svg></span><span class="route-copy"><strong>Есть предложение от лизинговой компании</strong><small>Сравнить полную стоимость</small></span><b>→</b></a>
@@ -830,18 +849,8 @@ button,input,select,textarea{font-size:inherit}
   </div>
 </section>
 
-<!-- SERVICES -->
-<section class="section" id="services">
-  <div class="container">
-    <div class="eyebrow">01 / НАПРАВЛЕНИЯ</div>
-    <h2 class="section-title">Что вы хотите профинансировать?</h2>
-    
-    <div class="grid-3" id="servicesGrid"></div>
-  </div>
-</section>
-
 <section class="section section-alt" id="offer-compare"><div class="container"><div class="eyebrow">СРАВНЕНИЕ КП</div><h2 class="section-title">Какое предложение выгоднее?</h2><p class="section-sub">Введите данные двух предложений и узнайте, сколько составят общие расходы.</p><div class="offer-grid"><fieldset class="offer-card"><legend>Предложение №1</legend><div class="field"><label for="offerAadvance">Аванс, ₽</label><input type="text" data-money inputmode="numeric" id="offerAadvance" data-offer="A" data-part="advance" value="900000" data-min="0" data-max="1000000000" data-slider="5000000" data-quantum="5000"></div><div class="field"><label for="offerAmonths">Число ежемесячных платежей</label><input type="number" id="offerAmonths" data-offer="A" data-part="months" value="36" min="1" max="120" step="1" inputmode="numeric" data-slider="120" data-quantum="1"></div><div class="field"><label for="offerApayment">Платёж в месяц, ₽</label><input type="text" data-money inputmode="numeric" id="offerApayment" data-offer="A" data-part="payment" value="130000" data-min="0" data-max="1000000000" data-slider="1000000" data-quantum="1000"></div><div class="field"><label for="offerAbuyout">Выкуп (если не включён в платежи), ₽</label><input type="text" data-money inputmode="numeric" id="offerAbuyout" data-offer="A" data-part="buyout" value="1000" data-min="0" data-max="1000000000" data-slider="1000000" data-quantum="1000"></div><div class="field"><label for="offerAextras">Доп. расходы (если не включены в платежи), ₽</label><input type="text" data-money inputmode="numeric" id="offerAextras" data-offer="A" data-part="extras" value="0" data-min="0" data-max="1000000000" data-slider="1000000" data-quantum="1000"></div><details class="schedule-detail"><summary>Неравномерный график платежей</summary><label for="scheduleA">Платежи по месяцам, ₽ (через точку с запятой или с новой строки)</label><textarea id="scheduleA" rows="4" maxlength="3000" placeholder="130000; 125000; 120000"></textarea><label class="schedule-check"><input type="checkbox" id="useScheduleA"> Использовать этот график вместо равных платежей</label><small id="scheduleHintA">Аванс и выкуп указываются отдельно.</small></details><div class="offer-total"><small>Всего к оплате</small><strong id="offerTotalA">—</strong></div></fieldset><fieldset class="offer-card"><legend>Предложение №2</legend><div class="field"><label for="offerBadvance">Аванс, ₽</label><input type="text" data-money inputmode="numeric" id="offerBadvance" data-offer="B" data-part="advance" value="900000" data-min="0" data-max="1000000000" data-slider="5000000" data-quantum="5000"></div><div class="field"><label for="offerBmonths">Число ежемесячных платежей</label><input type="number" id="offerBmonths" data-offer="B" data-part="months" value="36" min="1" max="120" step="1" inputmode="numeric" data-slider="120" data-quantum="1"></div><div class="field"><label for="offerBpayment">Платёж в месяц, ₽</label><input type="text" data-money inputmode="numeric" id="offerBpayment" data-offer="B" data-part="payment" value="128000" data-min="0" data-max="1000000000" data-slider="1000000" data-quantum="1000"></div><div class="field"><label for="offerBbuyout">Выкуп (если не включён в платежи), ₽</label><input type="text" data-money inputmode="numeric" id="offerBbuyout" data-offer="B" data-part="buyout" value="100000" data-min="0" data-max="1000000000" data-slider="1000000" data-quantum="1000"></div><div class="field"><label for="offerBextras">Доп. расходы (если не включены в платежи), ₽</label><input type="text" data-money inputmode="numeric" id="offerBextras" data-offer="B" data-part="extras" value="30000" data-min="0" data-max="1000000000" data-slider="1000000" data-quantum="1000"></div><details class="schedule-detail"><summary>Неравномерный график платежей</summary><label for="scheduleB">Платежи по месяцам, ₽ (через точку с запятой или с новой строки)</label><textarea id="scheduleB" rows="4" maxlength="3000" placeholder="130000; 125000; 120000"></textarea><label class="schedule-check"><input type="checkbox" id="useScheduleB"> Использовать этот график вместо равных платежей</label><small id="scheduleHintB">Аванс и выкуп указываются отдельно.</small></details><div class="offer-total"><small>Всего к оплате</small><strong id="offerTotalB">—</strong></div></fieldset></div><div class="offer-result" role="status" aria-live="polite" id="offerResult">—</div><details class="offer-visual" id="offerVisual" hidden><summary>Подробно: из чего складываются расходы</summary><div class="offer-breakdown"><table><thead><tr><th scope="col">Расходы</th><th scope="col">№1</th><th scope="col">№2</th></tr></thead><tbody id="offerBreakdown"></tbody></table></div><div class="offer-bars"><div><span>Предложение 1</span><div class="offer-bar" id="offerBarA"></div></div><div><span>Предложение 2</span><div class="offer-bar" id="offerBarB"></div></div></div><div class="offer-key"><span><i></i>Аванс</span><span><i></i>Платежи</span><span><i></i>Выкуп</span><span><i></i>Доп. расходы</span></div></details><details class="discount-detail"><summary>Дополнительный финансовый расчёт (дисконтирование)</summary><div class="field"><label for="discountRate">Годовая ставка дисконтирования, %</label><input id="discountRate" data-slider="100" data-quantum="0.1" type="number" min="0" max="100" step="0.1" value="15" inputmode="decimal"></div><p class="calculation-explain">Ставка задаётся вами, а не лизинговой компанией. Аванс и дополнительные расходы считаются уплаченными сейчас, платежи — в конце каждого месяца, выкуп — в конце срока.</p><div class="discount-result" id="discountResult">—</div></details><button class="btn btn-outline" id="offerExport" type="button">Скачать подробное сравнение (CSV)</button> <button class="btn btn-outline" id="offerReset" type="button">Вернуть пример</button> <button class="btn btn-primary" type="button" onclick="document.getElementById('callbackTrigger').click()">Обсудить предложения</button></div></section>
-<!-- WHY BROKER --><section class="section" id="why-broker"><div class="container"><div class="eyebrow">ПРИНЦИП РАБОТЫ</div><h2 class="section-title">Почему через брокера?</h2><div class="unified-compare"><article><h3>Самостоятельный поиск</h3><p>− Отдельные обращения в разные компании</p><p>− Разные форматы предложений</p><p>− Самостоятельная проверка комиссий и договора</p><p>− Повторный поиск при отказе</p></article><article class="preferred"><h3>✓ Через «Лизинг Компас»</h3><p>✓ Единые параметры для подбора</p><p>✓ Сводная таблица полной стоимости</p><p>✓ Проверка доступных программ и скидок</p><p>✓ Разбор договора и сопровождение</p></article></div></div></section>
+<!-- WHY BROKER --><section class="section" id="why-broker"><div class="container"><div class="eyebrow">ПРИНЦИП РАБОТЫ</div><h2 class="section-title">Почему <span class="accent-word">брокер</span>, а не одна ЛК?</h2><div class="unified-compare"><article><div class="compare-symbol" aria-hidden="true">−</div><h3>Самостоятельный поиск</h3><p>− Отдельные обращения в разные компании</p><p>− Разные форматы предложений</p><p>− Самостоятельная проверка комиссий и договора</p><p>− Повторный поиск при отказе</p></article><article class="preferred"><div class="compare-symbol" aria-hidden="true">✓</div><h3>Через «Лизинг Компас»</h3><p>✓ Одна заявка — подбор подходящих компаний</p><p>✓ Сводная таблица платежей и полной стоимости</p><p>✓ Проверка доступных программ и скидок</p><p>✓ Разбор договора и сопровождение</p></article></div></div></section>
 <section class="section support-route" id="support-route"><div class="container"><div class="eyebrow">СОПРОВОЖДЕНИЕ</div><h2 class="section-title">Уже есть договор лизинга?</h2><p class="section-sub">Выберите задачу, чтобы подготовиться к разговору со специалистом. Без загрузки документов.</p><div class="support-grid">
 <details><summary>Досрочный выкуп</summary><p>Подготовьте действующий график, остаток обязательств и условия выкупа. Сравните итоговые расходы до и после выкупа.</p></details>
 <details><summary>Изменение графика платежей</summary><p>Уточните задолженность, желаемый платёж и период изменения графика. Новые условия зависят от согласия сторон.</p></details>
@@ -1229,71 +1238,7 @@ button,input,select,textarea{font-size:inherit}
     rates: [{ name: "Сценарий 1", rate: 18 }, { name: "Сценарий 2", rate: 20 }, { name: "Сценарий 3", rate: 22 }, { name: "Сценарий 4", rate: 24 }, { name: "Сценарий 5", rate: 26 }]
   };
 
-  const SERVICES = [
-  {
-    "title": "Легковые автомобили",
-    "type": "Новое легковое авто",
-    "meta": "Транспорт",
-    "desc": "Новые автомобили для бизнеса и корпоративных парков.",
-    "full": "Сравнение аванса, графика, страхования и выкупа.",
-    "ico": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 15v-3l2-5h14l2 5v3M5 15v3h2v-3m10 0v3h2v-3M3 15h18M6 12h2m8 0h2\"/></svg>"
-  },
-  {
-    "title": "Авто с пробегом",
-    "type": "Авто с пробегом",
-    "meta": "Транспорт",
-    "desc": "Подбор финансирования для автомобилей с пробегом.",
-    "full": "Учитываем возраст, продавца, состояние и документы.",
-    "ico": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 15v-3l2-5h14l2 5v3M5 15v3h2v-3m10 0v3h2v-3M3 15h18M17 3v4m-2-2h4\"/></svg>"
-  },
-  {
-    "title": "Оборудование",
-    "type": "Оборудование",
-    "meta": "Производство",
-    "desc": "Станки, медицинское, пищевое и складское оборудование.",
-    "full": "Учитываем поставщика, сроки поставки и планируемую окупаемость.",
-    "ico": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 7h16v13H4zM8 7V4h8v3M8 12h8m-8 4h5\"/></svg>"
-  },
-  {
-    "title": "Недвижимость",
-    "type": "Коммерческая недвижимость",
-    "meta": "Коммерческие объекты",
-    "desc": "Офисы, склады, цеха и торговые помещения.",
-    "full": "Оцениваем структуру сделки и доступные программы.",
-    "ico": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 21V3h11v18M15 9h5v12M2 21h20M8 7h3m-3 4h3m-3 4h3\"/></svg>"
-  },
-  {
-    "title": "Грузовики и спецтехника",
-    "type": "Спецтехника / Грузовой",
-    "meta": "Логистика и строительство",
-    "desc": "Грузовой транспорт, строительная и сельскохозяйственная техника.",
-    "full": "Сравниваем условия финансирования и эксплуатации.",
-    "ico": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 6h12v10H3zM15 10h4l3 4v2h-7M7 16a2 2 0 1 0 0 4 2 2 0 0 0 0-4m12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4\"/></svg>"
-  },
-  {
-    "title": "Рефинансирование и выкуп",
-    "type": "Рефинансирование / Возвратный лизинг",
-    "meta": "Действующий договор",
-    "desc": "Пересмотр финансовой нагрузки и варианты выкупа.",
-    "full": "Решение зависит от действующего договора и согласия сторон.",
-    "ico": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20 7H4m0 0 4-4M4 7l4 4M4 17h16m0 0-4-4m4 4-4 4\"/></svg>"
-  },
-  {
-    "title": "Возвратный лизинг",
-    "type": "Рефинансирование / Возвратный лизинг",
-    "meta": "Оборотный капитал",
-    "desc": "Финансирование с использованием принадлежащего бизнесу актива.",
-    "full": "Сделка предполагает продажу имущества и последующую передачу его в лизинг.",    "ico": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3v18m4-14h-6a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6H8\"/></svg>"
-  },
-  {
-    "title": "Сопровождение договора",
-    "type": "Новое легковое авто",
-    "meta": "Поддержка",
-    "desc": "Страховые случаи, изменение графика и досрочный выкуп.",
-    "full": "Изучаем документы и возможные способы урегулирования.",
-    "ico": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3l8 3v6c0 5-5 8-8 9-3-1-8-4-8-9V6l8-3Zm-4 9 3 3 5-6\"/></svg>"
-  }
-];
+  const SERVICES = [{"slug":"cars","title":"Новые легковые автомобили","desc":"Новые авто для бизнеса и корпоративных парков.","type":"Новое легковое авто","meta":"Транспорт","price":["Выберите автомобиль и поставщика","Сравните аванс, график и выкуп","Уточните страхование, ТО и ограничения пробега"],"color":4500000},{"slug":"used","title":"Автомобили с пробегом","desc":"Легковые авто с проверкой документов и условий.","type":"Авто с пробегом","meta":"Транспорт","price":["Проверьте историю и состояние автомобиля","Уточните ограничения возраста и продавца","Сравните условия выкупа и страхования"],"color":2500000},{"slug":"trucks","title":"Грузовой транспорт","desc":"Тягачи, грузовики, прицепы и полуприцепы.","type":"Спецтехника / Грузовой","meta":"Логистика","price":["Согласуйте комплектацию и поставку","Учитывайте сезонность и рейсовую нагрузку","Проверьте страхование и обслуживание"],"color":12000000},{"slug":"machines","title":"Спецтехника","desc":"Строительная, дорожная и складская техника.","type":"Спецтехника / Грузовой","meta":"Строительство","price":["Уточните модель, моточасы и поставщика","Сопоставьте платежи с загрузкой техники","Проверьте условия эксплуатации и страхования"],"color":8500000},{"slug":"equipment","title":"Лизинг оборудования","desc":"Станки, медицинское, пищевое и IT-оборудование.","type":"Оборудование","meta":"Производство","price":["Согласуйте спецификацию и срок поставки","Уточните монтаж и момент начала платежей","Оцените окупаемость и дополнительные расходы"],"color":6000000},{"slug":"property","title":"Коммерческая недвижимость","desc":"Склады, офисы, цеха и торговые объекты.","type":"Коммерческая недвижимость","meta":"Недвижимость","price":["Проверьте права на объект и документы","Сопоставьте сроки, расходы и выкуп","Уточните условия регистрации и передачи"],"color":45000000},{"slug":"buyout","title":"Выкуп и рефинансирование","desc":"Пересмотр условий действующего договора.","type":"Рефинансирование / Возвратный лизинг","meta":"Действующий договор","price":["Получите текущий остаток обязательств","Проверьте порядок выкупа и комиссии","Сравните общую стоимость вариантов"],"color":4500000},{"slug":"return","title":"Возвратный лизинг","desc":"Оборотные средства с использованием своего имущества.","type":"Рефинансирование / Возвратный лизинг","meta":"Оборотный капитал","price":["Подтвердите право собственности и обременения","Оцените стоимость продажи и новый график","Проверьте налоговые и договорные последствия"],"color":5000000},{"slug":"support","title":"Сопровождение договора","desc":"Страховые случаи, реструктуризация и выкуп.","type":"","meta":"Поддержка","price":["Подготовьте договор, график и полис","Уточните обстоятельства и сроки","Обсудите возможные решения со специалистом"],"color":0}];
 
   const DEFAULT_CASES = [{"title":"Парк из 5 седанов для такси","save":"≈ 1 430 171 ₽","body":"Стоимость 12 млн ₽, аванс 20%, срок 36 мес. Разница полной стоимости между условными ставками 18% и 26%, без отдельного выкупа и дополнительных расходов. Не реальная сделка.","price":12000000,"term":36},{"title":"Станок ЧПУ для цеха","save":"≈ 1 000 468 ₽","body":"Стоимость 6 млн ₽, аванс 20%, срок 48 мес. Разница полной стоимости между условными ставками 18% и 26%, без отдельного выкупа и дополнительных расходов. Не реальная сделка.","price":6000000,"term":48},{"title":"Склад 1 200 м²","save":"≈ 14 928 464 ₽","body":"Стоимость 45 млн ₽, аванс 20%, срок 84 мес. Разница полной стоимости между условными ставками 18% и 26%, без отдельного выкупа и дополнительных расходов. Не реальная сделка.","price":45000000,"term":84}];
   const DEFAULT_ARTICLES = [
@@ -1343,23 +1288,7 @@ button,input,select,textarea{font-size:inherit}
     });
   }
 
-  function renderServices() {
-    document.getElementById("servicesGrid").innerHTML = SERVICES.map((s, i) => `
-      <div class="card">
-        <div>
-          <div class="card-ico">${s.ico}</div>
-          <h3>${s.title}</h3>
-          <div class="card-meta">${s.meta}</div>
-          <p>${s.desc}</p>
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button class="btn btn-primary btn-sm" onclick="selectServiceCalc('${s.type}')">Рассчитать</button>
-          <button class="btn btn-outline btn-sm" onclick="openServiceDetail(${i})">Подробнее</button>
-        </div>
-      </div>
-    `).join("");
-  }
-
+  function renderServices(){document.getElementById("servicesGrid").innerHTML=SERVICES.map(s=>`<a class="card service-tile" href="./service-${s.slug}.html" style="--tile:${s.color}"><div class="service-art"><img src="./art/${s.slug}.svg" alt="" width="310" height="162" loading="lazy" decoding="async"></div><div class="service-copy"><h3>${s.title}</h3><p>${s.desc}</p><span class="service-link">Подробнее <span aria-hidden="true">→</span></span></div></a>`).join("");}
   function renderCases() {
     document.getElementById("casesGrid").innerHTML = casesData.map((c, i) => `
       <div class="card">
@@ -1771,5 +1700,5 @@ document.querySelectorAll('form').forEach(form=>{
 document.getElementById('qBudget').addEventListener('input',()=>{const a=document.getElementById('qAdv'),max=Math.max(0,financeNumber(document.getElementById('qBudget'))||0);a.dataset.max=String(max);if(financeNumber(a)>max)setFinance(a,max);refreshFinance();});
 </script>
 <script id="unified-layout">(()=>{if(new URLSearchParams(location.search).get('layout')!=='1')return;const main=document.querySelector('main'),blocks=[...main.children].filter(e=>e.matches('section,.route-section'));const original=blocks.slice();const bar=document.createElement('div');bar.className='layout-tools';bar.innerHTML='<strong>Конструктор блоков — только предпросмотр</strong><p>Перемещайте блоки стрелками. Изменения не затрагивают опубликованный порядок и сохраняются только в этом браузере.</p><button type="button" id="uLayoutReset">Вернуть порядок</button>';main.before(bar);const key='lc-unified-layout-v1';blocks.forEach((el,i)=>{el.dataset.layoutId=String(i);const name=el.querySelector('h1,h2')?.textContent||'Блок';const controls=document.createElement('div');controls.className='layout-buttons';const label=document.createElement('strong');label.textContent=name;controls.append(label);for(const [txt,dir] of [['↑ Выше',-1],['↓ Ниже',1]]){const b=document.createElement('button');b.type='button';b.textContent=txt;b.onclick=()=>{const list=[...main.children].filter(x=>x.dataset.layoutId!==undefined),j=list.indexOf(el);if(dir<0&&j>0)main.insertBefore(el,list[j-1]);if(dir>0&&j<list.length-1)main.insertBefore(list[j+1],el);try{localStorage.setItem(key,JSON.stringify([...main.children].filter(x=>x.dataset.layoutId!==undefined).map(x=>x.dataset.layoutId)))}catch{}el.scrollIntoView({block:'start'});};controls.append(b)}el.prepend(controls)});try{const saved=JSON.parse(localStorage.getItem(key)||'null');if(Array.isArray(saved)&&saved.length===blocks.length&&new Set(saved).size===blocks.length&&saved.every(x=>blocks[Number(x)]))saved.forEach(x=>main.append(blocks[Number(x)]))}catch{}document.getElementById('uLayoutReset').onclick=()=>{original.forEach(x=>main.append(x));try{localStorage.removeItem(key)}catch{}window.scrollTo(0,0)};})();
-</script><script id="market-v43-js">(()=>{const input=document.getElementById('marketSearch'),clear=document.getElementById('marketClear'),more=document.getElementById('marketMore'),count=document.getElementById('marketCount'),chips=[...document.querySelectorAll('[data-market-name]')];let expanded=false;const norm=x=>x.toLocaleLowerCase('ru-RU').replace(/ё/g,'е').replace(/[^а-яa-z0-9]/g,'');function render(){const query=norm(input.value.trim());const searching=Boolean(query);let visible=0;chips.forEach((chip,i)=>{const show=searching?norm(chip.dataset.marketName).includes(query):expanded||i<16;chip.hidden=!show;if(show)visible++});count.textContent=visible?'Показано '+visible+' из '+chips.length:'Ничего не найдено. Попробуйте другое название.';more.hidden=searching;clear.hidden=!input.value;more.setAttribute('aria-expanded',String(expanded));more.textContent=expanded?'Свернуть список ↑':'Все компании ('+chips.length+') ↓'}input.addEventListener('input',render);clear.addEventListener('click',()=>{input.value='';render();input.focus()});more.addEventListener('click',()=>{expanded=!expanded;render();if(!expanded)document.getElementById('leasing-market').scrollIntoView({block:'start',behavior:'smooth'})});render()})();</script></body>
+</script><script id="market-v43-js">(()=>{const input=document.getElementById('marketSearch'),clear=document.getElementById('marketClear'),more=document.getElementById('marketMore'),count=document.getElementById('marketCount'),chips=[...document.querySelectorAll('[data-market-name]')];let expanded=false;const norm=x=>x.toLocaleLowerCase('ru-RU').replace(/ё/g,'е').replace(/[^а-яa-z0-9]/g,'');function render(){const query=norm(input.value.trim());const searching=Boolean(query);let visible=0;chips.forEach((chip,i)=>{const show=searching?norm(chip.dataset.marketName).includes(query):expanded||i<16;chip.hidden=!show;if(show)visible++});count.textContent=visible?'Показано '+visible+' из '+chips.length:'Ничего не найдено. Попробуйте другое название.';more.hidden=searching;clear.hidden=!input.value;more.setAttribute('aria-expanded',String(expanded));more.textContent=expanded?'Свернуть список ↑':'Все компании ('+chips.length+') ↓'}input.addEventListener('input',render);clear.addEventListener('click',()=>{input.value='';render();input.focus()});more.addEventListener('click',()=>{expanded=!expanded;render();if(!expanded)document.getElementById('leasing-market').scrollIntoView({block:'start',behavior:'smooth'})});render()})();</script><script id="service-routing-v44">(()=>{const p=new URLSearchParams(location.search);const service=SERVICES.find(s=>s.slug===p.get('service'));if(service&&service.type){document.getElementById('cType').value=service.type;syncPrice(service.price,true);recalc()}if(p.get('callback')==='1'){document.getElementById('callbackTrigger')?.click()}})();</script></body>
 </html>
