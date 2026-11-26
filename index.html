@@ -557,7 +557,7 @@ html{scroll-padding-bottom:100px}
 #calc-section .thumb-slider-knob:active{cursor:grabbing}
 #calc-section .thumb-slider:has(input:focus-visible){outline:2px solid var(--navy-2);outline-offset:2px;border-radius:8px}
 </style>
-<meta name="preview-version" content="unified-v4.2"><script>
+<meta name="preview-version" content="unified-v4.3"><script>
 function sliderFraction(value,min,max,power=1){if(max<=min)return 0;return Math.pow(Math.max(0,Math.min(1,(value-min)/(max-min))),1/power);}
 function sliderValue(fraction,min,max,power=1){return min+(max-min)*Math.pow(Math.max(0,Math.min(1,fraction)),power);}
 function financeNumber(el){const v=String(el.value).replace(/\s/g,'');return /^\d+$/.test(v)?Number(v):NaN}
@@ -595,7 +595,9 @@ button,input,select,textarea{font-size:inherit}
 .steps-grid{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));grid-auto-flow:row!important;grid-auto-columns:auto!important;overflow:visible!important;gap:12px}.process-controls{display:none!important}.steps-grid .step-item{min-height:0!important}
 .layout-tools{margin:15px auto;padding:14px;border:1px solid var(--border);border-radius:12px;max-width:1160px;background:#fff}.layout-tools button,.layout-buttons button{padding:8px 12px;border:1px solid #cbd5e1;border-radius:8px;background:white;color:#0f2342;font-weight:600}.layout-buttons{display:flex;gap:8px;align-items:center;padding:8px 12px;background:#e4f1ec;border-bottom:1px solid #afd5c5;font-size:13px;flex-wrap:wrap}
 @media(max-width:767px){.unified-compare{grid-template-columns:1fr}.unified-result{padding:17px}.unified-breakdown{font-size:14px}.unified-advantages span{font-size:13px;padding:9px}.steps-grid{grid-template-columns:1fr!important}.steps-grid .step-item{display:grid;grid-template-columns:42px 1fr;gap:3px 12px;text-align:left;align-items:start;padding:16px!important}.step-item .step-num{grid-row:span 2}.step-item h4{margin:0!important}.step-item p{margin:0!important}#servicesGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px}#servicesGrid .card{padding:13px!important}#servicesGrid .card h3{font-size:16px!important;overflow-wrap:anywhere}#servicesGrid .card p{font-size:14px!important}#servicesGrid .card .btn{font-size:13px!important;padding:8px!important}#casesGrid{grid-template-columns:1fr!important}.partner-pill{font-size:13px!important;padding:9px 13px!important}.section{padding:36px 0!important}.unified-result .res-card strong{font-size:32px!important}.unified-result .res-card.green strong{font-size:18px!important}}
-</style><style id="unified-v42">.hero .hero-grid{grid-template-columns:minmax(0,1fr);gap:0}.hero .hero-copy{max-width:850px}.hero .unified-advantages{max-width:720px}</style></head>
+</style><style id="unified-v42">.hero .hero-grid{grid-template-columns:minmax(0,1fr);gap:0}.hero .hero-copy{max-width:850px}.hero .unified-advantages{max-width:720px}</style><style id="market-v43">
+#leasing-market .section-sub{margin-bottom:18px}.market-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:17px}.market-search-label{width:100%;font-size:14px;font-weight:650;color:var(--navy)}#marketSearch{flex:1;min-width:0;max-width:490px;border:1px solid #cad5e0;border-radius:12px;padding:12px 14px;background:white;font-size:16px;color:var(--navy)}#marketClear{border:0;background:transparent;color:var(--navy);padding:8px;cursor:pointer;font-size:14px}.market-list{display:flex;flex-wrap:wrap;gap:9px;align-items:center}.market-chip{display:inline-flex;align-items:center;gap:8px;padding:10px 15px;border:1px solid #dfe6ed;border-radius:999px;background:#fff;color:#152e48;font-size:15px;font-weight:700;line-height:1.35;max-width:100%;overflow-wrap:anywhere}.market-brand{color:var(--brand);border-color:color-mix(in srgb,var(--brand) 24%,white)}.market-dot{width:8px;height:8px;border-radius:50%;background:var(--brand);flex:none}.market-chip[hidden],#marketClear[hidden],#marketMore[hidden]{display:none!important}.market-count{margin:14px 0 10px;font-size:13px;color:var(--muted)}.market-note{margin-top:17px;font-size:13px;color:var(--muted);line-height:1.5}.market-note a{text-decoration:underline;text-underline-offset:2px}#marketMore{min-height:44px}@media(max-width:767px){.market-chip{font-size:14px;padding:9px 12px;gap:6px}.market-list{gap:7px}.market-dot{width:7px;height:7px}}
+</style></head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
 <div class="preview-notice"><div class="container"><span class="preview-dot"></span><strong>Вариант №2 · V2.14</strong><span>Предпросмотр · заявки пока не принимаются</span></div></div>
@@ -870,27 +872,146 @@ button,input,select,textarea{font-size:inherit}
   </div>
 </section>
 
-<!-- PARTNERS LOGOS -->
-<section class="section section-alt">
-  <div class="container">
-    <div class="eyebrow">УЧАСТНИКИ РЫНКА</div>
-    <h2 class="section-title">Лизинговые компании: примеры</h2>
-    <p class="section-sub">Примеры участников рынка. Партнёрские отношения пока не подтверждены.</p>
-    <div class="partners-strip">
-      <div class="partner-pill">ВТБ Лизинг<small>Авто, техника, субсидии</small></div>
-      <div class="partner-pill">СберЛизинг<small>Все типы имущества</small></div>
-      <div class="partner-pill">Европлан<small>Авто и автосервис</small></div>
-      <div class="partner-pill">Газпромбанк Автолизинг<small>Экспресс-скоринг</small></div>
-      <div class="partner-pill">Каркаде (CARCADE)<small>Новые и б/у авто</small></div>
-      <div class="partner-pill">Балтийский лизинг<small>Оборудование и возвратный</small></div>
-      <div class="partner-pill">Альфа-Лизинг<small>Быстрая онлайн-выдача</small></div>
-      <div class="partner-pill">Совкомбанк Лизинг<small>Спецтехника и авто</small></div>
-      <div class="partner-pill">Интерлизинг<small>Оборудование и транспорт</small></div><div class="partner-pill">РЕСО-Лизинг</div>
-      <div class="partner-pill">Росагролизинг<small>Сельхозтехника</small></div>
-    </div>
-  </div>
-</section>
-
+<!-- MARKET DIRECTORY V4.3 -->
+<section class="section section-alt" id="leasing-market"><div class="container">
+<div class="eyebrow">КАТАЛОГ РЫНКА</div><h2 class="section-title">Лизинговые компании</h2>
+<p class="section-sub">Лизингодатели и бренды российского рынка. Найдите нужную компанию по названию.</p>
+<div class="market-tools"><label for="marketSearch" class="market-search-label">Поиск по названию</label><input type="search" id="marketSearch" placeholder="Например, Европлан или МСП" autocomplete="off"><button type="button" id="marketClear" hidden>Очистить</button></div>
+<div class="market-list" id="marketList"><div class="market-chip market-brand" style="--brand:#1267b6" data-market-name="ВТБ Лизинг"><span class="market-dot" aria-hidden="true"></span>ВТБ Лизинг</div>
+<div class="market-chip market-brand" style="--brand:#14834a" data-market-name="СберЛизинг"><span class="market-dot" aria-hidden="true"></span>СберЛизинг</div>
+<div class="market-chip market-brand" style="--brand:#0c5598" data-market-name="Европлан"><span class="market-dot" aria-hidden="true"></span>Европлан</div>
+<div class="market-chip market-brand" style="--brand:#1462a6" data-market-name="Газпромбанк Автолизинг"><span class="market-dot" aria-hidden="true"></span>Газпромбанк Автолизинг</div>
+<div class="market-chip market-brand" style="--brand:#bc242e" data-market-name="CARCADE"><span class="market-dot" aria-hidden="true"></span>CARCADE</div>
+<div class="market-chip market-brand" style="--brand:#17487c" data-market-name="Балтийский лизинг"><span class="market-dot" aria-hidden="true"></span>Балтийский лизинг</div>
+<div class="market-chip market-brand" style="--brand:#c92129" data-market-name="Альфа-Лизинг"><span class="market-dot" aria-hidden="true"></span>Альфа-Лизинг</div>
+<div class="market-chip market-brand" style="--brand:#087544" data-market-name="РЕСО-Лизинг"><span class="market-dot" aria-hidden="true"></span>РЕСО-Лизинг</div>
+<div class="market-chip market-brand" style="--brand:#164c98" data-market-name="Совкомбанк Лизинг"><span class="market-dot" aria-hidden="true"></span>Совкомбанк Лизинг</div>
+<div class="market-chip market-brand" style="--brand:#19568e" data-market-name="Интерлизинг"><span class="market-dot" aria-hidden="true"></span>Интерлизинг</div>
+<div class="market-chip market-brand" style="--brand:#1462a6" data-market-name="Газпромбанк Лизинг"><span class="market-dot" aria-hidden="true"></span>Газпромбанк Лизинг</div>
+<div class="market-chip market-brand" style="--brand:#215a95" data-market-name="ГТЛК"><span class="market-dot" aria-hidden="true"></span>ГТЛК</div>
+<div class="market-chip market-brand" style="--brand:#30773d" data-market-name="Росагролизинг"><span class="market-dot" aria-hidden="true"></span>Росагролизинг</div>
+<div class="market-chip market-brand" style="--brand:#9a6b00" data-market-name="Т-Лизинг"><span class="market-dot" aria-hidden="true"></span>Т-Лизинг</div>
+<div class="market-chip market-brand" style="--brand:#c0501d" data-market-name="ПСБ Лизинг"><span class="market-dot" aria-hidden="true"></span>ПСБ Лизинг</div>
+<div class="market-chip market-brand" style="--brand:#176ab0" data-market-name="КАМАЗ-ЛИЗИНГ"><span class="market-dot" aria-hidden="true"></span>КАМАЗ-ЛИЗИНГ</div>
+<div class="market-chip" data-market-name="ДельтаЛизинг" hidden>ДельтаЛизинг</div>
+<div class="market-chip" data-market-name="Восток-Лизинг" hidden>Восток-Лизинг</div>
+<div class="market-chip" data-market-name="ГК ФЛИТ" hidden>ГК ФЛИТ</div>
+<div class="market-chip" data-market-name="Универсальная лизинговая компания" hidden>Универсальная лизинговая компания</div>
+<div class="market-chip" data-market-name="КОНТРОЛ лизинг" hidden>КОНТРОЛ лизинг</div>
+<div class="market-chip" data-market-name="УралБизнесЛизинг" hidden>УралБизнесЛизинг</div>
+<div class="market-chip" data-market-name="Мэйджор Лизинг" hidden>Мэйджор Лизинг</div>
+<div class="market-chip" data-market-name="РСХБ Лизинг" hidden>РСХБ Лизинг</div>
+<div class="market-chip" data-market-name="КузбассФинансЛизинг" hidden>КузбассФинансЛизинг</div>
+<div class="market-chip" data-market-name="Южноуральский лизинговый центр" hidden>Южноуральский лизинговый центр</div>
+<div class="market-chip" data-market-name="ЧелИндЛизинг" hidden>ЧелИндЛизинг</div>
+<div class="market-chip" data-market-name="СТОУН-XXI" hidden>СТОУН-XXI</div>
+<div class="market-chip" data-market-name="Дойче Финанс Восток" hidden>Дойче Финанс Восток</div>
+<div class="market-chip" data-market-name="Элемент Лизинг" hidden>Элемент Лизинг</div>
+<div class="market-chip" data-market-name="ФКМ Лизинг" hidden>ФКМ Лизинг</div>
+<div class="market-chip" data-market-name="Сибирская лизинговая компания" hidden>Сибирская лизинговая компания</div>
+<div class="market-chip" data-market-name="АдвансТрак" hidden>АдвансТрак</div>
+<div class="market-chip" data-market-name="ПР-Лизинг" hidden>ПР-Лизинг</div>
+<div class="market-chip" data-market-name="Реалист Банк" hidden>Реалист Банк</div>
+<div class="market-chip" data-market-name="БИЗНЕС АЛЬЯНС" hidden>БИЗНЕС АЛЬЯНС</div>
+<div class="market-chip" data-market-name="ТЕХНО Лизинг" hidden>ТЕХНО Лизинг</div>
+<div class="market-chip" data-market-name="ТАЛК" hidden>ТАЛК</div>
+<div class="market-chip" data-market-name="ЛК ПроДвижение" hidden>ЛК ПроДвижение</div>
+<div class="market-chip" data-market-name="Транспортные решения" hidden>Транспортные решения</div>
+<div class="market-chip" data-market-name="СТАНДАРТ-Лизинг" hidden>СТАНДАРТ-Лизинг</div>
+<div class="market-chip" data-market-name="Финансовый Партнер" hidden>Финансовый Партнер</div>
+<div class="market-chip" data-market-name="МАШПРОМЛИЗИНГ" hidden>МАШПРОМЛИЗИНГ</div>
+<div class="market-chip" data-market-name="Роделен" hidden>Роделен</div>
+<div class="market-chip" data-market-name="Первоуральскбанк" hidden>Первоуральскбанк</div>
+<div class="market-chip" data-market-name="МСП Лизинг" hidden>МСП Лизинг</div>
+<div class="market-chip" data-market-name="Лизинг-Медицина" hidden>Лизинг-Медицина</div>
+<div class="market-chip" data-market-name="ИНВЕСТ-лизинг" hidden>ИНВЕСТ-лизинг</div>
+<div class="market-chip" data-market-name="Транспортная лизинговая компания" hidden>Транспортная лизинговая компания</div>
+<div class="market-chip" data-market-name="АТБ ЛК" hidden>АТБ ЛК</div>
+<div class="market-chip" data-market-name="МСБ-Лизинг" hidden>МСБ-Лизинг</div>
+<div class="market-chip" data-market-name="Лизинг-Трейд" hidden>Лизинг-Трейд</div>
+<div class="market-chip" data-market-name="Альянс-Лизинг" hidden>Альянс-Лизинг</div>
+<div class="market-chip" data-market-name="Технологии Лизинга и Финансы" hidden>Технологии Лизинга и Финансы</div>
+<div class="market-chip" data-market-name="Фера" hidden>Фера</div>
+<div class="market-chip" data-market-name="ЛК Азия корпорейшн" hidden>ЛК Азия корпорейшн</div>
+<div class="market-chip" data-market-name="АРЕНЗА-ПРО" hidden>АРЕНЗА-ПРО</div>
+<div class="market-chip" data-market-name="Лизинговое агентство" hidden>Лизинговое агентство</div>
+<div class="market-chip" data-market-name="Уралпромлизинг" hidden>Уралпромлизинг</div>
+<div class="market-chip" data-market-name="ТСС-Лизинг" hidden>ТСС-Лизинг</div>
+<div class="market-chip" data-market-name="КВАЗАР лизинг" hidden>КВАЗАР лизинг</div>
+<div class="market-chip" data-market-name="Столичный Лизинг" hidden>Столичный Лизинг</div>
+<div class="market-chip" data-market-name="Межрегиональная инвестиционная компания" hidden>Межрегиональная инвестиционная компания</div>
+<div class="market-chip" data-market-name="Аспект" hidden>Аспект</div>
+<div class="market-chip" data-market-name="ЭкономЛизинг" hidden>ЭкономЛизинг</div>
+<div class="market-chip" data-market-name="Лизинговые Решения" hidden>Лизинговые Решения</div>
+<div class="market-chip" data-market-name="КАРГО АРЕНДА" hidden>КАРГО АРЕНДА</div>
+<div class="market-chip" data-market-name="Аквилон-Лизинг" hidden>Аквилон-Лизинг</div>
+<div class="market-chip" data-market-name="Сеспель-Финанс" hidden>Сеспель-Финанс</div>
+<div class="market-chip" data-market-name="ВЕЛКОР" hidden>ВЕЛКОР</div>
+<div class="market-chip" data-market-name="ФинТех Лизинг" hidden>ФинТех Лизинг</div>
+<div class="market-chip" data-market-name="ДиректЛизинг" hidden>ДиректЛизинг</div>
+<div class="market-chip" data-market-name="Пионер-Лизинг" hidden>Пионер-Лизинг</div>
+<div class="market-chip" data-market-name="РЕКОРД ЛИЗИНГ" hidden>РЕКОРД ЛИЗИНГ</div>
+<div class="market-chip" data-market-name="ОГЛК" hidden>ОГЛК</div>
+<div class="market-chip" data-market-name="СОЛИД СпецАвтоТехЛизинг" hidden>СОЛИД СпецАвтоТехЛизинг</div>
+<div class="market-chip" data-market-name="ГОРИЗОНТ" hidden>ГОРИЗОНТ</div>
+<div class="market-chip" data-market-name="КМ-Финанс" hidden>КМ-Финанс</div>
+<div class="market-chip" data-market-name="АС Финанс" hidden>АС Финанс</div>
+<div class="market-chip" data-market-name="ГЕН ЛИЗИНГ" hidden>ГЕН ЛИЗИНГ</div>
+<div class="market-chip" data-market-name="Объединенная лизинговая компания" hidden>Объединенная лизинговая компания</div>
+<div class="market-chip" data-market-name="АК БАРС Лизинг" hidden>АК БАРС Лизинг</div>
+<div class="market-chip" data-market-name="Курскпромлизинг" hidden>Курскпромлизинг</div>
+<div class="market-chip" data-market-name="БЭЛТИ-ГРАНД" hidden>БЭЛТИ-ГРАНД</div>
+<div class="market-chip" data-market-name="Петербургснаб" hidden>Петербургснаб</div>
+<div class="market-chip" data-market-name="Карго Лизинг" hidden>Карго Лизинг</div>
+<div class="market-chip" data-market-name="ЛК Пруссия" hidden>ЛК Пруссия</div>
+<div class="market-chip" data-market-name="Независимая лизинговая компания" hidden>Независимая лизинговая компания</div>
+<div class="market-chip" data-market-name="РЛК Ростовской области" hidden>РЛК Ростовской области</div>
+<div class="market-chip" data-market-name="Межрегиональная лизинговая компания" hidden>Межрегиональная лизинговая компания</div>
+<div class="market-chip" data-market-name="ПТК-лизинг" hidden>ПТК-лизинг</div>
+<div class="market-chip" data-market-name="ИнтерЛайн Лизинг" hidden>ИнтерЛайн Лизинг</div>
+<div class="market-chip" data-market-name="Русавтолизинг" hidden>Русавтолизинг</div>
+<div class="market-chip" data-market-name="МАРКАЛИС Лизинг" hidden>МАРКАЛИС Лизинг</div>
+<div class="market-chip" data-market-name="Пензенская лизинговая компания" hidden>Пензенская лизинговая компания</div>
+<div class="market-chip" data-market-name="БелФин" hidden>БелФин</div>
+<div class="market-chip" data-market-name="Ленобллизинг" hidden>Ленобллизинг</div>
+<div class="market-chip" data-market-name="ЛК Арктика" hidden>ЛК Арктика</div>
+<div class="market-chip" data-market-name="Лентранслизинг" hidden>Лентранслизинг</div>
+<div class="market-chip" data-market-name="Альметьевская Универсальная Лизинговая Компания" hidden>Альметьевская Универсальная Лизинговая Компания</div>
+<div class="market-chip" data-market-name="АСТ Лизинг" hidden>АСТ Лизинг</div>
+<div class="market-chip" data-market-name="ВВС Лизинг" hidden>ВВС Лизинг</div>
+<div class="market-chip" data-market-name="Городская Инновационно-лизинговая компания" hidden>Городская Инновационно-лизинговая компания</div>
+<div class="market-chip" data-market-name="Инвест-Бизнес Лизинг" hidden>Инвест-Бизнес Лизинг</div>
+<div class="market-chip" data-market-name="Комиагролизинг" hidden>Комиагролизинг</div>
+<div class="market-chip" data-market-name="КредитЕвропаЛизинг" hidden>КредитЕвропаЛизинг</div>
+<div class="market-chip" data-market-name="Самаранефтепролизинг" hidden>Самаранефтепролизинг</div>
+<div class="market-chip" data-market-name="ЛК СДМ" hidden>ЛК СДМ</div>
+<div class="market-chip" data-market-name="Лизинговая компания малого бизнеса Республики Татарстан" hidden>Лизинговая компания малого бизнеса Республики Татарстан</div>
+<div class="market-chip" data-market-name="ЛК РНКБ" hidden>ЛК РНКБ</div>
+<div class="market-chip" data-market-name="ЛИКОНС" hidden>ЛИКОНС</div>
+<div class="market-chip" data-market-name="ЛК Титан" hidden>ЛК Титан</div>
+<div class="market-chip" data-market-name="ЛХ Файнэншл Сервисез" hidden>ЛХ Файнэншл Сервисез</div>
+<div class="market-chip" data-market-name="МУЛЬТИЛИЗИНГ" hidden>МУЛЬТИЛИЗИНГ</div>
+<div class="market-chip" data-market-name="Нацпромлизинг" hidden>Нацпромлизинг</div>
+<div class="market-chip" data-market-name="Нефтепромлизинг" hidden>Нефтепромлизинг</div>
+<div class="market-chip" data-market-name="Оптио" hidden>Оптио</div>
+<div class="market-chip" data-market-name="Р-Лизинг" hidden>Р-Лизинг</div>
+<div class="market-chip" data-market-name="Райффайзен-Лизинг" hidden>Райффайзен-Лизинг</div>
+<div class="market-chip" data-market-name="РБ ЛИЗИНГ" hidden>РБ ЛИЗИНГ</div>
+<div class="market-chip" data-market-name="РЕГИОН Групп Лизинг" hidden>РЕГИОН Групп Лизинг</div>
+<div class="market-chip" data-market-name="Свое Дело Лизинг" hidden>Свое Дело Лизинг</div>
+<div class="market-chip" data-market-name="Система-Лизинг" hidden>Система-Лизинг</div>
+<div class="market-chip" data-market-name="СпецИнвестЛизинг" hidden>СпецИнвестЛизинг</div>
+<div class="market-chip" data-market-name="Стройлизинг" hidden>Стройлизинг</div>
+<div class="market-chip" data-market-name="ТаймЛизинг" hidden>ТаймЛизинг</div>
+<div class="market-chip" data-market-name="Транслизинг" hidden>Транслизинг</div>
+<div class="market-chip" data-market-name="ТрансФин-М" hidden>ТрансФин-М</div>
+<div class="market-chip" data-market-name="ФИНСМАРТ" hidden>ФИНСМАРТ</div>
+<div class="market-chip" data-market-name="Флит Автолизинг" hidden>Флит Автолизинг</div>
+<div class="market-chip" data-market-name="ЮниКредитЛизинг" hidden>ЮниКредитЛизинг</div></div>
+<p id="marketCount" role="status" class="market-count">Показано 16 из 131</p>
+<button class="btn btn-outline" type="button" id="marketMore" aria-expanded="false" aria-controls="marketList">Все компании (131) ↓</button>
+<p class="market-note">Справочный каталог, не список наших партнёров. Включение в отраслевой источник не подтверждает приём новых заявок. Цветовые акценты ориентировочные, не официальные логотипы. Источники: <a href="https://raexpert.ru/rankingtable/leasing/1h_2026/main/" target="_blank" rel="noopener noreferrer">Эксперт РА, 1-е полугодие 2026</a> · <a href="https://assocleasing.ru/members/" target="_blank" rel="noopener noreferrer">Объединённая лизинговая ассоциация</a>.</p>
+</div></section>
 <!-- B2B PARTNERS -->
 <section class="section" id="b2b">
   <div class="container">
@@ -1650,5 +1771,5 @@ document.querySelectorAll('form').forEach(form=>{
 document.getElementById('qBudget').addEventListener('input',()=>{const a=document.getElementById('qAdv'),max=Math.max(0,financeNumber(document.getElementById('qBudget'))||0);a.dataset.max=String(max);if(financeNumber(a)>max)setFinance(a,max);refreshFinance();});
 </script>
 <script id="unified-layout">(()=>{if(new URLSearchParams(location.search).get('layout')!=='1')return;const main=document.querySelector('main'),blocks=[...main.children].filter(e=>e.matches('section,.route-section'));const original=blocks.slice();const bar=document.createElement('div');bar.className='layout-tools';bar.innerHTML='<strong>Конструктор блоков — только предпросмотр</strong><p>Перемещайте блоки стрелками. Изменения не затрагивают опубликованный порядок и сохраняются только в этом браузере.</p><button type="button" id="uLayoutReset">Вернуть порядок</button>';main.before(bar);const key='lc-unified-layout-v1';blocks.forEach((el,i)=>{el.dataset.layoutId=String(i);const name=el.querySelector('h1,h2')?.textContent||'Блок';const controls=document.createElement('div');controls.className='layout-buttons';const label=document.createElement('strong');label.textContent=name;controls.append(label);for(const [txt,dir] of [['↑ Выше',-1],['↓ Ниже',1]]){const b=document.createElement('button');b.type='button';b.textContent=txt;b.onclick=()=>{const list=[...main.children].filter(x=>x.dataset.layoutId!==undefined),j=list.indexOf(el);if(dir<0&&j>0)main.insertBefore(el,list[j-1]);if(dir>0&&j<list.length-1)main.insertBefore(list[j+1],el);try{localStorage.setItem(key,JSON.stringify([...main.children].filter(x=>x.dataset.layoutId!==undefined).map(x=>x.dataset.layoutId)))}catch{}el.scrollIntoView({block:'start'});};controls.append(b)}el.prepend(controls)});try{const saved=JSON.parse(localStorage.getItem(key)||'null');if(Array.isArray(saved)&&saved.length===blocks.length&&new Set(saved).size===blocks.length&&saved.every(x=>blocks[Number(x)]))saved.forEach(x=>main.append(blocks[Number(x)]))}catch{}document.getElementById('uLayoutReset').onclick=()=>{original.forEach(x=>main.append(x));try{localStorage.removeItem(key)}catch{}window.scrollTo(0,0)};})();
-</script></body>
+</script><script id="market-v43-js">(()=>{const input=document.getElementById('marketSearch'),clear=document.getElementById('marketClear'),more=document.getElementById('marketMore'),count=document.getElementById('marketCount'),chips=[...document.querySelectorAll('[data-market-name]')];let expanded=false;const norm=x=>x.toLocaleLowerCase('ru-RU').replace(/ё/g,'е').replace(/[^а-яa-z0-9]/g,'');function render(){const query=norm(input.value.trim());const searching=Boolean(query);let visible=0;chips.forEach((chip,i)=>{const show=searching?norm(chip.dataset.marketName).includes(query):expanded||i<16;chip.hidden=!show;if(show)visible++});count.textContent=visible?'Показано '+visible+' из '+chips.length:'Ничего не найдено. Попробуйте другое название.';more.hidden=searching;clear.hidden=!input.value;more.setAttribute('aria-expanded',String(expanded));more.textContent=expanded?'Свернуть список ↑':'Все компании ('+chips.length+') ↓'}input.addEventListener('input',render);clear.addEventListener('click',()=>{input.value='';render();input.focus()});more.addEventListener('click',()=>{expanded=!expanded;render();if(!expanded)document.getElementById('leasing-market').scrollIntoView({block:'start',behavior:'smooth'})});render()})();</script></body>
 </html>
