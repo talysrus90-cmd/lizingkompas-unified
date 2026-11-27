@@ -42,6 +42,7 @@ jobs:
         working-directory: production/backend
         run: |
           python manage.py check
+          python manage.py makemigrations --dry-run --verbosity 3
           python manage.py makemigrations --check --dry-run
       - name: Validate encrypted lead intake, security, staff comparison
         working-directory: production/backend
