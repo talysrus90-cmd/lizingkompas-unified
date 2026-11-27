@@ -13,6 +13,8 @@ from django.core.exceptions import ImproperlyConfigured
 BASE_DIR = Path(__file__).resolve().parent.parent
 TESTING = ("test" in sys.argv or os.getenv("COMPASS_TEST_MODE") == "1")
 PRODUCTION = os.getenv("COMPASS_PRODUCTION") == "1"
+# Dedicated staff container is reachable ONLY over SSH to 127.0.0.1:8002.
+SSH_OPERATOR = os.getenv("COMPASS_SSH_OPERATOR") == "1"
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "")
 if len(SECRET_KEY) < 50 and not TESTING:
@@ -97,15 +99,15 @@ STORAGES = {
 # Document uploads are NOT enabled. Any future private document storage must
 # be placed outside this static folder and behind authorization and AV checks.
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SECURE = PRODUCTION
+SESSION_COOKIE_SECURE = PRODUCTION and not SSH_OPERATOR
 SESSION_COOKIE_SAMESITE = "Strict"
 CSRF_COOKIE_HTTPONLY = True
-CSRF_COOKIE_SECURE = PRODUCTION
+CSRF_COOKIE_SECURE = PRODUCTION and not SSH_OPERATOR
 CSRF_COOKIE_SAMESITE = "Strict"
-SECURE_SSL_REDIRECT = PRODUCTION
+SECURE_SSL_REDIRECT = PRODUCTION and not SSH_OPERATOR
 SECURE_REDIRECT_EXEMPT = [r"^healthz$"]
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https") if PRODUCTION else None
-SECURE_HSTS_SECONDS = int(os.getenv("COMPASS_HSTS_SECONDS", "0"))
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https") if PRODUCTION and not SSH_OPERATOR else None
+SECURE_HSTS_SECONDS = int(os.getenv("COMPASS_HSTS_SECONDS", "0")) if not SSH_OPERATOR else 0
 SECURE_HSTS_INCLUDE_SUBDOMAINS = False
 SECURE_HSTS_PRELOAD = False
 SECURE_CONTENT_TYPE_NOSNIFF = True
