@@ -60,8 +60,8 @@ def replace_legacy_demo_forms(html):
     unsent form inputs through URL query strings, cookies or localStorage.
     """
     pattern=re.compile(
-        r'<form\\b[^>]*onsubmit="submitForm\\(event,[^"]+"[^>]*>'
-        r'[\\s\\S]*?</form>',
+        r'<form\b[^>]*onsubmit="submitForm\(event,[^"]+"[^>]*>'
+        r'[\s\S]*?</form>',
         flags=re.I,
     )
     sequence=[
