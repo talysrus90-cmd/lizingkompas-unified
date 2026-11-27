@@ -192,6 +192,6 @@ test('website markup and original menu layout stay intact',()=>{
   const h=fs.readFileSync('variant-5.html','utf8');
   assert.ok(h.includes('id="burgerBtn"'));
   assert.ok(h.includes('id="mobileMenu"'));
-  assert.ok(h.includes('src="./lk-ui-v504.js"'));
+  assert.ok(h.includes('src="./lk-ui-v504.js?rev=20261127-back-qr-v2"'));
   assert.match(h,/name="robots" content="noindex,nofollow"/);
 });
