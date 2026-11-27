@@ -1,0 +1,20 @@
+name: Share feature check
+on:
+  push:
+    paths: ['variant-5.html', 'lk-share-v1.js', 'tests/share.test.cjs', '.github/workflows/share-check.yml']
+  pull_request:
+    paths: ['variant-5.html', 'lk-share-v1.js', 'tests/share.test.cjs', '.github/workflows/share-check.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  share:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check lk-share-v1.js
+      - run: node --test tests/share.test.cjs
