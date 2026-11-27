@@ -39,6 +39,11 @@ const printed=[];
 let socket;
 let nextId=1;
 const pending=new Map();
+const watchdog=setTimeout(()=>{
+  console.error('Chromium smoke deadline exceeded after 65 seconds');
+  chrome.kill();
+  process.exit(1);
+},65000);
 
 async function connect(){
   let port;
@@ -69,18 +74,32 @@ async function connect(){
     const entry=pending.get(payload.id);
     if(!entry)return;
     pending.delete(payload.id);
+    clearTimeout(entry.timer);
     payload.error?entry.reject(Error(payload.error.message)):entry.resolve(payload.result||{});
   };
+  socket.onclose=()=>{
+    for(const entry of pending.values()){
+      clearTimeout(entry.timer);
+      entry.reject(Error('CDP socket closed'));
+    }
+    pending.clear();
+  };
   await new Promise((resolve,reject)=>{
-    socket.onopen=resolve;
-    socket.onerror=reject;
+    const timeout=setTimeout(()=>reject(Error('CDP WebSocket open timed out')),8000);
+    socket.onopen=()=>{clearTimeout(timeout);resolve();};
+    socket.onerror=()=>{clearTimeout(timeout);reject(Error('CDP WebSocket connection failed'));};
   });
 }
 function command(method,params={}){
   const id=nextId++;
   return new Promise((resolve,reject)=>{
-    pending.set(id,{resolve,reject});
-    socket.send(JSON.stringify({id,method,params}));
+    const timer=setTimeout(()=>{
+      pending.delete(id);
+      reject(Error('CDP command timeout: '+method));
+    },12000);
+    pending.set(id,{resolve,reject,timer});
+    try{socket.send(JSON.stringify({id,method,params}));}
+    catch(error){clearTimeout(timer);pending.delete(id);reject(error);}
   });
 }
 async function evaluate(expression){
@@ -113,7 +132,9 @@ function check(condition,message){
   if(!condition)throw Error('SMOKE FAIL: '+message);
 }
 async function smoke(){
+  console.log('BROWSER_STAGE connect');
   await connect();
+  console.log('BROWSER_STAGE connected');
   await command('Page.enable');
   await command('Runtime.enable');
   await command('Emulation.setDeviceMetricsOverride',{
@@ -121,6 +142,7 @@ async function smoke(){
     screenWidth:393,screenHeight:851
   });
   await command('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:1});
+  console.log('BROWSER_STAGE mobile-public');
   await waitReady(URL_V5);
   const initial=await evaluate(`({
     url:location.href,
@@ -171,6 +193,7 @@ async function smoke(){
   check(closed.aria==='false','aria-expanded not reset');
   check(closed.url.includes('variant-5.html'),'Back left the site');
 
+  console.log('BROWSER_STAGE mobile-broker');
   await waitReady(URL_BROKER);
   const broker=await evaluate(`({
     title:document.title,
@@ -222,10 +245,13 @@ async function smoke(){
   try{await smoke();}
   catch(error){console.error(error.stack||String(error));process.exitCode=1;}
   finally{
-    for(const entry of pending.values())entry.reject(Error('Browser shutting down'));
+    clearTimeout(watchdog);
+    for(const entry of pending.values()){
+      clearTimeout(entry.timer);
+      entry.reject(Error('Browser shutting down'));
+    }
     pending.clear();
     if(socket&&socket.readyState<=1)socket.close();
-    try{await command('Browser.close');}catch(_){}
     chrome.kill();
     await sleep(200);
     try{fs.rmSync(folder,{recursive:true,force:true,maxRetries:3,retryDelay:100});}catch(_){}
