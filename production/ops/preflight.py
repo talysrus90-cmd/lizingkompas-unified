@@ -12,6 +12,7 @@ Add --require-live only for the actual go-live control meeting.
 Python 3.12, standard library, does not mutate source, DB, DNS or registry.
 """
 import argparse
+import base64
 import json
 import pathlib
 import re
@@ -33,6 +34,16 @@ LEGAL_DRAFT_TEXT = (
     "окончательная редакция утверждается",
 )
 DOMAIN = "leasingcompass.ru"
+
+
+def valid_fernet_key(key):
+    """Fernet uses a 32-byte key encoded as 44 URL-safe base64 chars."""
+    if not isinstance(key,str) or not re.fullmatch(r"[A-Za-z0-9_-]{43}=",key):
+        return False
+    try:
+        return len(base64.urlsafe_b64decode(key.encode("ascii")))==32
+    except (ValueError,TypeError):
+        return False
 
 
 def env_read(path):
@@ -75,8 +86,10 @@ def inspect_settings(env,site,domain,network=False):
     checks["approved_policy"]=env.get("COMPASS_POLICY_APPROVED")=="yes"
     checks["rkn_scope_confirmed"]=env.get("COMPASS_RKN_SCOPE_CONFIRMED")=="yes"
     checks["restore_test_passed"]=env.get("COMPASS_RESTORE_TEST_PASSED")=="yes"
-    checks["fernet_keys_configured"]=bool(env.get("COMPASS_FERNET_KEYS")) and not env.get(
-        "COMPASS_FERNET_KEYS","").startswith("REPLACE")
+    checks["fernet_keys_configured"]=bool(env.get("COMPASS_FERNET_KEYS")) and all(
+        valid_fernet_key(key.strip())
+        for key in env.get("COMPASS_FERNET_KEYS","").split(",")
+    )
     checks["database_configured"]=env.get("DATABASE_URL","").startswith("postgresql://") and (
         "REPLACE" not in env.get("DATABASE_URL","")
     )
