@@ -839,7 +839,60 @@ html{scroll-padding-top:145px!important}
 #servicesGrid{grid-template-columns:minmax(0,1fr)!important}
 #servicesGrid .photo-service{max-width:none!important}
 }
-</style><link rel="manifest" href="./lk-app.webmanifest"><meta name="theme-color" content="#142b45"><link rel="apple-touch-icon" href="./art/lk-app.svg"></head>
+</style><link rel="manifest" href="./lk-app.webmanifest"><meta name="theme-color" content="#142b45"><link rel="apple-touch-icon" href="./art/lk-app.svg"><style id="lk-v505">
+header .nav-wrap{display:flex!important;flex-flow:row nowrap!important;align-items:center!important;justify-content:space-between!important;min-height:70px!important;padding-block:5px!important;gap:8px!important}
+header .logo{flex:1 1 auto!important;min-width:0!important;align-items:center!important}
+header .logo>div:last-child{min-width:0}
+header .nav-right{display:flex!important;flex:0 0 auto!important;flex-flow:row nowrap!important;width:auto!important;align-items:center!important;justify-content:flex-end!important;gap:7px!important}
+header .nav-right .burger{border:0!important;background:transparent!important;box-shadow:none!important;border-radius:0!important}
+.lk-handset{transform-box:fill-box;transform-origin:right center;animation:lk-lift-v505 1.35s ease-in-out infinite}
+.lk-ring-lines{animation:lk-signal-v505 1.35s ease-in-out infinite}
+@keyframes lk-lift-v505{0%,100%{transform:translateY(0) rotate(0)}20%,65%{transform:translateY(-1px) rotate(12deg)}40%,85%{transform:translateY(0) rotate(0)}}
+@keyframes lk-signal-v505{0%,40%,85%,100%{opacity:0}20%,65%{opacity:.85}}
+body.callback-motion-off .lk-handset,body.callback-motion-off .lk-ring-lines{animation:none!important}
+@media(prefers-reduced-motion:reduce){.lk-handset,.lk-ring-lines{animation:none!important}}
+.lk-request-layout{max-width:780px;margin:auto}
+.lk-footer-requisites{display:grid;gap:4px;font-size:15px;line-height:1.5;margin:8px 0 12px;overflow-wrap:anywhere}
+#contacts{scroll-margin-top:90px}
+#callbackDialog .direct-contact .direct-call{font-weight:750;color:#142b45}
+#callbackDialog .direct-contact small{font-size:13px;line-height:1.45;color:#526577}
+#lkCopyPhoneStatus{font-size:13px;color:#087f5b;min-height:0}
+@media(max-width:900px){
+header .desktop-nav{display:none!important}
+header .nav-wrap{padding:4px 7px!important;gap:4px!important;min-height:65px!important}
+header .logo{gap:5px!important;font-size:clamp(13px,3.65vw,19px)!important;line-height:1.09!important}
+header .logo-mark{width:32px!important;height:32px!important;flex:0 0 32px!important;border-radius:9px!important}
+header .logo-mark svg{width:28px!important;height:28px!important}
+header .logo small{display:block!important;font-size:clamp(7px,1.9vw,10px)!important;margin-top:3px!important;letter-spacing:0!important;white-space:nowrap!important}
+header .nav-right{gap:1px!important}
+header .nav-right .callback-trigger{width:52px!important;min-width:52px!important;flex:0 0 52px!important}
+header .nav-right .callback-icon,header .nav-right .callback-icon svg{width:36px!important;height:36px!important}
+header .nav-right .callback-label,header .nav-right .lk-share-top span{font-size:8px!important;line-height:1.12!important}
+header .nav-right .callback-label span{display:block}
+header .nav-right .msg-ico{width:44px!important;min-width:44px!important;flex:0 0 44px!important}
+header .nav-right .app-symbol{width:37px!important;height:37px!important}
+header .nav-right .app-max img{width:35px!important;height:35px!important}
+header .nav-right .app-name{font-size:9px!important}
+header .nav-right .lk-share-top{width:49px!important;min-width:49px!important;flex:0 0 49px!important;padding:0!important}
+header .nav-right .lk-share-top svg{width:30px!important;height:30px!important}
+header .nav-right .lk-qr-button,header .nav-right .burger{width:44px!important;min-width:44px!important;flex:0 0 44px!important}
+header .nav-right .lk-qr-button{border:none!important}
+header .nav-right .lk-qr-button img{width:35px;height:35px}
+header .nav-right .burger svg{width:23px;height:23px}
+html{scroll-padding-top:80px!important}
+}
+@media(max-width:360px){
+header .nav-wrap{padding-inline:4px!important;gap:3px!important}
+header .logo{font-size:12px!important;gap:3px!important}
+header .logo-mark{width:27px!important;height:27px!important;flex-basis:27px!important}
+header .logo-mark svg{width:23px!important;height:23px!important}
+header .logo small{font-size:6.5px!important}
+header .nav-right .callback-trigger{width:44px!important;min-width:44px!important;flex-basis:44px!important}
+header .nav-right .lk-share-top{width:44px!important;min-width:44px!important;flex-basis:44px!important}
+header .nav-right{gap:0!important}
+}
+@media(max-width:335px){header .logo-mark{display:none!important}header .logo{font-size:11.5px!important}}
+</style></head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
 <!-- V5.04; indexing remains disabled -->
@@ -853,7 +906,7 @@ html{scroll-padding-top:145px!important}
       <div class="logo-mark"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="17" stroke="currentColor" stroke-width="1.4" opacity=".65"/><path d="m32.8 13.6-5.6 13.6-12 7.2 5.6-13.6 12-7.2Z" fill="#F28B49"/><path d="m32.8 13.6-5.6 13.6-6.4-6.4 12-7.2Z" fill="#fff"/><circle cx="24" cy="24" r="2.3" fill="#142b45"/><path d="M24 5v4M24 39v4M5 24h4M39 24h4" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg></div>
       <div>
         Лизинг Компас
-        <small>LEASING COMPASS · Лизинговый брокер</small>
+        <small>LEASING COMPASS</small>
       </div>
     </a>
     <nav class="desktop-nav" aria-label="Основное меню">
@@ -868,7 +921,7 @@ html{scroll-padding-top:145px!important}
       
       
       
-      <button type="button" class="callback-trigger" id="callbackTrigger" aria-label="Заказать обратный звонок" aria-haspopup="dialog" aria-controls="callbackDialog"><span class="callback-icon"><svg class="lk-retro-phone" viewBox="0 0 64 64" aria-hidden="true"><g class="lk-handset"><path d="M7 24C7 11 19 7 32 7s25 4 25 17v5H44v-5c-1-5-23-5-24 0v5H7Z" fill="#df2632" stroke="#a91b27" stroke-width="1.5"/><path d="M11 21c3-8 13-10 21-10s18 2 21 10" fill="none" stroke="#ffaea2" stroke-width="2" stroke-linecap="round"/></g><path d="M24 27h16l13 21 2 8H9l2-8Z" fill="#d92b35" stroke="#a91b27" stroke-width="1.5" stroke-linejoin="round"/><rect x="7" y="54" width="50" height="6" rx="2" fill="#be1827"/><circle cx="32" cy="43" r="11" fill="#fff1e7" stroke="#ab2630" stroke-width="1.5"/><circle cx="32" cy="43" r="4" fill="#e23a42"/><g fill="#b62230"><circle cx="39.50" cy="43.00" r="1.7"/><circle cx="37.30" cy="48.30" r="1.7"/><circle cx="32.00" cy="50.50" r="1.7"/><circle cx="26.70" cy="48.30" r="1.7"/><circle cx="24.50" cy="43.00" r="1.7"/><circle cx="26.70" cy="37.70" r="1.7"/><circle cx="32.00" cy="35.50" r="1.7"/><circle cx="37.30" cy="37.70" r="1.7"/></g><g class="lk-ring-lines" fill="none" stroke="#d32434" stroke-width="2" stroke-linecap="round"><path d="M3 10 1 5M9 5 7 1M61 10l2-5M55 5l2-4"/></g></svg></span><span class="callback-label">Заказать<span>обратный звонок</span></span></button>
+      <button type="button" class="callback-trigger" id="callbackTrigger" aria-label="Заказать обратный звонок" aria-haspopup="dialog" aria-controls="callbackDialog"><span class="callback-icon"><svg class="lk-retro-phone" viewBox="0 0 64 64" aria-hidden="true"><g class="lk-handset"><path d="M7 24C7 11 19 7 32 7s25 4 25 17v5H44v-5c-1-5-23-5-24 0v5H7Z" fill="#df2632" stroke="#a91b27" stroke-width="1.5"/><path d="M11 21c3-8 13-10 21-10s18 2 21 10" fill="none" stroke="#ffaea2" stroke-width="2" stroke-linecap="round"/></g><path d="M24 27Q32 25 40 27L51 45Q55 51 55 55Q55 58 51 58H13Q9 58 9 55Q9 51 13 45Z" fill="#d92b35" stroke="#a91b27" stroke-width="1.5" stroke-linejoin="round"/><rect x="7" y="54" width="50" height="6" rx="3" fill="#be1827"/><circle cx="32" cy="43" r="11" fill="#fff1e7" stroke="#ab2630" stroke-width="1.5"/><circle cx="32" cy="43" r="4" fill="#e23a42"/><g fill="#b62230"><circle cx="39.50" cy="43.00" r="1.7"/><circle cx="37.30" cy="48.30" r="1.7"/><circle cx="32.00" cy="50.50" r="1.7"/><circle cx="26.70" cy="48.30" r="1.7"/><circle cx="24.50" cy="43.00" r="1.7"/><circle cx="26.70" cy="37.70" r="1.7"/><circle cx="32.00" cy="35.50" r="1.7"/><circle cx="37.30" cy="37.70" r="1.7"/></g><g class="lk-ring-lines" fill="none" stroke="#d32434" stroke-width="2" stroke-linecap="round"><path d="M3 10 1 5M9 5 7 1M61 10l2-5M55 5l2-4"/></g></svg></span><span class="callback-label">Заказать<span>обратный звонок</span></span></button>
       <a class="msg-ico msg-max" data-bind-href="max" target="_blank" rel="noopener" title="Макс" aria-label="MAX"><span class="app-symbol app-max"><img src="max.svg" alt="" aria-hidden="true"></span><span class="app-name">MAX</span></a>
       <button type="button" class="lk-share-top" data-lk-share="header" aria-label="Поделиться сайтом с друзьями и коллегами" title="Поделиться сайтом"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg><span>Поделиться</span></button>
       <button type="button" id="lkQrOpen" class="lk-qr-button" aria-label="Показать QR-код сайта" title="QR-код"><img src="./art/qr-variant5-v504.svg" width="40" height="40" alt=""></button><button class="burger" id="burgerBtn" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobileMenu"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" fill="currentColor"><circle cx="12" cy="5" r="2.3"/><circle cx="12" cy="12" r="2.3"/><circle cx="12" cy="19" r="2.3"/></svg></button>
@@ -1160,7 +1213,7 @@ html{scroll-padding-top:145px!important}
       <div>
         <div class="eyebrow">О КОМПАНИИ</div>
         <h2 class="section-title">О брокере «Лизинг Компас»</h2>
-        <p class="about-text">«Лизинг Компас» — проект независимого брокера по подбору и сопровождению лизинговых сделок. </p><p class="about-text">ИНН 231207234403 · ОГРНИП 323237500416632.</p><div class="about-points"><div>✓ Сравнение на единых параметрах</div><div>✓ Индивидуальные условия сопровождения</div><div>✓ Работа с договором и графиком платежей</div></div>
+        <p class="about-text">«Лизинг Компас» — проект независимого брокера по подбору и сопровождению лизинговых сделок. </p><div class="about-points"><div>✓ Сравнение на единых параметрах</div><div>✓ Индивидуальные условия сопровождения</div><div>✓ Работа с договором и графиком платежей</div></div>
       </div>
     </div>
   </div>
@@ -1171,35 +1224,7 @@ html{scroll-padding-top:145px!important}
 
 <section class="section section-alt" id="faq"><div class="container"><div class="eyebrow">ВОПРОСЫ</div><h2 class="section-title">Частые вопросы</h2><div class="support-grid"><details><summary>Чем лизинг отличается от кредита?</summary><p>Имущество приобретается лизингодателем и передаётся в пользование на договорных условиях. Порядок перехода собственности зависит от договора.</p></details><details><summary>Как сравнить два предложения?</summary><p>Сравните аванс, все платежи, выкуп и дополнительные расходы при одинаковых условиях. Отправьте нам графики платежей по электронной почте для индивидуального сравнения.</p></details><details><summary>Можно ли изменить действующий договор?</summary><p>Изменения зависят от договора и согласия сторон. Подготовьте график и документы для консультации.</p></details><details><summary>Почему налоговая экономия не указана одной цифрой?</summary><p>Она зависит от налогового режима, права на вычет и условий сделки. Универсальная цифра может вводить в заблуждение.</p></details></div></div></section>
 <!-- CONTACTS -->
-<section class="section section-alt" id="contacts">
-  <div class="container">
-    <div class="badge">Свяжитесь удобным способом</div>
-    <h2 class="section-title">Контакты и заявка на лизинг</h2>
-    <div class="grid-2">
-      <div class="card">
-        <div>
-          <h3>Прямая связь по всей России</h3>
-          <p>Связаться с нами можно по телефону или электронной почте.</p>
-          <div style="display:grid;gap:12px;margin:18px 0;font-size:16px;">
-            <div><strong>Телефон:</strong> <a href="tel:+79604844141" data-bind="phone" style="color:var(--navy);font-weight:800;">+7 (960) 484-41-41</a></div>
-            <div><strong>E-mail:</strong> <a href="mailto:lizingkompas@mail.ru" data-bind="email" style="color:var(--navy-2);font-weight:700;">lizingkompas@mail.ru</a></div>
-            <div><strong>Реквизиты:</strong> ИНН <span data-bind="ipInn">231207234403</span>, ОГРНИП <span data-bind="ipOgrnip">323237500416632</span></div>
-          </div>
-          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;">
-            
-            
-            <a class="btn btn-sm" style="background:#4F46E5;color:#fff;" data-bind-href="max" target="_blank" rel="noopener" aria-label="MAX"><span class="app-symbol app-max"><img src="max.svg" alt="" aria-hidden="true"></span><span class="app-name">MAX</span></a>
-            
-            
-            
-          </div>
-        </div>
-      </div>
-
-      <form id="request" class="card" onsubmit="submitForm(event, 'Заявка')"><h3>Подготовить заявку</h3><p>Подготовьте параметры обращения. Отправка через сайт пока недоступна.</p><div class="field"><label for="reqOrg">Наименование организации</label><input id="reqOrg" name="organization" required></div><div class="field"><label for="reqInn">ИНН</label><input id="reqInn" name="inn" inputmode="numeric" pattern="[0-9]{10}|[0-9]{12}" required></div><div class="field"><label for="reqRevenue">Средняя ежемесячная выручка, ₽</label><input id="reqRevenue" name="revenue" type="number" min="0" required></div><div class="field"><label for="reqName">ФИО контактного лица</label><input id="reqName" name="name" required></div><div class="field"><label for="reqPhone">Контактный телефон</label><input id="reqPhone" name="phone" type="tel" required></div><div class="field"><label for="reqComment">Комментарий: предмет лизинга, пожелания и т. д.</label><textarea id="reqComment" name="comment" rows="3"></textarea></div><div class="consent-block"><div class="consent-choice"><input type="checkbox" id="pdConsent4" name="pdConsent" required><label for="pdConsent4">Даю согласие на обработку персональных данных</label></div><div class="consent-links"><a href="./consent.html">Текст согласия</a> · <a href="./privacy.html">Политика обработки персональных данных</a></div></div><button class="btn btn-primary" type="submit" disabled>Подготовить заявку</button><p id="requestStatus" role="status"></p></form>
-    </div>
-  </div>
-</section>
+<section class="section section-alt" id="application"><div class="container"><h2 class="section-title">Заявка на лизинг</h2><div class="lk-request-layout"><form id="request" class="card" onsubmit="submitForm(event, 'Заявка')"><p>Подготовьте параметры обращения. Отправка через сайт пока недоступна.</p><div class="field"><label for="reqOrg">Наименование организации</label><input id="reqOrg" name="organization" required></div><div class="field"><label for="reqInn">ИНН</label><input id="reqInn" name="inn" inputmode="numeric" pattern="[0-9]{10}|[0-9]{12}" required></div><div class="field"><label for="reqRevenue">Средняя ежемесячная выручка, ₽</label><input id="reqRevenue" name="revenue" type="number" min="0" required></div><div class="field"><label for="reqName">ФИО контактного лица</label><input id="reqName" name="name" required></div><div class="field"><label for="reqPhone">Контактный телефон</label><input id="reqPhone" name="phone" type="tel" required></div><div class="field"><label for="reqComment">Комментарий: предмет лизинга, пожелания и т. д.</label><textarea id="reqComment" name="comment" rows="3"></textarea></div><div class="consent-block"><div class="consent-choice"><input type="checkbox" id="pdConsent4" name="pdConsent" required><label for="pdConsent4">Даю согласие на обработку персональных данных</label></div><div class="consent-links"><a href="./consent.html">Текст согласия</a> · <a href="./privacy.html">Политика обработки персональных данных</a></div></div><button class="btn btn-primary" type="submit" disabled>Подготовить заявку</button><p id="requestStatus" role="status"></p></form></div></div></section>
 </main>
 
 <!-- FOOTER -->
@@ -1218,11 +1243,11 @@ html{scroll-padding-top:145px!important}
         <h4>Правовая информация</h4>
         <ul><li><a href="./privacy.html" target="_blank" rel="noopener">Политика обработки персональных данных</a></li><li><a href="./consent.html" target="_blank" rel="noopener">Согласие на обработку персональных данных</a></li></ul>
       </div>
-      <div class="footer-contacts">
-        <h4>Связаться с нами</h4>
+      <div class="footer-contacts" id="contacts">
+        <h4>Прямая связь по всей России</h4>
         <a class="footer-phone" href="tel:+79604844141" data-bind="phone">+7 (960) 484-41-41</a>
         <span class="footer-email-label">Электронная почта</span><a class="footer-email" href="mailto:lizingkompas@mail.ru" data-bind="email">lizingkompas@mail.ru</a>
-        <button type="button" class="footer-callback" onclick="document.getElementById('callbackTrigger').click()">Заказать обратный звонок →</button>
+        <div class="lk-footer-requisites"><strong>Реквизиты</strong><span>ИНН <span data-bind="ipInn">231207234403</span></span><span>ОГРНИП <span data-bind="ipOgrnip">323237500416632</span></span></div><button type="button" class="footer-callback" onclick="document.getElementById('callbackTrigger').click()">Заказать обратный звонок →</button>
         <button type="button" id="callbackMotionToggle" class="motion-toggle" aria-pressed="false">Отключить анимацию звонка</button>
       </div>
     </div>
@@ -1542,7 +1567,7 @@ document.querySelectorAll('.partners-strip').forEach(x=>{x.parentElement.querySe
   
 </div>
 <button type="button" class="btn" id="callbackDemo" disabled>Заказать звонок</button>
-<p id="callbackResult" role="status" aria-live="polite"></p><div class="direct-contact"><span>Или позвоните самостоятельно</span><a href="tel:+79604844141" data-bind="phone" class="direct-call">+7 (960) 484-41-41</a></div>
+<p id="callbackResult" role="status" aria-live="polite"></p><div class="direct-contact"><span>Телефон специалиста</span><span class="direct-call" data-bind="phone">+7 (960) 484-41-41</span><button type="button" id="lkCopyContactPhone" class="btn btn-outline btn-sm">Скопировать номер</button><small>Для самостоятельного звонка вставьте номер в приложение «Телефон».</small><p id="lkCopyPhoneStatus" role="status" aria-live="polite"></p></div>
 </dialog>
 <script>
 (() => {
@@ -1552,7 +1577,7 @@ const trigger=document.getElementById('callbackTrigger');
 let lastTrigger=trigger;[trigger].forEach(btn=>btn.addEventListener('click',()=>{lastTrigger=btn;result.textContent='';document.getElementById('callbackConsent').checked=false;document.getElementById('callbackDemo').disabled=true;dialog.showModal();}));
 document.getElementById('callbackClose').addEventListener('click',()=>dialog.close());
 document.getElementById('callbackConsent').addEventListener('change',e=>{document.getElementById('callbackDemo').disabled=!e.target.checked;});
-document.getElementById('callbackDemo').addEventListener('click',()=>{if(!document.getElementById('callbackConsent').checked)return;const number=document.getElementById('callbackPhone').value.replace(/[^0-9]/g,'');if(number.length<10||number.length>15){result.textContent='Укажите корректный номер телефона.';return;}result.textContent='Номер подготовлен. Звонок не заказан: для связи позвоните нам напрямую.';});
+document.getElementById('callbackDemo').addEventListener('click',()=>{if(!document.getElementById('callbackConsent').checked)return;const number=document.getElementById('callbackPhone').value.replace(/[^0-9]/g,'');if(number.length<10||number.length>15){result.textContent='Укажите корректный номер телефона.';return;}result.textContent='Номер подготовлен. Автоматическая отправка пока недоступна. Для связи скопируйте номер специалиста.';});
 dialog.addEventListener('click',e=>{if(e.target===dialog){const b=dialog.getBoundingClientRect();if(e.clientX<b.left||e.clientX>b.right||e.clientY<b.top||e.clientY>b.bottom)dialog.close();}});
 dialog.addEventListener('close',()=>lastTrigger.focus());
 })();
@@ -1660,5 +1685,5 @@ document.querySelectorAll('form').forEach(form=>{
 document.getElementById('qBudget').addEventListener('input',()=>{const a=document.getElementById('qAdv'),max=Math.max(0,financeNumber(document.getElementById('qBudget'))||0);a.dataset.min=String(Math.ceil(max*.05));a.dataset.max=String(max);if(financeNumber(a)>max)setFinance(a,max);if(financeNumber(a)<Math.ceil(max*.05))setFinance(a,Math.ceil(max*.05));refreshFinance();});
 </script>
 <script id="unified-layout">(()=>{if(new URLSearchParams(location.search).get('layout')!=='1')return;const main=document.querySelector('main'),blocks=[...main.children].filter(e=>e.matches('section,.route-section'));const original=blocks.slice();const bar=document.createElement('div');bar.className='layout-tools';bar.innerHTML='<strong>Конструктор блоков</strong><p>Перемещайте блоки стрелками. Изменения не затрагивают опубликованный порядок и сохраняются только в этом браузере.</p><button type="button" id="uLayoutReset">Вернуть порядок</button>';main.before(bar);const key='lc-unified-layout-v1';blocks.forEach((el,i)=>{el.dataset.layoutId=String(i);const name=el.querySelector('h1,h2')?.textContent||'Блок';const controls=document.createElement('div');controls.className='layout-buttons';const label=document.createElement('strong');label.textContent=name;controls.append(label);for(const [txt,dir] of [['↑ Выше',-1],['↓ Ниже',1]]){const b=document.createElement('button');b.type='button';b.textContent=txt;b.onclick=()=>{const list=[...main.children].filter(x=>x.dataset.layoutId!==undefined),j=list.indexOf(el);if(dir<0&&j>0)main.insertBefore(el,list[j-1]);if(dir>0&&j<list.length-1)main.insertBefore(list[j+1],el);try{localStorage.setItem(key,JSON.stringify([...main.children].filter(x=>x.dataset.layoutId!==undefined).map(x=>x.dataset.layoutId)))}catch{}el.scrollIntoView({block:'start'});};controls.append(b)}el.prepend(controls)});try{const saved=JSON.parse(localStorage.getItem(key)||'null');if(Array.isArray(saved)&&saved.length===blocks.length&&new Set(saved).size===blocks.length&&saved.every(x=>blocks[Number(x)]))saved.forEach(x=>main.append(blocks[Number(x)]))}catch{}document.getElementById('uLayoutReset').onclick=()=>{original.forEach(x=>main.append(x));try{localStorage.removeItem(key)}catch{}window.scrollTo(0,0)};})();
-</script><script id="service-routing-v44">(()=>{const p=new URLSearchParams(location.search);const service=SERVICES.find(s=>s.slug===p.get('service'));if(service&&service.type){document.getElementById('cType').value=service.type;syncPrice(service.color,true);recalc()}if(p.get('callback')==='1'){document.getElementById('callbackTrigger')?.click()}})();</script><script id="calc-live-v411">(()=>{const live=document.getElementById('calcLive'),controls=document.getElementById('calcControls'),result=document.getElementById('resMonthly'),tab=document.getElementById('calcTab'),header=document.querySelector('header'),dock=document.getElementById('lkShareFloat'),mq=matchMedia('(max-width:767px)');let frame=0;function update(){frame=0;if(!mq.matches||!tab.classList.contains('active')){live.hidden=true;return}const h=window.innerHeight,headerBottom=Math.max(0,header?.getBoundingClientRect().bottom||0),dockRect=dock?.getBoundingClientRect(),dockHeight=dockRect&&getComputedStyle(dock).position==='fixed'?Math.max(0,h-dockRect.top):0,viewportBottom=h-dockHeight,ctrl=controls.getBoundingClientRect(),res=result.getBoundingClientRect();live.style.setProperty('--calc-dock-height',dockHeight+'px');const controlsVisible=ctrl.bottom>headerBottom+16&&ctrl.top<viewportBottom-45;const paymentVisible=res.top>=headerBottom&&res.bottom<=viewportBottom;live.hidden=!(controlsVisible&&!paymentVisible)}function schedule(){if(!frame)frame=requestAnimationFrame(update)}window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule,{passive:true});document.addEventListener('click',schedule);document.addEventListener('input',schedule);if(window.ResizeObserver){const ro=new ResizeObserver(schedule);[controls,header,dock].filter(Boolean).forEach(x=>ro.observe(x))}schedule()})();</script><script src="./lk-growth-v2.js"></script><script src="./lk-share-v3.js"></script><script src="./lk-ui-v504.js"></script></body>
+</script><script id="service-routing-v44">(()=>{const p=new URLSearchParams(location.search);const service=SERVICES.find(s=>s.slug===p.get('service'));if(service&&service.type){document.getElementById('cType').value=service.type;syncPrice(service.color,true);recalc()}if(p.get('callback')==='1'){document.getElementById('callbackTrigger')?.click()}})();</script><script id="calc-live-v411">(()=>{const live=document.getElementById('calcLive'),controls=document.getElementById('calcControls'),result=document.getElementById('resMonthly'),tab=document.getElementById('calcTab'),header=document.querySelector('header'),dock=document.getElementById('lkShareFloat'),mq=matchMedia('(max-width:767px)');let frame=0;function update(){frame=0;if(!mq.matches||!tab.classList.contains('active')){live.hidden=true;return}const h=window.innerHeight,headerBottom=Math.max(0,header?.getBoundingClientRect().bottom||0),dockRect=dock?.getBoundingClientRect(),dockHeight=dockRect&&getComputedStyle(dock).position==='fixed'?Math.max(0,h-dockRect.top):0,viewportBottom=h-dockHeight,ctrl=controls.getBoundingClientRect(),res=result.getBoundingClientRect();live.style.setProperty('--calc-dock-height',dockHeight+'px');const controlsVisible=ctrl.bottom>headerBottom+16&&ctrl.top<viewportBottom-45;const paymentVisible=res.top>=headerBottom&&res.bottom<=viewportBottom;live.hidden=!(controlsVisible&&!paymentVisible)}function schedule(){if(!frame)frame=requestAnimationFrame(update)}window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule,{passive:true});document.addEventListener('click',schedule);document.addEventListener('input',schedule);if(window.ResizeObserver){const ro=new ResizeObserver(schedule);[controls,header,dock].filter(Boolean).forEach(x=>ro.observe(x))}schedule()})();</script><script src="./lk-growth-v2.js"></script><script src="./lk-share-v3.js"></script><script src="./lk-ui-v504.js"></script><script src="./lk-ui-v505.js"></script></body>
 </html>
