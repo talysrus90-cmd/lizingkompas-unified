@@ -87,7 +87,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "collected_static"
 STORAGES = {
-    "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
+    "staticfiles": {"BACKEND": (
+        "django.contrib.staticfiles.storage.StaticFilesStorage" if TESTING
+        else "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    )},
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
 }
 # Document uploads are NOT enabled. Any future private document storage must
