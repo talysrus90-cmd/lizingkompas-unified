@@ -65,6 +65,33 @@ class LeadAdmin(admin.ModelAdmin):
                 details=previous+" -> "+obj.stage
             )
 
+    def save_formset(self,request,form,formset,change):
+        """Audit every quote added, updated or removed in the private CRM.
+
+        No source PDF or customer contact is inserted into the audit details.
+        The Django admin change transaction wraps this action atomically.
+        """
+        if formset.model is Quote:
+            quotes=formset.save(commit=False)
+            for item in formset.deleted_objects:
+                offer_id=item.offer_id
+                item.delete()
+                AuditEvent.objects.create(
+                    lead=form.instance,action="offer.deleted",
+                    actor=str(request.user.pk),details=offer_id[:64]
+                )
+            for item in quotes:
+                was_new=item._state.adding
+                item.save()
+                AuditEvent.objects.create(
+                    lead=form.instance,
+                    action="offer.added" if was_new else "offer.changed",
+                    actor=str(request.user.pk),details=item.offer_id[:64],
+                )
+            formset.save_m2m()
+        else:
+            super().save_formset(request,form,formset,change)
+
     def get_urls(self):
         urls=super().get_urls()
         custom=[path("<uuid:object_id>/compare/",self.admin_site.admin_view(self.compare_view),
