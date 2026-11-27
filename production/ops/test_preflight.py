@@ -1,5 +1,6 @@
 """Production launch gates may never be green with draft legal pages."""
 import importlib.util
+import base64
 import pathlib
 import tempfile
 import unittest
@@ -28,7 +29,7 @@ class PreflightTests(unittest.TestCase):
             "COMPASS_POLICY_APPROVED":"yes",
             "COMPASS_RKN_SCOPE_CONFIRMED":"yes",
             "COMPASS_RESTORE_TEST_PASSED":"yes",
-            "COMPASS_FERNET_KEYS":"example-placeholder-format-do-not-use-tests",
+            "COMPASS_FERNET_KEYS":base64.urlsafe_b64encode(bytes(range(32))).decode(),
             "DATABASE_URL":"postgresql://compass:synthetic@db:5432/leasingcompass",
             "DJANGO_SECRET_KEY":"testonly-"+"b"*80,
             "COMPASS_THROTTLE_SECRET":"testonly-"+"c"*80,
