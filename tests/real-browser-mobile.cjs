@@ -208,7 +208,7 @@ async function smoke(){
     return {color:style.color,background:style.backgroundColor,width:el.getBoundingClientRect().width};
   })()`);
   const lum=color=>{
-    const vals=color.match(/\\d+(?:\\.\\d+)?/g)?.slice(0,3).map(Number)||[];
+    const vals=color.match(/\d+(?:\.\d+)?/g)?.slice(0,3).map(Number)||[];
     const rgb=vals.map(x=>{const v=x/255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4;});
     return .2126*rgb[0]+.7152*rgb[1]+.0722*rgb[2];
   };
