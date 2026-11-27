@@ -98,7 +98,7 @@ jobs:
             sleep .3
           done
           curl --fail-with-body -sS http://127.0.0.1:18765/healthz | grep -F '"ok": true'
-          code=$(curl -sS -o /tmp/intake-disabled.txt -w '%{http_code}' http://127.0.0.1:18765/apply/)
+          code=$(curl -sS -o /tmp/intake-disabled.txt -w '%{http_code}' -H 'X-Forwarded-Proto: https' http://127.0.0.1:18765/apply/)
           test "$code" = "503"
       - name: Stop QA application container
         if: always()
