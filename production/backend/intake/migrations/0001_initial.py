@@ -48,6 +48,31 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
+            name="CallbackRequest",
+            fields=[
+                ("id", models.UUIDField(primary_key=True, default=uuid.uuid4,
+                                        editable=False, serialize=False)),
+                ("request_key", models.UUIDField(unique=True, editable=False)),
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now,
+                                                      editable=False, db_index=True)),
+                ("stage", models.CharField(max_length=12, default="new", db_index=True,
+                    choices=[("new","Ожидает звонка"),("contacted","Связались"),
+                             ("closed","Завершена")])),
+                ("name", intake.crypto.EncryptedTextField(blank=True, default="")),
+                ("phone", intake.crypto.EncryptedTextField()),
+                ("consent_version", models.CharField(max_length=80)),
+                ("consent_text_sha256", models.CharField(max_length=64)),
+                ("consent_at", models.DateTimeField(default=django.utils.timezone.now,
+                                                      editable=False)),
+                ("source_ip_digest", models.CharField(max_length=64)),
+            ],
+            options={
+                "verbose_name":"Обратный звонок",
+                "verbose_name_plural":"Обратные звонки",
+                "ordering":["-created_at"],
+            },
+        ),
+        migrations.CreateModel(
             name="SubmissionAttempt",
             fields=[
                 ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
