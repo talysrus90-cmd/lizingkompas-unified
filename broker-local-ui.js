@@ -54,13 +54,21 @@
   const formData=form=>Object.fromEntries(new FormData(form).entries());
   function setLoggedIn(isLogged){
     by("metricCasesLabel").textContent="Сделок в локальной базе";
-    by("metricOffersLabel").textContent="Условий КП в базе";
+    by("metricOffersLabel").textContent="КП в локальной базе";
+    by("metricCasesNote").textContent="в базе этого ПК";
+    by("metricOffersNote").textContent="финансовые условия";
     by("metricVerified").textContent="—";
+    by("metricVerifiedNote").textContent="оригиналы не загружены";
+    if(!isLogged){
+      by("metricCases").textContent="—";
+      by("metricOffers").textContent="—";
+    }
     by("localAuth").hidden=isLogged;
     by("localWorkArea").hidden=!isLogged;
     by("localLogout").hidden=!isLogged;
-    by("modeBadge").textContent=isLogged?"● ЛОКАЛЬНЫЙ РЕЖИМ • СДЕЛКИ В БАЗЕ":"● ПРИМЕР • ЛОКАЛЬНЫЙ ВХОД";
-    if(isLogged)document.querySelector('[data-tab="workspace"]')?.click();
+    by("modeBadge").textContent=isLogged?"● ЛОКАЛЬНО • ФИНАНСОВЫЕ ЗАПИСИ":"● ЛОКАЛЬНО • ВХОД";
+    // Local mode must never fall back to the public sample deal pages.
+    document.querySelector('[data-tab="workspace"]')?.click();
   }
   function make(tag,text,cls){
     const el=document.createElement(tag);
