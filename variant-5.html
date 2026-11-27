@@ -786,9 +786,55 @@ header .nav-right .callback-label span{max-width:none!important}
 header .nav-right .lk-qr-button{background:white;border:1px solid #e0e7eb;border-radius:8px;display:grid;place-items:center;min-width:44px;min-height:44px;padding:0;cursor:pointer}
 .lk-qr-button img{display:block;width:40px;height:40px}
 header .nav-right .burger{display:grid!important;place-items:center!important;min-width:44px!important;min-height:44px!important;width:44px!important;padding:0!important}
-#mobileMenu{display:none!important}
-#mobileMenu.open{display:grid!important;gap:0!important;max-height:min(67dvh,650px);overflow:auto;overscroll-behavior:contain;padding:8px 20px 14px!important}
-#mobileMenu>a,#mobileMenu>button{display:flex!important;align-items:center;min-height:44px;padding:11px 0!important;color:#20394b;background:white;border:0;border-bottom:1px solid #e9edf0;text-align:left;font:inherit;font-weight:650;text-decoration:none;cursor:pointer}
+/* Compact Chrome-inspired but independently styled accessible dark site popover. */
+header{position:sticky}
+header #mobileMenu{display:none!important}
+header #mobileMenu.open{
+  display:block!important;
+  position:absolute!important;z-index:1200!important;
+  inset-block-start:calc(100% + 5px)!important;
+  inset-inline-end:clamp(10px,2vw,28px)!important;
+  inset-inline-start:auto!important;
+  width:min(334px,calc(100vw - 20px))!important;
+  max-width:min(62dvh,540px)!important;
+  margin:0!important;padding:8px!important;
+  overflow:auto!important;overscroll-behavior:contain;
+  border:1px solid #50535b!important;border-radius:18px!important;
+  background:#303239!important;color:#f4f5f8!important;
+  box-shadow:0 16px 42px rgba(7,12,20,.28),0 3px 10px rgba(7,12,20,.17)!important;
+  -webkit-overflow-scrolling:touch;
+}
+header #mobileMenu .lk-menu-title{
+  color:#f1f3f5;font-size:14px;font-weight:700;
+  padding:10px 12px 9px;display:flex;justify-content:space-between;align-items:center;
+}
+header #mobileMenu .lk-menu-group{padding:5px 0;border-top:1px solid #4b4e55}
+header #mobileMenu .lk-menu-group-title{
+  color:#b7bdc8;font-size:11px;font-weight:650;letter-spacing:.03em;
+  padding:7px 12px 4px;
+}
+header #mobileMenu :is(a,button){
+  display:flex!important;align-items:center!important;gap:12px!important;
+  width:100%!important;min-height:44px!important;padding:9px 12px!important;
+  border:0!important;border-radius:10px!important;box-shadow:none!important;
+  color:#f3f4f7!important;background:transparent!important;
+  font:500 14px/1.35 system-ui,-apple-system,"Segoe UI",sans-serif!important;
+  text-align:left!important;text-decoration:none!important;cursor:pointer!important;
+}
+header #mobileMenu :is(a,button):hover,
+header #mobileMenu :is(a,button):focus-visible{
+  background:#454852!important;color:#ffffff!important;
+}
+header #mobileMenu :is(a,button):focus-visible{
+  outline:2px solid #b3e6d7!important;outline-offset:-2px!important;
+}
+header #mobileMenu .lk-menu-icon{
+  color:#d3d9e1!important;display:inline-flex;align-items:center;justify-content:center;
+  flex:0 0 23px;width:23px;font:700 19px/1 system-ui,sans-serif!important;
+}
+header #mobileMenu .lk-menu-utilities :is(a,button){font-weight:600!important}
+@media(max-width:360px){header #mobileMenu.open{max-height:min(59dvh,490px)!important}}
+
 .lk-qr-dialog>img{width:min(100%,300px);height:auto;display:block;image-rendering:pixelated;margin:0 auto 12px}
 .lk-qr-dialog>a,#lkInstallDialog>a{color:#087f5b;font-weight:700;display:block;padding:10px;text-align:center}
 .lk-comparison-readable{display:none}
@@ -1021,7 +1067,11 @@ main>.section .container{max-width:1320px;padding-inline:24px}
       <button type="button" class="lk-share-top" data-lk-share="header" aria-label="Поделиться сайтом с друзьями и коллегами" title="Поделиться сайтом"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg><span>Поделиться</span></button><button class="burger" id="burgerBtn" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobileMenu"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" fill="currentColor"><circle cx="12" cy="5" r="2.3"/><circle cx="12" cy="12" r="2.3"/><circle cx="12" cy="19" r="2.3"/></svg></button>
     </div>
   </div>
-  <nav class="mobile-menu" id="mobileMenu" aria-label="Меню сайта"><a href="#services">Услуги</a><a href="#calc-section">Калькулятор и подбор</a><a href="#request">Подготовить заявку</a><a href="#send-offer">Отправить график платежей</a><a href="#support-route">Сопровождение договора</a><a href="#cases">Примеры расчётов</a><a href="#b2b">Партнёрам (B2B)</a><a href="#partner-tools">Калькулятор поставщика</a><a href="#blog">База знаний</a><a href="./leasing-checklist.html">Чек-лист сделки</a><a href="#about">О брокере</a><a href="#contacts">Контакты</a><a href="./leasing-compass.vcf" download>Сохранить контакт</a><button type="button" id="lkInstallMenu">Установить приложение</button><a href="tel:+79604844141" class="phone-link" data-bind="phone">+7 (960) 484-41-41</a></nav>
+  <nav class="mobile-menu lk-menu-popover" id="mobileMenu" aria-label="Меню сайта"><div class="lk-menu-title">Разделы сайта <span aria-hidden="true">⋯</span></div><div class="lk-menu-group"><div class="lk-menu-group-title">Навигация</div><a href="#services"><span class="lk-menu-icon" aria-hidden="true">▦</span><span>Услуги</span></a><a href="#calc-section"><span class="lk-menu-icon" aria-hidden="true">≋</span><span>Калькулятор и подбор</span></a><a href="#request"><span class="lk-menu-icon" aria-hidden="true">✎</span><span>Подготовить заявку</span></a><a href="#cases"><span class="lk-menu-icon" aria-hidden="true">◫</span><span>Примеры расчётов</span></a></div><div class="lk-menu-group"><div class="lk-menu-group-title">Сделка и сопровождение</div><a href="#send-offer"><span class="lk-menu-icon" aria-hidden="true">⇧</span><span>Отправить график платежей</span></a><a href="#support-route"><span class="lk-menu-icon" aria-hidden="true">▤</span><span>Сопровождение договора</span></a><a href="#b2b"><span class="lk-menu-icon" aria-hidden="true">◇</span><span>Партнёрам (B2B)</span></a><a href="#partner-tools"><span class="lk-menu-icon" aria-hidden="true">⊞</span><span>Калькулятор поставщика</span></a></div><div class="lk-menu-group"><div class="lk-menu-group-title">Информация</div><a href="#blog"><span class="lk-menu-icon" aria-hidden="true">▣</span><span>База знаний</span></a><a href="./leasing-checklist.html"><span class="lk-menu-icon" aria-hidden="true">☷</span><span>Чек-лист сделки</span></a><a href="#about"><span class="lk-menu-icon" aria-hidden="true">ⓘ</span><span>О брокере</span></a><a href="#contacts"><span class="lk-menu-icon" aria-hidden="true">✉</span><span>Контакты</span></a></div><div class="lk-menu-group lk-menu-utilities">
+<a href="./leasing-compass.vcf" download><span class="lk-menu-icon" aria-hidden="true">↓</span><span>Сохранить контакт</span></a>
+<button type="button" id="lkInstallMenu"><span class="lk-menu-icon" aria-hidden="true">⊕</span><span>Установить приложение</span></button>
+<a href="tel:+79604844141" class="phone-link" data-bind="phone"><span class="lk-menu-icon" aria-hidden="true">☎</span><span>Позвонить</span></a>
+</div></nav>
 </header>
 
 <main id="main">
