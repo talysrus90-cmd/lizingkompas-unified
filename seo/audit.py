@@ -52,6 +52,8 @@ for url in locs:
         u=urlsplit(href)
         if not u.scheme and not u.netloc and u.path.endswith(".html") and not (f.parent/u.path).is_file(): errors.append(name+": broken local link "+href)
 if a.production:
+    keys=[p for p in root.glob("*.txt") if p.name!="robots.txt" and 8<=len(p.stem)<=128 and p.read_text(encoding="utf-8").strip()==p.stem]
+    if len(keys)!=1: errors.append("Missing or ambiguous IndexNow ownership key")
     for n in ("cabinet.html","self-service.html"):
         if (root/n).exists() and "noindex" not in (root/n).read_text(encoding="utf-8"): errors.append("Private/demo page indexable: "+n)
     if "Sitemap: "+prod+"sitemap.xml" not in (root/"robots.txt").read_text(encoding="utf-8"): errors.append("Production robots sitemap missing")

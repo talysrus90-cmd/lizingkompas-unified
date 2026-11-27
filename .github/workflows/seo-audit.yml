@@ -19,3 +19,5 @@ jobs:
       - run: python seo/audit.py
       - run: python seo/prepare_release.py --output /tmp/lk-seo-release --confirm-ready
       - run: python seo/audit.py --root /tmp/lk-seo-release --production
+      - run: python -m py_compile seo/live_check.py seo/indexnow.py
+      - run: python seo/indexnow.py --root /tmp/lk-seo-release --key $(basename $(find /tmp/lk-seo-release -maxdepth 1 -name '*.txt' ! -name robots.txt | head -1) .txt)
