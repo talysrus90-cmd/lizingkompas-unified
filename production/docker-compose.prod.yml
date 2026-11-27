@@ -51,7 +51,7 @@ services:
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       # Publication requires a separate explicitly approved production build.
-      - ./production-site:/srv/site:ro
+      - ${COMPASS_SITE_DIR:?Set an approved public site directory outside Git}:/srv/site:ro
       - caddydata:/data
       - caddyconfig:/config
     depends_on:
