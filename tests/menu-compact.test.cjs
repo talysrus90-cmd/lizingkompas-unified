@@ -41,5 +41,6 @@ test('ergonomic broker workspace supports light/dark without storing secrets',()
   assert.match(b,/:root\[data-theme="dark"\]/);
   assert.match(b,/id="themeToggle"/);
   assert.match(j,/themeButton\.addEventListener\("click"/);
-  assert.doesNotMatch(localUI,/(?:localStorage|sessionStorage|sendBeacon|WebSocket)/);
+  const liveCode=localUI.replace(/\/\*[\s\S]*?\*\//g,'');
+  assert.doesNotMatch(liveCode,/(?:localStorage|sessionStorage|sendBeacon|WebSocket)/);
 });
