@@ -22,6 +22,7 @@ allowed={".html",".css",".js",".mjs",".json",".svg",".png",".jpg",".jpeg",".webp
 blocked={"seo","node_modules","backups","tests","scripts","docs","__pycache__","CNAME"}
 def exclude(directory,names):
     return [n for n in names if n.startswith(".") or n in blocked or
+        (pathlib.Path(directory)==ROOT and n.startswith(("variant-","preview-","v5-"))) or
         ((pathlib.Path(directory)/n).is_file() and pathlib.Path(n).suffix.lower() not in allowed)]
 shutil.copytree(ROOT,out,ignore=exclude)
 for f in PUBLIC:
