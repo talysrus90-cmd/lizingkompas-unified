@@ -50,7 +50,7 @@ def main():
             "blockers": list(row.blockers),
         } for row in comparison.rows],
     }
-    print(json.dumps(output, ensure_ascii=False, indent=2))
+    print(json.dumps(output, ensure_ascii=True, indent=2))
 
 
 if __name__ == "__main__":
