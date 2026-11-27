@@ -6,7 +6,7 @@
 (() => {
   "use strict";
   if (typeof document === "undefined" || location.protocol !== "http:" ||
-      location.hostname !== "127.0.0.1") return;
+      location.hostname !== "127.0.0.1" || location.port !== "8765") return;
 
   document.body.dataset.localActive = "true";
   const by = id => document.getElementById(id);
