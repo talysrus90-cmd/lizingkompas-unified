@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Заявка на лизинг — Лизинг Компас</title>
+  <style>
+    :root{color-scheme:light;font-family:system-ui,"Segoe UI",sans-serif;
+      --bg:#f2f6f8;--surface:#fff;--text:#203947;--muted:#506978;--accent:#226b65}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);
+      line-height:1.55;font-size:16px}
+    main{max-width:760px;margin:36px auto 68px;padding:28px;
+      background:var(--surface);border:1px solid #d7e3e7;border-radius:18px}
+    h1{font-size:clamp(26px,4vw,34px);line-height:1.2;margin:10px 0}
+    .intro{color:var(--muted)}.fields{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .field{display:flex;flex-direction:column;gap:6px}label{font-weight:650}
+    input,select,textarea{width:100%;padding:12px;font:inherit;min-height:44px;
+      color:var(--text);background:#fbfdfd;border:1px solid #b6c9cf;border-radius:10px}
+    input:focus-visible,button:focus-visible,a:focus-visible{
+      outline:3px solid #29897e;outline-offset:2px}
+    input[type=checkbox]{min-height:22px;max-width:24px}
+    .consent{display:flex;align-items:flex-start;gap:13px;border:1px solid #b6c9cf;
+      padding:14px;border-radius:12px;margin-top:24px}
+    .consent label{font-weight:500}
+    .errors{color:#98231b;font-weight:600}
+    button{border:0;background:var(--accent);color:#fff;border-radius:11px;
+      min-height:48px;padding:12px 20px;font-weight:700;font-size:16px;cursor:pointer;margin-top:20px}
+    p.help{font-size:14px;color:var(--muted)}
+    footer{margin-top:20px;padding-top:14px;border-top:1px solid #d5e1e6;font-size:13px;color:var(--muted)}
+    a{color:var(--accent)}
+    @media(max-width:620px){main{margin:0;border-radius:0;padding:20px 14px}.fields{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<main>
+  <a href="/">← Лизинг Компас</a>
+  <h1>Подготовить заявку на лизинг</h1>
+  <p class="intro">Укажите основные параметры. Ответственный брокер рассмотрит обращение.
+    Никакие финансовые решения не принимаются автоматически.</p>
+  <form method="post" action="/apply/" autocomplete="on">
+    {% csrf_token %}
+    {{ form.request_key }}{{ form.website }}
+    {% if form.non_field_errors %}<p class="errors" role="alert">{{ form.non_field_errors }}</p>{% endif %}
+    <div class="fields">
+      {% for field in form.visible_fields %}
+        {% if field.name != "consent" %}
+          <div class="field">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}<div class="errors" role="alert">{{ field.errors }}</div>{% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div class="consent">
+      {{ form.consent }}
+      <label for="{{ form.consent.id_for_label }}">
+        <strong>Отдельное согласие на обработку персональных данных</strong>
+        <span>{{ consent_text }}</span>
+        <span>Версия: {{ consent_version }}.
+          <a href="/privacy.html" target="_blank" rel="noopener">Политика обработки данных</a>.</span>
+      </label>
+    </div>
+    {% if form.consent.errors %}<div class="errors" role="alert">{{ form.consent.errors }}</div>{% endif %}
+    <p class="help">Не прикрепляйте паспорт, выписки или договоры: загрузка документов
+      появится только после дополнительной защиты.</p>
+    <button type="submit">Отправить заявку</button>
+  </form>
+  <footer>{{ operator_name }} · Ответ на обращение осуществляется после ручной проверки.
+    При отсутствии согласия заявка не отправляется.</footer>
+</main>
+</body></html>
