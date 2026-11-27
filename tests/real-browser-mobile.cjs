@@ -193,7 +193,8 @@ async function smoke(){
       'broker has horizontal page overflow: '+broker.bodyWidth+' vs '+broker.viewportWidth);
   check(broker.contentWidth<=broker.viewportWidth+2,
       'broker content wider than mobile screen: '+broker.contentWidth);
-  console.log('BROKER_LAYOUT',JSON.stringify(broker));\n  check(broker.metricWidth<=220,
+  console.log('BROKER_LAYOUT',JSON.stringify(broker));
+  check(broker.metricWidth<=220,
       'broker KPI cards are oversized on mobile: '+broker.metricWidth);
   check(!broker.publicApiUsed,'public GitHub page incorrectly enabled local backend');
   check(broker.theme==='light','broker not opening in calm light theme');
