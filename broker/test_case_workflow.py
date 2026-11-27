@@ -11,7 +11,7 @@ S = Scenario(D("4500000"), D("900000"), 36, "included")
 
 
 def quote(id: str, monthly: str = "120000") -> Offer:
-    return Offer(id, "Лизингодатель (пример)", "doc-001", NOW - timedelta(days=2),
+    return Offer(id, "Лизингодатель (пример)", "doc-" + id, NOW - timedelta(days=2),
                  NOW + timedelta(days=30), S, True, D(monthly),
                  D("1000"), D("5000"), D("500"), D("30000"), D("0"))
 
@@ -69,6 +69,10 @@ class CaseWorkflowTests(unittest.TestCase):
         self.desk.add_offer(self.broker, self.case.case_id, quote("off-1"), 1)
         with self.assertRaisesRegex(ValueError, "duplicate_offer"):
             self.desk.add_offer(self.broker, self.case.case_id, quote("off-1"), 2)
+        from dataclasses import replace
+        with self.assertRaisesRegex(ValueError, "duplicate_original_document"):
+            self.desk.add_offer(self.broker, self.case.case_id,
+                                replace(quote("off-2"), source_document_id="doc-off-1"), 2)
         incompatible = Scenario(D("5000000"), D("900000"), 36, "included")
         o = quote("off-2")
         from dataclasses import replace
