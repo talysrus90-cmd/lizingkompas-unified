@@ -127,6 +127,12 @@ async function qa(){
     f.requestSubmit();
   })()`);
   await waitJs('!document.getElementById("localWorkArea").hidden','login via actual UI');
+  check(await js(`[...document.querySelectorAll(
+    '.nav button[data-tab="deals"],.nav button[data-tab="offers"],.nav button[data-tab="documents"],.nav button[data-tab="analytics"]'
+  )].every(x=>getComputedStyle(x).display==='none')`),
+    'synthetic sample tabs must not appear as operational in private mode');
+  check(await js(`document.querySelector('#view-workspace').classList.contains('active')`),
+    'local workspace is not the initial private page');
   await js(`document.getElementById('localCaseForm').requestSubmit()`);
   await waitJs('document.querySelectorAll("#localCaseList button").length===1',
     'create persisted case from form');
@@ -146,6 +152,10 @@ async function qa(){
     await waitJs(`document.getElementById('localCaseList').textContent.includes('${Number(ident)} КП')`,
       'save original quote '+ident);
   }
+  check(await js(`document.getElementById('metricCasesNote').textContent==='в базе этого ПК' &&
+             document.getElementById('metricCases').textContent==='1' &&
+             document.getElementById('metricOffers').textContent==='2'`),
+    'local KPI cards must reflect actual persisted finance records');
   await js(`document.getElementById('localCompare').click()`);
   await waitJs('document.querySelectorAll("#localResults tbody tr").length===2',
     'live comparison table');
