@@ -69,6 +69,9 @@ jobs:
         run: env -u DATABASE_URL python manage.py test intake --verbosity 1
       - name: Verify production V5 release is built from current UI, excluding demos
         run: python -m unittest discover -s seo -p "test_prepare_release_v5.py" -v
+      - name: Verify legal, backups and RKN fail-closed launch gates
+        run: python -m unittest discover -s production/ops -p "test_preflight.py" -v
+
       - name: "Fail closed when live-intake launch prerequisites are missing"
         working-directory: production/backend
         run: |
