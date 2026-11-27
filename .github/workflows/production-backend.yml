@@ -46,7 +46,7 @@ jobs:
       - name: Validate encrypted lead intake, security, staff comparison
         working-directory: production/backend
         run: python manage.py test intake --verbosity 2
-      - name: Fail-closed: live intake cannot start without real launch prerequisites
+      - name: "Fail closed when live-intake launch prerequisites are missing"
         working-directory: production/backend
         run: |
           if COMPASS_TEST_MODE=0 COMPASS_PRODUCTION=1 COMPASS_LIVE_INTAKE=yes python manage.py check; then
