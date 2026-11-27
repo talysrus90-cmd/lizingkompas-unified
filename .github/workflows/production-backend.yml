@@ -16,7 +16,7 @@ permissions:
 jobs:
   backend:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 18
     services:
       postgres:
         image: postgres:16
@@ -76,6 +76,37 @@ jobs:
             echo "ERROR: production started with missing secrets and launch gates"
             exit 1
           fi
+
+      - name: Build final non-root application Docker image
+        run: |
+          docker build -f production/Dockerfile -t leasing-compass-app:ci .
+      - name: Smoke-test actual production Gunicorn image with read-only filesystem
+        run: |
+          docker run -d --name compass-ci-smoke --network host \
+            --read-only \
+            --tmpfs /tmp:rw,nosuid,size=64m \
+            --tmpfs /srv/compass/backend/collected_static:rw,nosuid,size=64m,uid=10001,gid=10001 \
+            -e COMPASS_PRODUCTION=1 \
+            -e DJANGO_ALLOWED_HOSTS=127.0.0.1,localhost,leasingcompass.ru \
+            -e DATABASE_URL="$DATABASE_URL" \
+            -e DJANGO_SECRET_KEY="$DJANGO_SECRET_KEY" \
+            -e COMPASS_LIVE_INTAKE=no \
+            --entrypoint sh leasing-compass-app:ci -c \
+            'python manage.py collectstatic --noinput >/dev/null && exec gunicorn compassapp.wsgi:application --bind 127.0.0.1:18765 --workers 1 --access-logfile -'
+          for n in $(seq 1 35); do
+            if curl -fsS http://127.0.0.1:18765/healthz >/dev/null; then break; fi
+            sleep .3
+          done
+          curl --fail-with-body -sS http://127.0.0.1:18765/healthz | grep -F '"ok": true'
+          code=$(curl -sS -o /tmp/intake-disabled.txt -w '%{http_code}' http://127.0.0.1:18765/apply/)
+          test "$code" = "503"
+      - name: Stop QA application container
+        if: always()
+        run: docker rm -f compass-ci-smoke || true
+      - name: Validate Caddy syntax and public/private routing config
+        run: |
+          docker run --rm -v "$PWD/production/Caddyfile:/etc/caddy/Caddyfile:ro" \
+            -e PRIMARY_DOMAIN=leasingcompass.ru caddy:2 caddy validate --config /etc/caddy/Caddyfile
       - name: Validate Docker Compose parser without deploying
         run: |
           cp production/.env.production.example production/.env.production
