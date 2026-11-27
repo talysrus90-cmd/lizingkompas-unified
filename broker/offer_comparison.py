@@ -121,13 +121,17 @@ def compare_offers(scenario: Scenario, offers: list[Offer] | tuple[Offer, ...],
     if not isinstance(offers, (list, tuple)) or not 2 <= len(offers) <= MAX_OFFERS:
         raise ValueError("2..20 offers required")
     seen: set[str] = set()
+    seen_documents: set[str] = set()
     raw: list[tuple[Offer, Decimal | None, tuple[str, ...]]] = []
     for offer in offers:
         if not isinstance(offer, Offer):
             raise ValueError("not an Offer")
         if offer.offer_id in seen:
             raise ValueError("duplicate offer_id")
+        if offer.source_document_id in seen_documents:
+            raise ValueError("duplicate original document")
         seen.add(offer.offer_id)
+        seen_documents.add(offer.source_document_id)
         issues: list[str] = []
         if offer.scenario != scenario:
             issues.append("different_scenario")
