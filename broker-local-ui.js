@@ -53,6 +53,9 @@
   }
   const formData=form=>Object.fromEntries(new FormData(form).entries());
   function setLoggedIn(isLogged){
+    by("metricCasesLabel").textContent="Сделок в локальной базе";
+    by("metricOffersLabel").textContent="Условий КП в базе";
+    by("metricVerified").textContent="—";
     by("localAuth").hidden=isLogged;
     by("localWorkArea").hidden=!isLogged;
     by("localLogout").hidden=!isLogged;
@@ -106,6 +109,8 @@
   async function refresh(selectId=null){
     const out=await api("/api/cases");
     cases=out.cases||[];
+    by("metricCases").textContent=String(cases.length);
+    by("metricOffers").textContent=String(cases.reduce((sum,row)=>sum+row.offer_count,0));
     if(selectId)selected=cases.find(x=>x.case_id===selectId)||null;
     else if(selected)selected=cases.find(x=>x.case_id===selected.case_id)||null;
     else selected=cases[0]||null;
