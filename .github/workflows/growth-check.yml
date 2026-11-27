@@ -1,0 +1,20 @@
+name: Growth tools check
+on:
+  push:
+    paths: ['variant-5.html','lk-growth-v1.js','lk-share-v2.js','lk-widget-v1.js','partner-calculator.html','tests/growth.test.cjs','.github/workflows/growth-check.yml']
+  pull_request:
+    paths: ['variant-5.html','lk-growth-v1.js','lk-share-v2.js','lk-widget-v1.js','partner-calculator.html','tests/growth.test.cjs','.github/workflows/growth-check.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check lk-growth-v1.js && node --check lk-share-v2.js && node --check lk-widget-v1.js
+      - run: node --test tests/growth.test.cjs tests/share.test.cjs
