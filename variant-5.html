@@ -906,7 +906,7 @@ header .nav-right{gap:0!important}
 #why-broker .lk-comparison-readable li:before{flex:0 0 12px;text-align:center}
 #why-broker .lk-read-more{margin:6px 0 0!important;line-height:1.3!important;font-size:16px!important}
 }
-</style><meta name="lk-version" content="5.07"><style id="lk-v507-brand">
+</style><meta name="lk-version" content="5.08"><style id="lk-v507-brand">
 header .logo{font-size:24px!important;line-height:1.1!important}
 header .logo-mark{width:59px!important;height:59px!important;flex-basis:59px!important;border-radius:13px!important}
 header .logo-mark svg{width:50px!important;height:50px!important}
@@ -933,6 +933,24 @@ header .logo small{font-size:7px!important}
 header .logo-mark{display:grid!important;width:25px!important;height:25px!important;flex-basis:25px!important}
 header .logo-mark svg{width:22px!important;height:22px!important}
 header .logo{font-size:11.5px!important}
+}
+</style><style id="lk-v508-calc-and-compare">
+#calcTab #cTermOut{font-size:1.22em!important;font-weight:800!important;line-height:1.15!important;font-variant-numeric:tabular-nums}
+#calcTab #calcControls>.field:last-child{margin-bottom:0!important;padding-bottom:0!important}
+@media(max-width:767px){
+#calcTab .calc-grid{gap:5px!important}
+#calcTab #calcControls>.field:last-child .range-limits{margin-bottom:0!important}
+#calcTab #calcFullResult{margin-top:0!important}
+#why-broker .comparison-full .lk-comparison-readable{display:grid;grid-template-columns:minmax(76px,30%) minmax(0,1fr);grid-template-rows:auto 1fr auto;column-gap:9px;row-gap:4px;padding:8px 10px 8px 0!important;overflow:hidden;text-align:left}
+#why-broker .lk-comparison-top{display:contents!important}
+#why-broker .comparison-full .lk-comparison-top img{grid-column:1;grid-row:1/4;width:100%!important;height:100%!important;max-height:none!important;min-height:0;object-fit:contain!important;align-self:stretch;border-radius:8px 0 0 8px;box-shadow:none!important}
+#why-broker .lk-comparison-top strong{grid-column:2;grid-row:1;font-size:clamp(15px,4.1vw,19px)!important;line-height:1.2!important}
+#why-broker .lk-comparison-readable ul{grid-column:2;grid-row:2;gap:4px!important;margin:0!important;align-content:start}
+#why-broker .lk-comparison-readable li{font-size:clamp(13px,3.5vw,16px)!important;line-height:1.32!important;gap:5px!important}
+#why-broker .lk-comparison-readable li:before{flex-basis:10px}
+#why-broker .lk-read-more{grid-column:2;grid-row:3;font-size:14px!important;margin:1px 0 0!important}
+#why-broker .lk-direct{background:linear-gradient(105deg,#e6edf5,#f6f9fc)!important}
+#why-broker .lk-compass{background:linear-gradient(105deg,#cceee1,#edf8f2)!important;border-color:#87c8ae!important}
 }
 </style></head>
 <body>
@@ -1034,7 +1052,7 @@ header .logo{font-size:11.5px!important}
             </div>
             <div class="field">
               <label for="cTerm"><span>Срок лизинга</span><strong id="cTermOut">36 мес.</strong></label>
-              <div class="thumb-slider" style="--range-fill:33.333%"><input type="range" id="cTerm" min="12" max="84" step="6" value="36" oninput="recalc()" style="--range-fill:33.333%"><div class="thumb-slider-rail" aria-hidden="true"><div class="thumb-slider-knob"></div></div></div><div class="range-limits" aria-hidden="true"><span>12 мес.</span><span>84 мес.</span></div><div class="term-presets" aria-label="Быстрый выбор срока"><button type="button" data-term="24" aria-pressed="false">24 мес.</button><button type="button" data-term="36" aria-pressed="true">36 мес.</button><button type="button" data-term="48" aria-pressed="false">48 мес.</button><button type="button" data-term="60" aria-pressed="false">60 мес.</button></div>
+              <div class="thumb-slider" style="--range-fill:33.333%"><input type="range" id="cTerm" min="12" max="84" step="6" value="36" oninput="recalc()" style="--range-fill:33.333%"><div class="thumb-slider-rail" aria-hidden="true"><div class="thumb-slider-knob"></div></div></div><div class="range-limits" aria-hidden="true"><span>12 мес.</span><span>84 мес.</span></div>
             </div>
           </div>
 
@@ -1293,7 +1311,7 @@ header .logo{font-size:11.5px!important}
         <button type="button" id="callbackMotionToggle" class="motion-toggle" aria-pressed="false">Отключить анимацию звонка</button>
       </div>
     </div>
-    <div class="lk-growth-actions lk-footer-install"><a href="./leasing-compass.vcf" download>Сохранить контакт</a><button type="button" id="lkInstallFooter">Установить сайт на устройство</button></div><div class="footer-bottom"><span>© 2026 «Лизинг Компас» · V5.07</span><span>Расчёты носят информационный характер и не являются публичной офертой.</span></div>
+    <div class="lk-growth-actions lk-footer-install"><a href="./leasing-compass.vcf" download>Сохранить контакт</a><button type="button" id="lkInstallFooter">Установить сайт на устройство</button></div><div class="footer-bottom"><span>© 2026 «Лизинг Компас» · V5.08</span><span>Расчёты носят информационный характер и не являются публичной офертой.</span></div>
   </div>
 </footer><dialog id="lkQrDialog" class="lk-share-dialog lk-qr-dialog" aria-labelledby="lkQrTitle"><div class="lk-share-head"><h2 id="lkQrTitle">QR-код сайта</h2><button type="button" data-close-dialog="lkQrDialog" aria-label="Закрыть">×</button></div><p>Наведите камеру другого телефона.</p><img src="./art/qr-variant5-v504.svg" width="300" height="300" alt="QR-код сайта Лизинг Компас"><a href="./art/qr-variant5-v504.svg" download="leasing-compass-qr.svg">Сохранить QR-код</a></dialog><dialog id="lkInstallDialog" class="lk-share-dialog" aria-labelledby="lkInstallTitle"><div class="lk-share-head"><h2 id="lkInstallTitle">Установить «Лизинг Компас»</h2><button type="button" data-close-dialog="lkInstallDialog" aria-label="Закрыть">×</button></div><p>В меню браузера выберите «Установить приложение» или «Добавить на главный экран». На iPhone в Safari — «Поделиться» → «На экран Домой». На ПК в Chrome или Edge используйте пункт установки сайта.</p><p>Если страница открыта внутри другого приложения, сначала откройте её в обычном браузере.</p><a href="./leasing-compass.url" download="Лизинг Компас.url">Скачать ярлык для Windows</a></dialog>
 <button type="button" class="lk-share-float" id="lkShareFloat" data-lk-share="floating" aria-label="Поделиться сайтом с друзьями и коллегами"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg><span>Поделиться сайтом</span></button>
@@ -1496,7 +1514,7 @@ header .logo{font-size:11.5px!important}
     const tbody=document.getElementById("lkCompareBody");
     if(tbody.children.length!==rows.length){tbody.innerHTML=rows.map((x,i)=>'<tr class="'+(i===0?'best':'')+'"><td data-label="Сценарий"><strong>'+x.rate+'%</strong><small>'+(i===0?'Минимум в модели':'Условная ставка')+'</small></td><td data-label="Платёж/мес."></td><td data-label="Всего"></td><td data-label="Переплата"></td></tr>').join("");}
     rows.forEach((x,i)=>{const cells=tbody.children[i].cells;[fmt(x.mPay),fmt(x.total),fmt(x.overpay)].forEach((v,j)=>{if(cells[j+1].textContent!==v)cells[j+1].textContent=v;});});
-    document.querySelectorAll("[data-term]").forEach(b=>b.setAttribute("aria-pressed",String(Number(b.dataset.term)===term)));
+
   }
 
   // Tabs & Quiz
@@ -1662,7 +1680,7 @@ document.querySelectorAll('form').forEach(form=>{
 <script>
 (() => {
  const byId=id=>document.getElementById(id);
- document.querySelectorAll('[data-term]').forEach(b=>b.addEventListener('click',()=>{byId('cTerm').value=b.dataset.term;recalc();}));
+
  byId('resetCalc').addEventListener('click',()=>{setFinance(byId('cPriceNum'),4500000);byId('cPriceRange').value=4500000;byId('cAdvRange').value=20;byId('cAdvInput').dataset.min='225000';byId('cAdvInput').dataset.max='2205000';setFinance(byId('cAdvInput'),900000);byId('cTerm').value=36;recalc();});
  byId('saveCurrentCalc').addEventListener('click',()=>{paintCalc();const x=calcSnapshot;const lines=['Лизинг Компас — учебная модель, не оферта','Стоимость;Аванс;Срок (мес.)',[Math.round(x.price),Math.round(x.advRub),x.term].join(';'),'Условная ставка (%);Платёж в месяц;Всего с авансом;Переплата',...calcRows.map(r=>[r.rate,Math.round(r.mPay),Math.round(r.total),Math.round(r.overpay)].join(';'))];const u=URL.createObjectURL(new Blob(['\uFEFF'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=u;a.download='Leasing_Compass_calculation.csv';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);});
  // Native scrolling: adapted from KASKAD mobile process controls, no gesture interception.
