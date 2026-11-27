@@ -44,7 +44,8 @@ for url in locs:
     for ok,detail in [(page.lang=="ru","lang"),(page.title==1,"title"),(page.h1==1,"h1"),(bool(page.meta.get("description")),"description"),(page.canon==[wanted],"canonical"),(page.missing_alt==0,"image alt"),(bool(page.ld),"JSON-LD"),(page.meta.get("robots")==("index,follow" if a.production else "noindex,nofollow"),"robots meta")]:
         if not ok: errors.append(name+": "+detail)
     if name=="index.html":
-        services={urlsplit(x).path for x in page.hrefs if urlsplit(x).path.startswith("./service-")}
+        service_prefix="./v5-service-" if a.production else "./service-"
+        services={urlsplit(x).path for x in page.hrefs if urlsplit(x).path.startswith(service_prefix)}
         articles={urlsplit(x).path for x in page.hrefs if urlsplit(x).path.startswith("./article-")}
         if len(services)<10: errors.append("Missing static service links")
         if len(articles)<6: errors.append("Missing static article links")
