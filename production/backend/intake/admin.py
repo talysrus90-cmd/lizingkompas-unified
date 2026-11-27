@@ -7,7 +7,7 @@ from django.urls import path, reverse
 from django.utils.html import format_html
 from broker.offer_comparison import Scenario, Offer, compare_offers
 from datetime import date
-from .models import Lead, Quote, AuditEvent
+from .models import Lead, Quote, AuditEvent, CallbackRequest
 
 class QuoteInline(admin.TabularInline):
     model = Quote
@@ -124,3 +124,22 @@ class AuditAdmin(admin.ModelAdmin):
 admin.site.site_header="Лизинг Компас — закрытая CRM"
 admin.site.site_title="Лизинг Компас"
 admin.site.index_title="Операторские заявки"
+
+@admin.register(CallbackRequest)
+class CallbackRequestAdmin(admin.ModelAdmin):
+    """Restricted operator follow-up view. No public access."""
+    list_display=("created_at","short_id","stage")
+    list_filter=("stage",)
+    ordering=("-created_at",)
+    readonly_fields=("id","request_key","created_at","consent_version",
+                     "consent_text_sha256","consent_at","source_ip_digest","name","phone")
+    fields=("id","stage","created_at","name","phone","consent_version",
+            "consent_text_sha256","consent_at","source_ip_digest","request_key")
+    list_per_page=40
+    def short_id(self,obj):
+        return str(obj.pk)[:8]
+    short_id.short_description="Номер обращения"
+    def has_add_permission(self,request):
+        return False
+    def has_delete_permission(self,request,obj=None):
+        return False
