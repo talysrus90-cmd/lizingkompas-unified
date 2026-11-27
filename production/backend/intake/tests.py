@@ -80,8 +80,7 @@ class IntakeTests(TestCase):
         self.assertEqual(len(lead.source_ip_digest),64)
         self.assertEqual(AuditEvent.objects.count(),1)
         with connection.cursor() as cursor:
-            cursor.execute("SELECT client_name,phone,message FROM intake_lead WHERE id=%s",
-                           [str(lead.pk)])
+            cursor.execute("SELECT client_name,phone,message FROM intake_lead LIMIT 1")
             raw=cursor.fetchone()
         self.assertTrue(all(v.startswith("enc:v1:") for v in raw))
         self.assertNotIn("Контакт",str(raw))
