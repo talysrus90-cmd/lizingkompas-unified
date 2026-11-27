@@ -1,0 +1,17 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<p><a href="{% url 'admin:intake_lead_change' lead.pk %}">← К заявке</a></p>
+<h2>{{ title }}</h2>
+{% if message %}<p style="color:#a05214">{{ message }}</p>{% endif %}
+<table style="border-collapse:collapse;min-width:720px">
+<thead><tr><th>Рейтинг</th><th>Лизингодатель</th><th>Сумма выплат, ₽</th><th>Проверка</th></tr></thead>
+<tbody>{% for row in rows %}
+<tr>
+<td>{{ row.rank|default:"—" }}</td>
+<td>{{ row.lessor }}</td>
+<td>{{ row.total_cash_outflow|default:"—" }}</td>
+<td>{% if row.blockers %}{{ row.blockers|join:", " }}{% else %}Сопоставимо{% endif %}</td>
+</tr>{% endfor %}</tbody></table>
+<p>Суммарный денежный отток без дисконтирования, налоговых выгод и предположений
+о неуказанных платежах. Источник каждого КП и согласование условий проверяет брокер вручную.</p>
+{% endblock %}
