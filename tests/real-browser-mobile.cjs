@@ -15,8 +15,9 @@ const os=require('node:os');
 const cp=require('node:child_process');
 const assert=require('node:assert/strict');
 
-const URL_V5='https://talysrus90-cmd.github.io/lizingkompas-unified/variant-5.html?v=508&qa=mobile-headless-20261127';
-const URL_BROKER='https://talysrus90-cmd.github.io/lizingkompas-unified/broker-preview.html?qa=mobile-headless-20261127';
+const BASE=(process.env.LK_BROWSER_BASE||'https://talysrus90-cmd.github.io/lizingkompas-unified/').replace(/\\/?$/,'/');
+const URL_V5=BASE+'variant-5.html?v=508&qa=mobile-headless-20261127';
+const URL_BROKER=BASE+'broker-preview.html?qa=mobile-headless-20261127';
 const candidates=[
   process.env.CHROME_BIN,
   'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
@@ -189,10 +190,10 @@ async function smoke(){
     mq760:matchMedia('(max-width:760px)').matches,
     shellScrollWidth:document.querySelector('.shell').scrollWidth
   })`);
-  check(broker.bodyWidth<=broker.viewportWidth+2,
-      'broker has horizontal page overflow: '+broker.bodyWidth+' vs '+broker.viewportWidth);
-  check(broker.contentWidth<=broker.viewportWidth+2,
-      'broker content wider than mobile screen: '+broker.contentWidth);
+  check(broker.bodyWidth<=395,
+      'broker has horizontal page overflow: '+broker.bodyWidth+' for 393px device');
+  check(broker.contentWidth<=395,
+      'broker content wider than 393px mobile screen: '+broker.contentWidth);
   console.log('BROKER_LAYOUT',JSON.stringify(broker));
   check(broker.metricWidth<=220,
       'broker KPI cards are oversized on mobile: '+broker.metricWidth);
