@@ -7,7 +7,7 @@ from datetime import date, timedelta
 from decimal import Decimal
 from cryptography.fernet import Fernet
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from django.db import connection
 from django.test import TestCase, Client, override_settings
 from django.urls import reverse
@@ -158,6 +158,41 @@ class IntakeTests(TestCase):
             self.client.post("/callback/",invalid,HTTP_X_CSRFTOKEN=csrf).status_code,400
         )
         self.assertEqual(CallbackRequest.objects.count(),0)
+
+    def test_broker_must_be_assigned_to_access_lead_even_with_model_permission(self):
+        payload,headers=self.form_payload()
+        self.assertEqual(self.client.post("/apply/",payload,**headers).status_code,302)
+        owned=Lead.objects.get()
+        # Create a second synthetic case without any real name or contact.
+        other=Lead.objects.get(pk=owned.pk)
+        other.pk=uuid.uuid4()
+        other.request_key=uuid.uuid4()
+        other.save(force_insert=True)
+        broker=User.objects.create_user(
+            username="broker-synthetic",password="test-only-not-a-real-secret",
+            is_staff=True,
+        )
+        broker.user_permissions.add(*Permission.objects.filter(
+            content_type__app_label="intake",
+            codename__in=("view_lead","change_lead","view_quote","change_quote",
+                          "view_callbackrequest"),
+        ))
+        owned.assigned_to=broker
+        owned.save(update_fields=["assigned_to"])
+        self.client.force_login(broker)
+        listing=self.client.get("/admin/intake/lead/")
+        self.assertEqual(listing.status_code,200)
+        self.assertContains(listing,str(owned.pk)[:8])
+        # Staff should not be able to enumerate unrelated case objects.
+        other_url=reverse("admin:intake_lead_compare",args=[other.pk])
+        own_url=reverse("admin:intake_lead_compare",args=[owned.pk])
+        self.assertEqual(self.client.get(other_url).status_code,404)
+        own_result=self.client.get(own_url)
+        self.assertEqual(own_result.status_code,200)
+        self.assertNotContains(listing,str(other.pk)[:8],status_code=200)
+        self.assertNotEqual(
+            self.client.get("/admin/intake/callbackrequest/").status_code,200
+        )
 
     def test_staff_only_comparison_and_metadata_audit(self):
         payload,headers=self.form_payload()
