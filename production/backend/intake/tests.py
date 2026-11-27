@@ -47,6 +47,8 @@ class IntakeTests(TestCase):
     def form_payload(self):
         response=self.client.get("/apply/")
         self.assertEqual(response.status_code,200)
+        self.assertIn("default-src 'none'",response["Content-Security-Policy"])
+        self.assertIn("no-store",response["Cache-Control"])
         payload={**F,"request_key":str(self.client.session["apply_nonce"])}
         csrf=self.client.cookies["csrftoken"].value
         return payload, {"HTTP_X_CSRFTOKEN":csrf}
