@@ -1,0 +1,19 @@
+{
+  "id": "./variant-5.html",
+  "name": "Лизинг Компас",
+  "short_name": "Лизинг Компас",
+  "lang": "ru",
+  "start_url": "./variant-5.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#142b45",
+  "icons": [
+    {
+      "src": "./art/lk-app.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
