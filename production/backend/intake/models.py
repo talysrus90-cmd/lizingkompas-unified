@@ -22,6 +22,10 @@ class Lead(models.Model):
     created_at = models.DateTimeField(default=timezone.now, editable=False, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
     stage = models.CharField(max_length=12, choices=Stage.choices, default=Stage.NEW, db_index=True)
+    assigned_to = models.ForeignKey(
+        "auth.User",null=True,blank=True,on_delete=models.PROTECT,
+        related_name="assigned_leasing_leads"
+    )
     client_name = EncryptedTextField()
     phone = EncryptedTextField()
     email = EncryptedTextField(blank=True, default="")
