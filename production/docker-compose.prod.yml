@@ -38,7 +38,9 @@ services:
       - "127.0.0.1:8001:8000"
     networks: [private]
     read_only: true
-    tmpfs: [/tmp:rw,noexec,nosuid,size=64m]
+    tmpfs:
+      - /tmp:rw,nosuid,size=64m
+      - /srv/compass/backend/collected_static:rw,nosuid,size=64m,uid=10001,gid=10001
     security_opt: [no-new-privileges:true]
 
   caddy:
