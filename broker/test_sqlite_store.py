@@ -6,6 +6,7 @@ import os
 import pathlib
 import sqlite3
 import tempfile
+from contextlib import closing
 import unittest
 from dataclasses import replace
 from datetime import date, timedelta
@@ -91,7 +92,7 @@ class SqliteStoreTests(unittest.TestCase):
         self.assertEqual(self.desk.get(self.broker, rec.case_id).offer_ids,
                          ("off-one",))
         self.assertEqual(next_rec.version, rec.version + 1)
-        with sqlite3.connect(self.path) as connection:
+        with closing(sqlite3.connect(self.path)) as connection:
             n = connection.execute("SELECT COUNT(*) FROM audit").fetchone()[0]
             self.assertEqual(n, 2)
 
