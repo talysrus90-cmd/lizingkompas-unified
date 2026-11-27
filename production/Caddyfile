@@ -1,0 +1,31 @@
+# TLS certificates obtained automatically after DNS points to this Russian VPS.
+# Public routes ONLY: operator/admin stays blocked at the internet edge.
+{$PRIMARY_DOMAIN}, www.{$PRIMARY_DOMAIN} {
+    encode zstd gzip
+    header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy strict-origin-when-cross-origin
+        X-Frame-Options DENY
+    }
+
+    @private path /admin /admin/* /ops /ops/* /broker-local-ui.js /broker-preview* /broker/*
+    handle @private {
+        respond "Not found" 404
+    }
+
+    @application path /apply /apply/* /healthz /static/*
+    handle @application {
+        reverse_proxy app:8000 {
+            header_up X-Real-IP {remote_host}
+        }
+    }
+    handle / {
+        root * /srv/site
+        rewrite * /variant-5.html
+        file_server
+    }
+    handle {
+        root * /srv/site
+        file_server
+    }
+}
