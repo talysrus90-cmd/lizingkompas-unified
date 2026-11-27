@@ -1,0 +1,26 @@
+# Local Python outputs and synthetic broker QA databases
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+*.sqlite
+*.sqlite3
+*.sqlite3-*
+*.sqlite-*
+*.db
+*.db-*
+
+# Never commit local configuration, tokens, or private signing material.
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.pfx
+*.key
+
+# Local editor & operating system noise
+.DS_Store
+Thumbs.db
