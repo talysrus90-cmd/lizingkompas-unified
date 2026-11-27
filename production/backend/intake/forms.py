@@ -64,3 +64,29 @@ class ApplicationForm(forms.Form):
         if data.get("website"):
             raise ValidationError("Форма не прошла проверку.")
         return data
+
+class CallbackForm(forms.Form):
+    """Single-purpose callback form; no CRM/credit/document questions."""
+    request_key = forms.UUIDField(widget=forms.HiddenInput)
+    name = forms.CharField(label="Как к вам обращаться (необязательно)",
+                           max_length=120,required=False)
+    phone = forms.CharField(label="Ваш телефон",max_length=20)
+    consent = forms.BooleanField(
+        label="Даю отдельное согласие на обработку данных для обратного звонка",
+        required=True
+    )
+    website = forms.CharField(required=False,widget=forms.HiddenInput)
+
+    def clean_phone(self):
+        digits=re.sub(r"\\D","",self.cleaned_data["phone"])
+        if len(digits)==11 and digits.startswith("8"):
+            digits="7"+digits[1:]
+        if len(digits)!=11 or not digits.startswith("7"):
+            raise ValidationError("Введите российский номер телефона.")
+        return "+"+digits
+
+    def clean(self):
+        values=super().clean()
+        if values.get("website"):
+            raise ValidationError("Форма не прошла проверку.")
+        return values
