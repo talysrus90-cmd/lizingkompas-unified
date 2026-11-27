@@ -78,7 +78,7 @@ class CallbackForm(forms.Form):
     website = forms.CharField(required=False,widget=forms.HiddenInput)
 
     def clean_phone(self):
-        digits=re.sub(r"\\D","",self.cleaned_data["phone"])
+        digits=re.sub(r"\D","",self.cleaned_data["phone"])
         if len(digits)==11 and digits.startswith("8"):
             digits="7"+digits[1:]
         if len(digits)!=11 or not digits.startswith("7"):
