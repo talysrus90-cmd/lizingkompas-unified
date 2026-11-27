@@ -6,9 +6,9 @@ set -euo pipefail
 : "${RESTIC_PASSWORD_FILE:?}"
 : "${TEST_RESTORE_DATABASE_URL:?Must be an empty ISOLATED PostgreSQL database in RF}"
 case "$TEST_RESTORE_DATABASE_URL" in
-  *leasingcompass@db*|*"/leasingcompass"*)
-    echo "ERROR: refusing to restore into apparent production database" >&2
-    exit 2;;
+  *restore_test*) ;;
+  *) echo "ERROR: restore URL must identify an isolated restore_test database" >&2
+     exit 2;;
 esac
 command -v restic >/dev/null || exit 2
 command -v pg_restore >/dev/null || exit 2
