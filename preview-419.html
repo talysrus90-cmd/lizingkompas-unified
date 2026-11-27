@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta name="robots" content="noindex,nofollow">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Лизинг Компас — лизинг для бизнеса, подбор и сравнение условий</title>
+  
+  
+  
+  
+  <style>
+    :root {
+      --navy: #0F2342;
+      --navy-2: #1B3B6F;
+      --slate: #2D3748;
+      --muted: #5A677A;
+      --bg: #F4F7FA;
+      --white: #FFFFFF;
+      --border: #E2E8F0;
+      --accent: #EA580C;
+      --accent-hover: #C2410C;
+      --green: #059669;
+      --green-bg: #ECFDF5;
+      --radius: 14px;
+      --shadow: 0 10px 30px rgba(15, 35, 66, 0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, sans-serif;
+      color: var(--slate);
+      background: var(--white);
+      line-height: 1.55;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font-family: inherit; }
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    .section { padding: 76px 0; }
+    .section-alt { background: var(--bg); }
+    .section-title { font-size: clamp(27.5px, 3.39vw, 40.5px); color: var(--navy); font-weight: 800; margin-bottom: 12px; line-height: 1.2; }
+    .section-sub { color: var(--muted); font-size: 17px; max-width: 720px; margin-bottom: 36px; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; font-size: 14px; font-weight: 600; background: rgba(234,88,12,0.12); color: var(--accent); margin-bottom: 14px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 13px 24px; border-radius: 10px; font-weight: 700; font-size: 16px;
+      border: none; cursor: pointer; transition: .2s ease; text-align: center;
+    }
+    .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 6px 18px rgba(234,88,12,0.28); }
+    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+    .btn-outline { background: transparent; color: var(--navy); border: 1.5px solid var(--navy); }
+    .btn-outline:hover { background: var(--navy); color: #fff; }
+    .btn-outline-light { background: rgba(255,255,255,0.08); color: #fff; border: 1.5px solid rgba(255,255,255,0.45); }
+    .btn-outline-light:hover { background: #fff; color: var(--navy); }
+    .btn-sm { padding: 9px 16px; font-size: 14px; border-radius: 8px; }
+
+    /* Header */
+    header {
+      position: sticky; top: 0; z-index: 900; background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px); border-bottom: 1px solid var(--border);
+    }
+    .nav-wrap { display: flex; align-items: center; justify-content: space-between; min-height: 74px; gap: 14px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; color: var(--navy); }
+    .logo-mark {
+      width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, var(--navy), var(--navy-2));
+      color: #fff; display: grid; place-items: center; font-weight: 900; font-size: 18px; flex-shrink: 0;
+    }
+    .logo small { display: block; font-size: 11.5px; font-weight: 600; color: var(--muted); letter-spacing: .3px; }
+    nav.desktop-nav { display: flex; gap: 20px; font-size: 15px; font-weight: 600; color: var(--slate); }
+    nav.desktop-nav a:hover { color: var(--accent); }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .phone-link { font-weight: 800; color: var(--navy); font-size: 16px; white-space: nowrap; }
+    .msg-ico {
+      width: 34px; height: 34px; border-radius: 8px; display: inline-grid; place-items: center;
+      font-size: 14px; font-weight: 800; color: #fff; transition: .2s;
+    }
+    .msg-tg { background: #0088CC; }
+    .msg-wa { background: #25D366; }
+    .msg-max { background: #4F46E5; }
+    .msg-ico:hover { opacity: .85; transform: translateY(-1px); }
+    .burger { display: none; background: none; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 19px; cursor: pointer; color: var(--navy); }
+    .mobile-menu { display: none; padding: 16px 20px 22px; border-top: 1px solid var(--border); background: #fff; }
+    .mobile-menu.open { display: grid; gap: 12px; }
+    .mobile-menu a { font-weight: 600; padding: 6px 0; border-bottom: 1px solid #F1F5F9; }
+
+    /* Hero */
+    .hero {
+      background: radial-gradient(circle at 85% 20%, #1E4480 0%, var(--navy) 65%);
+      color: #fff; padding: 68px 0 76px; position: relative; overflow: hidden;
+    }
+    .hero-grid { display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 36px; align-items: center; }
+    .hero h1 { font-size: clamp(29.5px, 4.24vw, 49px); font-weight: 800; line-height: 1.15; margin-bottom: 18px; }
+    .hero p.lead { font-size: 18px; color: #CBD5E1; margin-bottom: 26px; max-width: 650px; }
+    .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 30px; }
+    .hero-bullets { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .hero-bullet {
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14);
+      padding: 12px 14px; border-radius: 10px; font-size: 14.5px; display: flex; gap: 8px; align-items: flex-start;
+    }
+    .hero-bullet span { color: #FB923C; font-weight: 800; }
+    .hero-card {
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 18px; padding: 26px; backdrop-filter: blur(8px);
+    }
+    .hero-card h3 { font-size: 19px; margin-bottom: 14px; }
+    .stat-row { display: flex; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,0.12); font-size: 15px; }
+    .stat-row:last-of-type { border-bottom: none; }
+    .stat-row strong { color: #34D399; font-size: 16px; }
+
+    /* Cards & Grids */
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .card {
+      background: var(--white); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 24px; box-shadow: var(--shadow); display: flex; flex-direction: column; justify-content: space-between;
+      transition: .2s;
+    }
+    .card:hover { transform: translateY(-3px); border-color: #CBD5E1; }
+    .card-ico {
+      width: 44px; height: 44px; border-radius: 10px; background: #EFF6FF; color: var(--navy-2);
+      display: grid; place-items: center; font-size: 21px; font-weight: 800; margin-bottom: 14px;
+    }
+    .card h3 { font-size: 19px; color: var(--navy); margin-bottom: 8px; }
+    .card p { font-size: 15px; color: var(--muted); margin-bottom: 16px; }
+    .card-meta { font-size: 14px; font-weight: 700; color: var(--green); margin-bottom: 14px; }
+
+    /* Calc & Quiz Tabs */
+    .tabs { display: inline-flex; background: #E2E8F0; padding: 5px; border-radius: 12px; margin-bottom: 24px; gap: 6px; flex-wrap: wrap; }
+    .tab-btn {
+      padding: 10px 20px; border-radius: 9px; border: none; background: transparent;
+      font-weight: 700; font-size: 15px; color: var(--slate); cursor: pointer; transition: .2s;
+    }
+    .tab-btn.active { background: var(--navy); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .calc-box {
+      background: #fff; border: 1px solid var(--border); border-radius: 18px;
+      padding: 28px; box-shadow: var(--shadow);
+    }
+    .calc-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 30px; }
+    .field { margin-bottom: 16px; }
+    .field label { display: flex; justify-content: space-between; font-size: 14.5px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .field input[type="text"], .field input[type="tel"], .field input[type="email"], .field input[type="number"], .field select, .field textarea {
+      width: 100%; padding: 11px 13px; border: 1.5px solid var(--border); border-radius: 9px; font-size: 15.5px; color: var(--slate);
+    }
+    .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--navy-2); }
+    .field input[type="range"] { width: 100%; accent-color: var(--accent); margin-top: 6px; cursor: pointer; }
+    .toggle-row { display: flex; gap: 8px; }
+    .chip {
+      flex: 1; padding: 9px 10px; border: 1.5px solid var(--border); border-radius: 8px;
+      background: #fff; font-size: 14px; font-weight: 700; cursor: pointer; text-align: center;
+    }
+    .chip.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+    .check-row { display: flex; align-items: flex-start; gap: 9px; font-size: 14px; color: var(--muted); cursor: pointer; margin: 12px 0; }
+    .check-row input { margin-top: 3px; width: 16px; height: 16px; accent-color: var(--navy); flex-shrink: 0; }
+
+    .result-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+    .res-card { background: var(--bg); border-radius: 12px; padding: 16px; border: 1px solid var(--border); }
+    .res-card.green { background: var(--green-bg); border-color: #A7F3D0; }
+    .res-card small { display: block; font-size: 12.5px; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+    .res-card strong { font-size: 23.5px; color: var(--navy); }
+    .res-card.green strong { color: var(--green); }
+
+    .lk-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 18px; }
+    .lk-table th, .lk-table td { padding: 9px 8px; border-bottom: 1px solid var(--border); text-align: right; }
+    .lk-table th:first-child, .lk-table td:first-child { text-align: left; }
+    .lk-table th { background: var(--bg); color: var(--navy); font-weight: 700; }
+    .lk-table tr.best td { background: var(--green-bg); font-weight: 700; }
+
+    .calc-lead-box { background: #F8FAFC; border: 1.5px dashed var(--navy-2); border-radius: 12px; padding: 18px; margin-top: 10px; }
+    .calc-lead-box h4 { color: var(--navy); margin-bottom: 8px; font-size: 17px; }
+
+    /* Quiz */
+    .quiz-progress { height: 8px; background: #E2E8F0; border-radius: 99px; overflow: hidden; margin-bottom: 22px; }
+    .quiz-bar { height: 100%; background: var(--accent); width: 25%; transition: .3s; }
+    .quiz-step { display: none; }
+    .quiz-step.active { display: block; }
+    .quiz-opts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 16px 0 22px; }
+    .quiz-opt {
+      padding: 15px; border: 1.5px solid var(--border); border-radius: 10px; cursor: pointer;
+      font-weight: 700; font-size: 15.5px; background: #fff; text-align: left; transition: .15s;
+    }
+    .quiz-opt.selected, .quiz-opt:hover { border-color: var(--accent); background: #FFF7ED; color: var(--navy); }
+
+    /* Compare & Steps */
+    .compare-card { border-radius: 16px; padding: 26px; }
+    .compare-bad { background: #FFF5F5; border: 1px solid #FED7D7; }
+    .compare-good { background: #F0FDF4; border: 1.5px solid #86EFAC; }
+    .compare-card ul { list-style: none; display: grid; gap: 11px; margin-top: 14px; font-size: 15.5px; }
+    .steps-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+    .step-item { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 20px; position: relative; }
+    .step-num {
+      width: 34px; height: 34px; border-radius: 50%; background: var(--navy); color: #fff;
+      display: grid; place-items: center; font-weight: 800; font-size: 15px; margin-bottom: 12px;
+    }
+
+    /* Partners Logos */
+    .partners-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+    .partner-pill {
+      background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 18px 14px;
+      text-align: center; font-weight: 800; color: var(--navy); font-size: 15.5px;
+      box-shadow: 0 4px 12px rgba(15,35,66,0.04);
+    }
+    .partner-pill small { display: block; font-size: 11.5px; font-weight: 600; color: var(--muted); margin-top: 4px; }
+
+    /* About & Cases */
+    .case-saving { display: inline-block; background: var(--green-bg); color: var(--green); font-weight: 800; font-size: 15px; padding: 6px 12px; border-radius: 8px; margin-bottom: 12px; }
+    .about-box { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 32px; align-items: center; background: #fff; border: 1px solid var(--border); border-radius: 18px; padding: 32px; box-shadow: var(--shadow); }
+    .avatar-placeholder {
+      background: linear-gradient(145deg, var(--navy), var(--navy-2)); color: #fff;
+      border-radius: 16px; padding: 36px 24px; text-align: center;
+    }
+    .avatar-circle {
+      width: 96px; height: 96px; border-radius: 50%; background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.4); margin: 0 auto 14px; display: grid; place-items: center;
+      font-size: 34px; font-weight: 800;
+    }
+
+    /* Footer */
+    footer { background: var(--navy); color: #CBD5E1; padding: 54px 0 28px; font-size: 15px; }
+    .footer-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 28px; margin-bottom: 32px; }
+    footer h4 { color: #fff; margin-bottom: 12px; font-size: 16px; }
+    footer ul { list-style: none; display: grid; gap: 8px; }
+    footer a:hover { color: #fff; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.14); padding-top: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 14px; font-size: 13.5px; color: #94A3B8; }
+
+    /* Floating buttons & Cookie */
+    .fab-wrap { position: fixed; right: 18px; bottom: 20px; z-index: 850; display: flex; flex-direction: column; gap: 9px; }
+    .fab {
+      width: 48px; height: 48px; border-radius: 50%; color: #fff; display: grid; place-items: center;
+      font-weight: 800; font-size: 14px; box-shadow: 0 8px 20px rgba(0,0,0,0.22); transition: .2s;
+    }
+    .fab:hover { transform: scale(1.07); }
+    .cookie-bar {
+      position: fixed; left: 18px; bottom: 18px; max-width: 420px; z-index: 860;
+      background: var(--navy); color: #fff; padding: 16px 18px; border-radius: 12px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.28); font-size: 14px; display: none; gap: 12px; align-items: center;
+    }
+    .cookie-bar.show { display: flex; }
+
+    /* Modal */
+    .modal-bg {
+      position: fixed; inset: 0; background: rgba(15, 35, 66, 0.65); z-index: 1000;
+      display: none; align-items: center; justify-content: center; padding: 16px; backdrop-filter: blur(4px);
+    }
+    .modal-bg.open { display: flex; }
+    .modal {
+      background: #fff; width: 100%; max-width: 640px; max-height: 90vh; overflow-y: auto;
+      border-radius: 16px; padding: 28px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    }
+    .modal.modal-lg { max-width: 920px; }
+    .modal-close {
+      position: absolute; right: 16px; top: 14px; background: #F1F5F9; border: none;
+      width: 34px; height: 34px; border-radius: 50%; font-size: 21px; cursor: pointer; color: var(--slate);
+    }
+    .toast {
+      position: fixed; top: 86px; right: 20px; z-index: 1100; background: var(--green); color: #fff;
+      padding: 14px 20px; border-radius: 10px; font-weight: 700; font-size: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: none;
+    }
+    .toast.show { display: block; }
+
+    /* CMS Table */
+    .cms-table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    .cms-table th, .cms-table td { border: 1px solid var(--border); padding: 7px; text-align: left; }
+    .cms-table th { background: var(--bg); }
+
+    @media (max-width: 980px) {
+      nav.desktop-nav, .nav-right .phone-link { display: none; }
+      .burger { display: inline-block; }
+      .hero-grid, .calc-grid, .about-box, .footer-grid { grid-template-columns: 1fr; }
+      .grid-3, .grid-4, .steps-grid, .partners-strip { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 620px) {
+      .section { padding: 52px 0; }
+      .grid-2, .grid-3, .grid-4, .steps-grid, .hero-bullets, .quiz-opts, .result-cards, .partners-strip { grid-template-columns: 1fr; }
+      .cookie-bar { left: 12px; right: 76px; flex-direction: column; align-items: flex-start; }
+    }
+  
+.app-symbol{width:35px;height:35px;border-radius:10px;display:grid;place-items:center;flex-shrink:0}
+.app-symbol img{width:23px;height:23px;display:block;object-fit:contain;filter:brightness(0) invert(1)}
+.app-telegram{background:#229ED9}.app-whatsapp{background:#25D366}.app-max{background:#fff;border:1px solid #e2e8f0}
+.app-max img{width:29px;height:29px;filter:none}.app-vk{background:#0077FF}.app-rutube{background:#100943}.app-youtube{background:#FF0000}
+.app-name{font-size:10.5px;line-height:1.2;white-space:nowrap;font-weight:650;color:#0F2342}
+.msg-ico,.fab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:auto;height:auto;min-width:58px;padding:5px 3px;background:transparent;box-shadow:none;border:0;border-radius:9px}
+.fab-wrap{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:5px;box-shadow:0 6px 20px #0f23421a;gap:3px}
+#contacts a.btn:has(.app-symbol){background:#fff!important;border:1px solid #e2e8f0;display:flex;flex-direction:column;gap:4px;padding:8px}
+@media(max-width:980px){.nav-wrap{flex-wrap:wrap;padding-top:10px;padding-bottom:10px;gap:8px}.logo{flex:1;min-width:220px}.logo small{font-size:10.5px}.nav-right{width:100%;justify-content:space-between;gap:4px}}
+@media(max-width:620px){.nav-wrap{padding-left:14px;padding-right:14px}.nav-right .btn-sm{padding:9px 12px}.msg-ico{min-width:52px}.app-name{font-size:10.5px}.fab-wrap{left:0;right:0;bottom:0;flex-direction:row;justify-content:center;gap:24px;border-radius:12px 12px 0 0;padding:5px 8px calc(5px + env(safe-area-inset-bottom));}.fab{min-width:62px}.fab .app-symbol{width:32px;height:32px}.fab .app-symbol img{width:22px;height:22px}.fab .app-max img{width:27px;height:27px}body{padding-bottom:76px}.hero{padding-top:38px}.cookie-bar{bottom:85px}}
+
+/* V3: prominent callback action, without continuous distracting movement */
+.callback-trigger{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:78px;padding:3px 4px;border:0;background:transparent;color:#b91c1c;cursor:pointer;border-radius:10px;flex-shrink:0}
+.callback-icon{display:grid;place-items:center;width:39px;height:39px;position:relative;border-radius:11px;background:#dc2626;color:#fff;box-shadow:0 3px 10px #dc262633}
+.callback-icon svg{width:25px;height:25px;transform-origin:50% 55%;animation:callback-ring 6s ease-in-out 2}
+.callback-icon::after{content:"";position:absolute;inset:0;border:2px solid #dc2626;border-radius:inherit;pointer-events:none;animation:callback-pulse 6s ease-out 2}
+.callback-label{font-size:10.5px;font-weight:800;line-height:1.12;text-align:center;white-space:nowrap}
+.callback-trigger:hover .callback-icon{background:#b91c1c}
+.callback-trigger:focus-visible{outline:3px solid #dc2626;outline-offset:3px}
+@keyframes callback-ring{0%,2%,12%,100%{transform:rotate(0)}4%,8%{transform:rotate(-13deg)}6%,10%{transform:rotate(13deg)}}
+@keyframes callback-pulse{0%,2%{transform:scale(1);opacity:.6}13%,100%{transform:scale(1.3);opacity:0}}
+@media(prefers-reduced-motion:reduce){.callback-icon svg,.callback-icon::after{animation:none}.callback-icon::after{display:none}}
+.callback-dialog{border:0;border-radius:16px;padding:24px;width:min(440px,calc(100% - 32px));max-height:85dvh;overflow:auto;margin:auto;color:var(--navy);box-shadow:0 20px 60px #0f234244}
+.callback-dialog::backdrop{background:#0f234299}
+.callback-dialog h2{font-size:24.5px;margin:4px 30px 8px 0;line-height:1.2}
+.callback-dialog p{font-size:15px;color:var(--muted);margin:10px 0}
+.callback-dialog .demo-note{background:#fff3df;padding:10px 12px;border-radius:8px;color:#783e00}
+.callback-dialog .field label{display:block}
+.callback-dialog .btn{width:100%;background:#dc2626;color:#fff}
+.callback-dialog .btn:hover{background:#b91c1c}
+#callbackResult{color:#166534;font-weight:700}
+@media(max-width:980px){.nav-right{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) minmax(76px,1.25fr) auto;align-items:center;justify-items:center;width:100%;gap:3px}.nav-right .phone-link{display:none}.nav-right .msg-ico{min-width:0;width:100%;padding:4px 0}.nav-right .burger{padding:7px 9px}.nav-right .callback-trigger{min-width:0;width:100%}.nav-wrap .logo{min-width:0}}
+@media(max-width:620px){.container{min-width:0}.hero-grid,.calc-grid,.about-box,.grid-2,.grid-3,.grid-4{grid-template-columns:minmax(0,1fr)}.hero-grid>*,.calc-grid>*,.about-box>*{min-width:0}.hero .badge{max-width:100%;white-space:normal}.lk-table{display:block;overflow-x:auto}.calc-box{padding:16px}.nav-wrap{padding-left:12px;padding-right:12px}.nav-right .app-name{font-size:10.5px}.nav-right .app-symbol{width:35px;height:35px}.callback-icon{width:36px;height:36px}.callback-icon svg{width:23px;height:23px}.fab-wrap{gap:20px}}
+
+/* V4: Leasing Compass — mobile-first financial design system */
+:root{--navy:#142B45;--navy-2:#21415F;--slate:#25384A;--muted:#526579;--bg:#F3F6F8;--border:#DCE4EA;--accent:#C74B13;--accent-hover:#A6380B;--green:#087B65;--green-bg:#E7F5F1;--radius:16px;--shadow:0 8px 28px #142b4509}
+html{scroll-padding-top:116px}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;line-height:1.55;letter-spacing:0;overflow-x:clip}
+.container{width:100%;max-width:1220px;min-width:0;padding-inline:24px}
+.section{padding:76px 0}.section-title{font-size:clamp(27.5px,3.29vw,42.5px);letter-spacing:-.025em;line-height:1.16;font-weight:760;max-width:900px}
+.section-sub{font-size:17px;max-width:720px;margin-bottom:30px}
+.eyebrow{font-size:12.5px;letter-spacing:.09em;font-weight:750;color:#8B431E;display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.preview-notice{background:#F5ECDD;color:#664519;border-bottom:1px solid #E8DCC9;font-size:12.5px}
+.preview-notice .container{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;padding-block:7px;text-align:center}
+.preview-dot{height:7px;width:7px;background:#B56F24;border-radius:50%;flex-shrink:0}
+.skip-link{position:fixed;top:-200px;left:12px;background:white;color:#142b45;z-index:2000;padding:12px;border:2px solid #142b45}
+.skip-link:focus{top:12px}
+header{background:#fff;backdrop-filter:none;box-shadow:0 2px 10px #142b4506}.nav-wrap{gap:18px;min-height:78px}
+.logo{flex-shrink:0;gap:10px;line-height:1.15;font-size:21px;letter-spacing:-.035em}.logo-mark{width:46px;height:46px;border-radius:12px;background:#142b45}.logo-mark svg{width:40px;height:40px}
+.logo small{font-size:9.5px;letter-spacing:.045em;font-weight:650;line-height:1.3;margin-top:5px}
+nav.desktop-nav{gap:18px;align-items:center;white-space:nowrap;font-size:15px}
+.nav-right{gap:6px}.nav-right .phone-link,.mobile-menu .phone-link{display:none}
+.nav-right .msg-ico,.nav-right .callback-trigger{min-height:56px;min-width:52px}.nav-right .callback-trigger{min-width:72px}
+.nav-right .app-name,.callback-label{font-size:10.5px}.nav-right .burger{min-width:44px;min-height:44px}
+.btn{min-height:46px;font-size:16px;border-radius:10px;transition:background .15s,color .15s;box-shadow:none}
+.btn-primary{background:var(--accent);box-shadow:none}.btn-primary:hover{transform:none;background:var(--accent-hover)}
+.btn-outline{border-color:#BCCAD5;color:var(--navy)}.btn-sm{min-height:40px}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #3275A9;outline-offset:3px}
+.hero{background:#142b45;color:#fff;padding:68px 0 62px;overflow:clip}
+.hero-grid{grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:54px}
+.hero-copy{min-width:0}.hero .eyebrow{color:#D9E6F0;letter-spacing:.08em;font-size:11.5px}.eyebrow-line{height:2px;width:22px;background:#F39760}
+.hero h1{font-size:clamp(37px,4.45vw,59.5px);line-height:1.08;letter-spacing:-.04em;font-weight:780;max-width:730px;margin-bottom:20px}
+.hero-highlight{color:#F6B38A}.hero p.lead{font-size:18px;line-height:1.6;color:#D9E4EE;max-width:650px;margin-bottom:26px}
+.hero-cta{margin-bottom:24px;gap:10px}.hero-cta .btn{min-height:52px;padding:14px 20px}
+.hero-assurance{display:flex;gap:12px 18px;flex-wrap:wrap;color:#D9E4EE;font-size:14px}.hero-assurance span{display:inline-flex;align-items:center;gap:5px}.hero-assurance svg{width:22px;height:22px}
+.finance-preview{background:#fff;color:#142b45;border:0;border-radius:20px;padding:28px;box-shadow:0 18px 40px #06152526;min-width:0;backdrop-filter:none}
+.finance-top{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11.5px;font-weight:750;letter-spacing:.08em;color:#526579}
+.finance-status{border:1px solid #DCE4EA;padding:4px 8px;border-radius:6px;letter-spacing:0}
+.finance-label{font-size:15px;color:#526579;margin-top:25px}
+.finance-amount{font-size:clamp(29.5px,4.24vw,47.5px);font-weight:780;letter-spacing:-.035em;line-height:1.1;margin:7px 0;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.finance-sub{font-size:12.5px;color:#526579;line-height:1.5}.finance-track{height:12px;border-radius:99px;background:#C8DCEB;overflow:hidden;margin-top:22px}.finance-track>span{display:block;background:#087B65;height:100%;min-width:0}
+.finance-legend{display:flex;justify-content:space-between;gap:8px;margin-top:8px;font-size:12.5px;color:#526579}.finance-legend i{display:inline-block;width:8px;height:8px;background:#087B65;border-radius:2px;margin-right:4px}.finance-legend span:last-child i{background:#C8DCEB}
+.finance-breakdown{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:16px 0;margin:18px 0}.finance-breakdown small{font-size:12.5px;display:block;color:#526579}.finance-breakdown strong{font-size:clamp(17px,2.12vw,23.5px);font-weight:750;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.finance-link{display:flex;justify-content:space-between;align-items:center;color:#142b45;font-size:15px;font-weight:750;min-height:44px}.finance-link span{font-size:23.5px;color:#C74B13}.finance-disclaimer{font-size:11.5px;color:#526579;margin-top:6px}
+.quick-paths{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));background:#fff;border-bottom:1px solid var(--border)}
+.quick-paths a{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:21px 14px;font-weight:650;font-size:15px;color:#142b45}.quick-paths a+a{border-left:1px solid var(--border)}.quick-paths span{font-size:11.5px;color:#526579;letter-spacing:.08em}.quick-paths b{font-size:19px;color:#C74B13}
+.grid-3,.grid-4,.grid-2,.calc-grid,.hero-grid,.about-box,.steps-grid{min-width:0}.grid-3>*,.grid-4>*,.grid-2>*,.calc-grid>*,.hero-grid>*,.about-box>*{min-width:0}
+#servicesGrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.card{padding:24px;border-radius:16px;box-shadow:0 4px 14px #142b4505;min-width:0;transition:border-color .15s}
+.card:hover{transform:none;border-color:#AABECB}.card h3{line-height:1.25;font-size:20px;letter-spacing:-.02em}.card p{font-size:15px;line-height:1.6;color:var(--muted)}.card-meta{color:#526579;text-transform:uppercase;font-size:10.5px;letter-spacing:.05em;font-weight:700}
+.card-ico{width:46px;height:46px;background:#EDF3F7;color:#21415F;border-radius:12px}.card-ico svg{width:27px;height:27px}.card .btn-sm{font-size:12.5px;padding-inline:11px}
+.tabs{background:#E6EDF2;padding:4px;gap:3px;max-width:100%}.tab-btn{min-height:44px;white-space:normal;line-height:1.25}
+.calc-box{padding:28px;box-shadow:none}.calc-grid{grid-template-columns:minmax(0,.84fr) minmax(0,1.16fr);gap:28px}.field label{font-size:15px;gap:8px;flex-wrap:wrap}.field input[type="text"],.field input[type="tel"],.field input[type="email"],.field input[type="number"],.field select,.field textarea{min-height:46px;font-size:17px;background:#fff;max-width:100%}.field input[type="range"]{height:34px}.chip{min-height:44px;line-height:1.25}.field-label{display:block;font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.model-note{font-size:14px;background:#EDF3F7;color:#435970;padding:12px;border-radius:9px;margin-bottom:12px}
+.result-cards{gap:10px}.res-card{padding:18px 14px;background:#F3F6F8}.res-card.green{background:#F3F6F8;border-color:#DCE4EA}.res-card.green strong{color:var(--navy)}.res-card strong{font-size:clamp(22.5px,2.65vw,32px);letter-spacing:-.025em;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.res-card small{font-size:12.5px}
+.table-caption{display:flex;justify-content:space-between;gap:10px;font-weight:700;color:var(--navy);font-size:15px;margin:14px 0 9px}.table-caption span{font-weight:400;color:var(--muted);font-size:12.5px}.table-wrap{max-width:100%;overflow-x:auto}.lk-table{display:table;width:100%;font-size:14px;font-variant-numeric:tabular-nums;margin-bottom:0}.lk-table th,.lk-table td{padding:11px 7px;white-space:nowrap}.lk-table td small{display:block;font-size:10.5px;font-weight:400;color:#526579}.lk-table tr.best td{background:#E7F5F1;font-weight:650}.calculation-explain{font-size:12.5px;color:var(--muted);line-height:1.5;margin:12px 0 16px}
+.calc-lead-box{border:1px solid var(--border);background:#F8FAFC}.quiz-opt{min-height:50px;border-radius:10px}.quiz-opt.selected{border-color:#C74B13;background:#FFF2E8}
+.decision-grid .compare-card{border:1px solid var(--border);background:#fff;border-radius:16px;padding:25px}.decision-index{display:block;color:#8B431E;font-size:12.5px;font-weight:750;margin-bottom:14px}.compare-card h3{color:var(--navy);font-size:21px;margin-bottom:10px}.compare-card p{color:var(--muted);font-size:16px}.steps-grid{gap:12px}.step-item h4{color:var(--navy)}.step-item p{font-size:14px;color:var(--muted);margin-top:7px}
+.case-saving{background:#EDF3F7;color:#435970;font-size:12.5px}.partner-pill{box-shadow:none}.about-box{box-shadow:none}.avatar-placeholder{background:#142b45;min-height:270px;display:flex;flex-direction:column;align-items:center;justify-content:center}.brand-emblem svg{width:100px;height:100px}.avatar-placeholder h3{font-size:29.5px;letter-spacing:-.03em}.avatar-placeholder p{font-size:11.5px;letter-spacing:.14em;color:#D9E6F0}.brand-caption{font-size:12.5px;margin-top:18px;color:#D9E6F0}.about-text{font-size:16px;color:var(--muted);margin-bottom:14px}.about-points{display:grid;gap:9px;font-weight:650;color:var(--navy);font-size:15px}
+footer{padding:48px 0 24px}.footer-grid{grid-template-columns:1.3fr 1fr 1fr 1.1fr;gap:20px}.footer-grid>*{min-width:0;overflow-wrap:anywhere}.fab-wrap{display:none}
+.modal{padding:24px}.modal-close{width:44px;height:44px}.callback-dialog{max-width:440px}.callback-icon svg{animation-fill-mode:both}.callback-icon::after{animation-fill-mode:forwards}.callback-dialog .demo-note{font-size:14px}
+@media(max-width:1120px){nav.desktop-nav{display:none}.burger{display:inline-block}.nav-wrap{flex-wrap:nowrap}.nav-right{display:flex;width:auto;justify-content:flex-end}.logo{flex:1;min-width:0}.hero-grid{gap:30px}#servicesGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){html{scroll-padding-top:142px}.container{padding-inline:16px}.section{padding:46px 0}.section-title{font-size:29.5px}.section-sub{font-size:16px;margin-bottom:22px}.preview-notice .container{font-size:11.5px;gap:4px 7px;padding-block:6px}.preview-notice .container>span:last-child{flex-basis:100%}.nav-wrap{display:flex;flex-wrap:wrap;gap:8px;min-height:0;padding-top:9px;padding-bottom:8px}.logo{flex-basis:100%;font-size:21px;min-width:0}.logo-mark{width:40px;height:40px}.logo-mark svg{width:35px;height:35px}.nav-right{display:grid;width:100%;grid-template-columns:repeat(3,minmax(0,1fr)) minmax(74px,1.1fr) 44px;gap:3px;justify-items:center}.nav-right .msg-ico,.nav-right .callback-trigger{min-width:0;width:100%;min-height:52px}.nav-right .burger{width:44px;min-width:44px;display:grid;place-items:center;padding:0}.nav-right .app-name,.callback-label{font-size:10.5px}.nav-right .app-symbol{width:34px;height:34px}.callback-icon{width:35px;height:35px}.hero{padding:32px 0 30px}.hero-grid,.calc-grid,.about-box,.footer-grid{grid-template-columns:minmax(0,1fr);gap:22px}.hero h1{font-size:clamp(34px,8.9vw,45.5px);letter-spacing:-.035em;margin-bottom:14px}.hero p.lead{font-size:17px;margin-bottom:20px}.hero-cta{display:grid;grid-template-columns:minmax(0,1fr);gap:9px;margin-bottom:16px}.hero-cta .btn{width:100%;min-height:48px}.hero-assurance{font-size:12.5px;gap:7px 12px}.finance-preview{padding:19px;border-radius:16px}.finance-label{margin-top:15px}.finance-amount{font-size:38px}.finance-track{margin-top:16px}.finance-breakdown{margin:12px 0;padding:12px 0}.quick-paths{grid-template-columns:minmax(0,1fr)}.quick-paths a{padding:12px 4px;font-size:14px;min-height:44px;justify-content:initial}.quick-paths a+a{border-left:0;border-top:1px solid var(--border)}.quick-paths a b{margin-left:auto}.calc-box{padding:16px}.tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}.tab-btn{padding:9px 7px;font-size:14px}.result-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.res-card{padding:13px 10px}.res-card strong{font-size:22.5px}.table-wrap{overflow:visible}.lk-table{display:block}.lk-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.lk-table tbody{display:grid;gap:8px}.lk-table tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border:1px solid var(--border);border-radius:10px;padding:10px;gap:8px;background:#fff}.lk-table tr.best{background:#E7F5F1;border-color:#B4D9CE}.lk-table tr.best td{background:transparent}.lk-table td,.lk-table td:first-child{text-align:left;border:0;padding:4px;white-space:normal;font-size:15px;overflow-wrap:anywhere}.lk-table td:before{content:attr(data-label);display:block;color:#526579;font-size:11.5px;font-weight:500;margin-bottom:3px}.lk-table td small{display:none}.grid-2,.grid-3,.grid-4,.steps-grid,.partners-strip{grid-template-columns:minmax(0,1fr)}.steps-grid{gap:10px}.step-item{display:grid;grid-template-columns:38px minmax(0,1fr);column-gap:12px;padding:16px}.step-item .step-num{grid-row:span 2;margin:0}.step-item p{margin:0}.partners-strip{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.partner-pill{padding:14px 8px;font-size:14px}.card{padding:18px}.fab-wrap{display:flex;position:fixed;left:0;right:0;bottom:0;flex-direction:row;justify-content:space-around;gap:3px;padding:5px 9px calc(5px + env(safe-area-inset-bottom));border-radius:12px 12px 0 0}.fab{min-width:64px;min-height:51px}.fab-wrap .callback-trigger{min-width:76px}.fab-wrap .callback-icon svg{animation:none}.fab-wrap .callback-icon:after{display:none}body{padding-bottom:76px}.callback-dialog{padding:20px}.modal{padding:18px}.about-box{padding:18px}.footer-grid{gap:18px}}
+@media(max-width:420px){#servicesGrid{grid-template-columns:minmax(0,1fr);gap:12px}.nav-right .app-name{font-size:10px}.callback-label{font-size:10px}.finance-amount{font-size:34px}.result-cards{gap:7px}.res-card strong{font-size:20px}.grid-2 .field{min-width:0}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+.sample-link{display:block;border:0;background:none;color:#21415F;font-size:15px;font-weight:700;text-align:left;padding:8px 0 15px;cursor:pointer;min-height:44px}.sample-link:hover{text-decoration:underline}.callback-icon::after{opacity:0}
+.direct-contact{border-top:1px solid var(--border);margin-top:16px;padding-top:12px;text-align:center;display:grid;gap:4px}.direct-contact span{font-size:14px;color:var(--muted)}.direct-call{display:flex;justify-content:center;align-items:center;min-height:44px;font-weight:750;color:var(--navy);font-size:19px}.mobile-menu .phone-link{display:block}.mobile-menu .phone-link:before{content:"Позвонить: ";font-weight:600}footer a[data-bind="phone"]{display:inline-block;color:#fff;min-height:32px;padding-top:6px}
+@media(min-width:1280px){.nav-right .phone-link{display:block;font-size:14px;min-height:44px;align-content:center;padding-inline:5px}.nav-wrap{gap:12px}nav.desktop-nav{gap:13px}}
+
+/* V4.4: independent consent and prominent brand/contact footer */
+.consent-block{border:1px solid #DCE4EA;border-radius:10px;padding:13px 12px;background:#fff;margin:14px 0;color:#25384A}
+.consent-choice{display:flex;align-items:flex-start;gap:11px}
+.consent-choice input{width:22px;height:22px;flex:0 0 22px;accent-color:#142B45;margin:3px 0;cursor:pointer}
+.consent-choice label{font-weight:650;font-size:15px;line-height:1.5;min-height:34px;cursor:pointer}
+.consent-links{display:flex;gap:5px 9px;flex-wrap:wrap;margin:6px 0 5px 33px;font-size:13.5px;line-height:1.6}
+.consent-links a{color:#21415F;text-decoration:underline;text-underline-offset:3px;padding-block:3px}
+.consent-block small{display:block;margin-left:33px;color:#526579;font-size:12px}
+button:disabled,.callback-dialog .btn:disabled{background:#E2E8F0!important;color:#526579!important;box-shadow:none;cursor:not-allowed;transform:none}
+.site-footer{background:#142B45;color:#D9E6F0;padding:48px 0 28px}
+.site-footer .footer-grid{grid-template-columns:1.35fr .85fr 1fr 1.25fr;gap:24px;align-items:start}
+.footer-brand{display:flex;align-items:center;gap:12px;color:white;line-height:1.13;margin-bottom:16px}
+.footer-mark{display:grid;place-items:center;width:58px;height:58px;border:1px solid #ffffff38;border-radius:15px;flex-shrink:0;background:#1E3B57}
+.footer-mark svg{width:50px;height:50px;color:white}
+.footer-brand strong{display:block;font-size:clamp(21px,2.12vw,26.5px);font-weight:800;letter-spacing:-.035em}
+.footer-brand small{display:block;font-size:10.5px;letter-spacing:.12em;margin-top:6px;color:#CFDFEC}
+.footer-identity p{font-size:15px;color:#D0DCE8;max-width:280px}
+.site-footer h4{font-size:16px;color:white;margin-bottom:13px}
+.site-footer li a{font-size:15px;display:inline-block;line-height:1.5;min-height:32px;padding:4px 0}
+.footer-contacts{display:grid;gap:8px;min-width:0}
+.footer-contacts h4{margin:0 0 3px}
+.site-footer .footer-phone,.site-footer .footer-email{display:block;color:white;font-weight:750;line-height:1.3;min-height:44px;align-content:center;text-decoration:none}
+.site-footer .footer-phone{font-size:clamp(20px,2.23vw,27.5px);white-space:nowrap;letter-spacing:-.025em;font-variant-numeric:tabular-nums}
+.site-footer .footer-email{font-size:clamp(15px,1.48vw,19px);overflow-wrap:anywhere}
+.footer-callback{border:1px solid #ffffff55;border-radius:9px;background:transparent;color:#fff;min-height:44px;padding:9px 12px;font-weight:650;font-size:14px;cursor:pointer;text-align:left}
+.footer-callback:hover{background:#ffffff12}
+@media(max-width:1000px){.site-footer .footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.footer-contacts{grid-column:2;grid-row:1}}@media(max-width:760px){.site-footer{padding:32px 0 20px}.site-footer .footer-grid{grid-template-columns:minmax(0,1fr);gap:24px}.footer-identity{grid-row:1}.footer-contacts{grid-column:1;grid-row:2;border-top:1px solid #ffffff25;border-bottom:1px solid #ffffff25;padding:18px 0}.site-footer .footer-phone{font-size:30.5px}.site-footer .footer-email{font-size:20px}.footer-brand strong{font-size:27.5px}.footer-brand small{font-size:11.5px}.footer-mark{width:60px;height:60px}.footer-identity p{max-width:none}.consent-links,.consent-block small{margin-left:0}}
+
+/* V4.5 — repeating, silent callback animation in header and mobile dock. */
+.callback-trigger .callback-icon{width:38px;height:38px;border-radius:50%;background:#dc2626;color:#fff;isolation:isolate;overflow:visible;box-shadow:0 2px 8px #dc262633}
+.callback-trigger .callback-icon svg{width:25px;height:25px;animation:lk-phone-ring 2.8s ease-in-out infinite;transform-origin:50% 55%;will-change:transform}
+.callback-trigger .callback-icon::before,.callback-trigger .callback-icon::after{content:"";display:block;position:absolute;inset:-2px;border:2px solid #dc2626;border-radius:50%;pointer-events:none;opacity:0;animation:lk-phone-wave 2.8s ease-out infinite}
+.callback-trigger .callback-icon::after{animation-delay:.28s}
+.callback-trigger .callback-label{font-size:11px;font-weight:750;line-height:1.16;white-space:normal;text-align:center;color:#b91c1c}
+.callback-trigger .callback-label span{display:block}
+.nav-right .callback-trigger{min-width:94px}
+.fab-wrap .callback-trigger{min-width:90px}
+@keyframes lk-phone-ring{0%,39%,100%{transform:rotate(0) scale(1)}5%,15%,25%{transform:rotate(-17deg) scale(1.08)}10%,20%,30%{transform:rotate(17deg) scale(1.08)}35%{transform:rotate(-7deg) scale(1.02)}}
+@keyframes lk-phone-wave{0%{transform:scale(.95);opacity:.65}48%,100%{transform:scale(1.46);opacity:0}}
+.motion-toggle{background:transparent;color:inherit;border:0;padding:4px 0;min-height:36px;font-size:12.5px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-align:left}
+body.callback-motion-off .callback-trigger .callback-icon svg,body.callback-motion-off .callback-trigger .callback-icon::before,body.callback-motion-off .callback-trigger .callback-icon::after{animation:none!important}
+body.callback-motion-off .callback-trigger .callback-icon::before,body.callback-motion-off .callback-trigger .callback-icon::after{opacity:0}
+@media(max-width:760px){
+.nav-right{grid-template-columns:repeat(3,minmax(0,1fr)) minmax(94px,1.45fr) 44px}
+.nav-right .callback-trigger{min-width:0;width:100%;padding-inline:1px}
+.callback-trigger .callback-icon{width:35px;height:35px}
+.callback-trigger .callback-icon svg{width:23px;height:23px}
+.callback-trigger .callback-label{font-size:10.5px}
+.fab-wrap .callback-trigger{min-width:94px}
+body{padding-bottom:86px}
+}
+@media(max-width:355px){
+.nav-right{grid-template-columns:repeat(3,minmax(0,1fr)) minmax(73px,1.3fr) 40px}
+.nav-right .burger{width:40px;min-width:40px}
+.nav-right .callback-label span{max-width:72px}
+.fab-wrap{gap:2px;padding-inline:5px}
+.fab{min-width:56px}
+.fab-wrap .callback-trigger{min-width:82px}
+}
+@media(prefers-reduced-motion:reduce){
+.callback-trigger .callback-icon svg,.callback-trigger .callback-icon::before,.callback-trigger .callback-icon::after{animation:none!important}
+.callback-trigger .callback-icon::before,.callback-trigger .callback-icon::after{display:none}
+}
+
+/* Lab 2.0: native interaction, minimal redraws, progressive disclosure. */
+.route-copy{flex:1;display:grid;gap:4px;color:var(--navy)!important;font-size:15px!important;letter-spacing:0!important}.route-copy small{font-weight:400;font-size:12.5px;color:var(--muted)}
+.quick-paths a{min-height:76px}.term-presets{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}.term-presets button{border:1px solid var(--border);border-radius:8px;background:white;color:var(--navy);min-height:44px;padding:8px 12px;font-weight:650;cursor:pointer}.term-presets button[aria-pressed=true]{background:var(--navy);color:white;border-color:var(--navy)}
+.scenario-details{border:1px solid var(--border);border-radius:12px;margin-top:14px;padding:12px;background:white}.scenario-details summary{cursor:pointer;min-height:44px;align-content:center;font-weight:750;color:var(--navy)}.scenario-details summary span{display:block;font-weight:400;color:var(--muted);font-size:12.5px;margin-left:16px}
+.support-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:18px}.support-grid details{padding:16px;border:1px solid var(--border);border-radius:12px;background:white}.support-grid summary{font-weight:700;color:var(--navy);cursor:pointer;min-height:44px;align-content:center}.support-grid p{font-size:15px;color:var(--muted)}
+.process-controls{display:none}.callback-trigger:not(.lab-visible) .callback-icon svg,.callback-trigger:not(.lab-visible) .callback-icon::before,.callback-trigger:not(.lab-visible) .callback-icon::after{animation-play-state:paused}
+@media(max-width:760px){.support-grid{grid-template-columns:1fr}.quick-paths a{min-height:58px}.steps-grid{display:grid;grid-auto-flow:column;grid-auto-columns:min(85%,320px);grid-template-columns:none;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:thin;gap:12px;padding-bottom:8px;touch-action:pan-x pan-y}.steps-grid .step-item{scroll-snap-align:start;min-height:120px;align-content:start}.process-controls{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}.process-controls button{min-height:44px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:white;color:var(--navy)}.process-controls span{font-size:12.5px;color:var(--muted)}}
+.offer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.offer-card{border:1px solid var(--border);border-radius:14px;padding:18px;min-width:0;background:white}.offer-card legend{color:var(--navy);font-weight:750;padding:0 8px}.offer-total{display:grid;gap:4px;padding:12px;background:#edf3f7;border-radius:10px;color:var(--navy)}.offer-total strong{font-size:25.5px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.offer-total small{color:var(--muted)}.offer-result{margin-top:15px;background:#e7f5f1;color:#14594c;font-weight:750;border-radius:10px;padding:15px}.offer-card .field input{width:100%}@media(max-width:600px){.offer-grid{grid-template-columns:minmax(0,1fr)}.offer-card{padding:14px}.offer-card .field{margin-bottom:9px}.offer-result{font-size:15px}}
+
+/* Lab 2.2: clear routes, progressive financial analysis and accessible review */
+.route-section{padding-block:24px 0}.route-title{color:var(--navy);font-size:22.5px;letter-spacing:-.02em;margin-bottom:12px}.quick-paths{gap:12px;border:0;background:transparent}.quick-paths a,.quick-paths a+a{border:1px solid var(--border);border-radius:14px;padding:16px;background:#fff;min-height:90px}.quick-paths a:hover{border-color:#809bb0;background:#f9fbfd}.route-icon{display:grid;place-items:center;background:#edf3f7;color:#21415f!important;width:44px;height:44px;border-radius:10px;flex:0 0 44px}.route-icon svg{width:25px;height:25px}.route-copy strong{font-size:16px}
+.schedule-detail,.discount-detail{border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin:12px 0;background:#fff}.schedule-detail summary,.discount-detail summary{cursor:pointer;color:var(--navy);font-weight:700;min-height:44px;align-content:center;font-size:15px}.schedule-detail>label{display:block;font-size:14px;margin:8px 0}.schedule-detail textarea{width:100%;font-size:17px;border:1px solid var(--border);border-radius:8px;padding:10px;resize:vertical}.schedule-detail .schedule-check{display:flex;align-items:center;gap:8px;min-height:44px}.schedule-check input{width:20px;height:20px;flex-shrink:0}.schedule-detail small{display:block;color:var(--muted);font-size:12.5px}
+.offer-visual{margin-top:18px;border:1px solid var(--border);border-radius:12px;padding:16px;background:white}.offer-visual h3{font-size:18px;color:var(--navy);margin-bottom:12px}.offer-bars{display:grid;gap:12px}.offer-bars>div>span{font-size:12.5px;font-weight:650;color:var(--muted)}.offer-bar{height:14px;display:flex;background:#edf3f7;border-radius:5px;overflow:hidden}.offer-segment{display:block;height:100%}.seg0,.offer-key span:nth-child(1) i{background:#1d536e}.seg1,.offer-key span:nth-child(2) i{background:#71b3bd}.seg2,.offer-key span:nth-child(3) i{background:#c74b13}.seg3,.offer-key span:nth-child(4) i{background:#8393a4}.offer-key{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:12.5px;color:var(--muted);margin-top:12px}.offer-key i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px}.discount-result{font-weight:700;color:var(--navy);font-size:15px;overflow-wrap:anywhere}
+.quiz-review{display:grid;border:1px solid var(--border);border-radius:10px;margin-top:14px;padding:4px 12px;background:#f8fafc}.quiz-review>div{display:flex;gap:10px;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);font-size:15px}.quiz-review>div:last-child{border-bottom:0}.quiz-review button{min-height:44px;background:none;border:0;text-decoration:underline;color:var(--navy);cursor:pointer}
+html{scroll-padding-bottom:100px}
+@media(max-width:760px){.route-section{padding-top:18px}.quick-paths{gap:8px}.quick-paths a,.quick-paths a+a{min-height:66px;padding:10px 12px;border:1px solid var(--border)}.route-copy strong{font-size:15px}.offer-card input:disabled{opacity:.6}.offer-visual{padding:12px}.offer-result{overflow-wrap:anywhere}.discount-detail .field input{width:100%}}
+
+/* Lab 2.3 — mobile density: preserve all contact routes and readable touch controls. */
+@media (max-width:760px){
+  html{scroll-padding-top:108px;scroll-padding-bottom:68px}
+  body{padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}
+  header .nav-wrap{padding:5px 12px 4px;gap:3px}
+  header .logo{gap:8px;font-size:19px;line-height:1.12}
+  header .logo-mark{width:33px;height:33px;border-radius:9px}
+  header .logo-mark svg{width:29px;height:29px}
+  header .logo small{font-size:9px;margin-top:3px;line-height:1.15}
+  header .nav-right{gap:2px;grid-template-columns:repeat(3,minmax(0,1fr)) minmax(89px,1.32fr) 44px}
+  header .nav-right .msg-ico,header .nav-right .callback-trigger{min-height:44px;padding:2px 0;gap:2px}
+  header .nav-right .app-symbol,.fab-wrap .fab .app-symbol{width:28px;height:28px;border-radius:8px}
+  header .nav-right .app-symbol img,.fab-wrap .fab .app-symbol img{width:20px;height:20px}
+  header .nav-right .app-max img,.fab-wrap .fab .app-max img{width:24px;height:24px}
+  header .nav-right .callback-icon,.fab-wrap .callback-trigger .callback-icon{width:29px;height:29px}
+  header .nav-right .callback-icon svg,.fab-wrap .callback-trigger .callback-icon svg{width:20px;height:20px}
+  header .nav-right .app-name,.fab-wrap .app-name{font-size:10px;line-height:1.1}
+  header .nav-right .callback-label,.fab-wrap .callback-label{font-size:9.5px;line-height:1.08}
+  .fab-wrap{padding:3px 8px calc(3px + env(safe-area-inset-bottom,0px));gap:3px}
+  .fab-wrap .fab,.fab-wrap .callback-trigger{min-height:44px;padding:2px 2px;gap:2px}
+  .fab-wrap .callback-trigger{min-width:86px}
+  .section{padding-block:32px}
+  .section-title{margin-bottom:9px;line-height:1.16}
+  .section-sub{margin-bottom:15px}
+  #calc-section .calc-box{padding:12px}
+  #calc-section .calc-grid{gap:14px}
+  #calc-section .calc-grid>div:first-child>.field{margin-bottom:8px}
+  #calc-section .field label{margin-bottom:4px;font-size:14px;gap:4px;line-height:1.3}
+  #calc-section .field input[type="number"],#calc-section .field select{min-height:44px;padding:7px 10px;font-size:17px;border-radius:8px}
+  #calc-section .field input[type="range"]{display:block;height:28px;margin-top:2px;margin-bottom:0;touch-action:pan-y}
+  #calc-section #advPctBtn,#calc-section #advRubBtn{min-width:36px;min-height:36px;padding:4px 8px!important}
+  #calc-section .term-presets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin-top:3px}
+  #calc-section .term-presets button{min-height:44px;padding:5px 2px;font-size:12.5px;white-space:nowrap}
+  #calc-section .toggle-row{gap:5px}
+  #calc-section .chip{padding:6px 8px;font-size:12.5px;min-height:44px}
+  #calc-section .model-note{padding:9px;margin-bottom:8px}
+  #calc-section .result-cards{gap:6px}
+  #calc-section .res-card{padding:10px 8px}
+  #calc-section .scenario-details{margin-top:9px;padding:8px 10px}
+  #calc-section .calculation-explain{margin-block:7px 9px}
+  #calc-section .tabs{margin-bottom:10px}
+  #calc-section .tab-btn{padding:6px;min-height:44px}
+  #offer-compare .offer-card .field{margin-bottom:8px}
+  #offer-compare .offer-card .field label{margin-bottom:4px;line-height:1.3}
+  #offer-compare .offer-card .field input{padding:7px 10px;min-height:44px}
+}
+@media (max-width:355px){
+  header .nav-right{grid-template-columns:repeat(3,minmax(0,1fr)) minmax(73px,1.25fr) 40px}
+  header .nav-right .burger{width:40px;min-width:40px}
+  header .nav-right .callback-label{font-size:9px}
+  #calc-section .calc-box{padding:10px}
+  #calc-section .term-presets button{font-size:11.5px}
+}
+/* Lab 2.4: self-service route, balanced four-card grid. */
+@media(min-width:761px){.quick-paths{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1121px){nav.desktop-nav{gap:12px;font-size:14px}nav.desktop-nav a{white-space:nowrap}.nav-wrap{gap:9px}}
+@media(min-width:1121px) and (max-width:1350px){nav.desktop-nav a[href="#b2b"]{display:none}}
+.cabinet-banner{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:15px 18px;margin-bottom:18px}.cabinet-banner strong{display:block;font-size:18px;color:var(--navy)}.cabinet-banner small{display:block;font-size:12.5px;color:var(--muted);margin-top:3px}.cabinet-banner .btn{flex-shrink:0}@media(max-width:760px){.cabinet-banner{display:grid;gap:8px;padding:12px;margin-bottom:15px}.cabinet-banner .btn{width:100%;min-height:44px}.cabinet-banner small{font-size:12.5px}}
+.site-footer .footer-email-label{font-size:12.5px;color:#d9e6f0;margin-top:4px}.site-footer .footer-email{font-size:clamp(18px,1.75vw,23.5px);border:1px solid #ffffff45;background:#21415f;border-radius:9px;padding:9px 10px;min-height:44px;letter-spacing:-.025em;overflow-wrap:anywhere}.site-footer .footer-email:hover,.site-footer .footer-email:focus-visible{background:#2b5070}@media(max-width:760px){.site-footer .footer-email{font-size:23.5px}}@media(max-width:350px){.site-footer .footer-email{font-size:20px}}
+</style>
+<style>
+/* Lab V2.9: compact, understandable comparison on small screens */
+#services .section-title,#cases .section-title{margin-bottom:22px}
+#offerResult strong,#offerResult span{display:block}#offerResult strong{font-size:clamp(18px,2.33vw,24.5px);line-height:1.3}#offerResult span{font-size:14px;font-weight:500;margin-top:5px}
+#offerVisual[hidden]{display:none!important}#offerVisual>summary{cursor:pointer;font-weight:700;color:var(--navy)}#offerVisual[open]>summary{margin-bottom:12px}
+.offer-breakdown{margin-bottom:18px;overflow-x:auto}.offer-breakdown table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}.offer-breakdown th,.offer-breakdown td{padding:8px 5px;border-bottom:1px solid var(--border);text-align:right;overflow-wrap:anywhere}.offer-breakdown th:first-child{text-align:left;font-weight:600;width:38%}.offer-breakdown tr:last-child{font-weight:800;color:var(--navy)}
+@media(max-width:420px){.offer-breakdown table{font-size:12.5px}.offer-breakdown th,.offer-breakdown td{padding:7px 3px}}
+</style>
+<style>
+/* Lab V2.9.1 — native accessible sliders, explicit cross-browser track and thumb. */
+#calc-section .field input[type="range"]{appearance:none;-webkit-appearance:none;display:block;box-sizing:border-box;width:100%;min-width:0;max-width:100%;height:46px;min-height:46px;margin:3px 0 0;padding:0;border:0;background:transparent;cursor:pointer;touch-action:none;accent-color:var(--accent);--range-track:linear-gradient(to right,var(--accent) 0%,var(--accent) var(--range-fill,0%),#CBD5E1 var(--range-fill,0%),#CBD5E1 100%)}
+#calc-section .field input[type="range"]::-webkit-slider-runnable-track{height:8px;background:var(--range-track);border-radius:999px}
+#calc-section .field input[type="range"]::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:28px;height:28px;margin-top:-10px;background:var(--accent);border:3px solid #fff;box-shadow:0 0 0 1px var(--accent),0 2px 5px #0f234233;border-radius:50%}
+#calc-section .field input[type="range"]::-moz-range-track{height:8px;background:var(--range-track);border-radius:999px}
+#calc-section .field input[type="range"]::-moz-range-thumb{box-sizing:border-box;width:28px;height:28px;background:var(--accent);border:3px solid #fff;box-shadow:0 0 0 1px var(--accent),0 2px 5px #0f234233;border-radius:50%}
+#calc-section .field input[type="range"]:focus-visible{outline:2px solid var(--navy-2);outline-offset:2px;border-radius:8px}
+#calc-section .range-limits{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);line-height:1.25;margin:-3px 0 5px}
+@media(max-width:760px){#calc-section .calc-grid>div:first-child>.field:has(input[type="range"]){margin-bottom:13px}}
+</style>
+<style>
+/* V2.9.2 — show results immediately after the last calculator control. */
+#calcTab .result-cards{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
+#calcTab .res-card{min-width:0}
+#calcTab .res-card small{line-height:1.3}
+#calcTab .res-card strong{display:block;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+@media(max-width:760px){#calcTab .calc-grid{grid-template-columns:minmax(0,1fr);gap:10px}#calcTab .calc-grid>div:first-child>.field:last-of-type{margin-bottom:0}#calcTab .result-cards{margin-top:0;margin-bottom:10px}}
+</style>
+<style>
+/* V2.9.4 — static thumb-only slider; native range excluded from pointer hit testing. */
+#calc-section .thumb-slider{position:relative;width:100%;height:46px;margin:3px 0 0;--range-fill:0%}
+#calc-section .thumb-slider input[type="range"]{position:absolute!important;inset:auto!important;left:0!important;top:0!important;width:1px!important;height:1px!important;min-width:0!important;min-height:0!important;max-width:1px!important;margin:0!important;padding:0!important;border:0!important;opacity:0!important;clip-path:inset(50%)!important;pointer-events:none!important;touch-action:auto!important;overflow:hidden!important}
+#calc-section .thumb-slider-rail{position:absolute;inset:0 20px;pointer-events:none}
+#calc-section .thumb-slider-rail::before{content:"";position:absolute;left:0;right:0;top:50%;height:5px;transform:translateY(-50%);border-radius:999px;background:linear-gradient(to right,var(--accent) 0%,var(--accent) var(--range-fill),#CBD5E1 var(--range-fill),#CBD5E1 100%)}
+#calc-section .thumb-slider-knob{position:absolute;left:var(--range-fill);top:50%;transform:translate(-50%,-50%);width:40px;height:40px;box-sizing:border-box;border:0;border-radius:50%;background:transparent;box-shadow:none;pointer-events:auto;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+#calc-section .thumb-slider-knob::before{content:"";position:absolute;left:5px;top:5px;width:30px;height:30px;box-sizing:border-box;border:3px solid #fff;border-radius:50%;background:var(--accent);box-shadow:0 0 0 1px var(--accent),0 2px 5px #0f234233;pointer-events:none}
+#calc-section .thumb-slider-knob:active{cursor:grabbing}
+#calc-section .thumb-slider:has(input:focus-visible){outline:2px solid var(--navy-2);outline-offset:2px;border-radius:8px}
+</style>
+<meta name="preview-version" content="unified-v4.13"><script>
+function sliderFraction(value,min,max,power=1){if(max<=min)return 0;return Math.pow(Math.max(0,Math.min(1,(value-min)/(max-min))),1/power);}
+function sliderValue(fraction,min,max,power=1){return min+(max-min)*Math.pow(Math.max(0,Math.min(1,fraction)),power);}
+function financeNumber(el){const v=String(el.value).replace(/\s/g,'');return /^\d+$/.test(v)?Number(v):NaN}
+function financeFormat(n){return Number.isFinite(n)?String(n).replace(/\B(?=(\d{3})+(?!\d))/g,' '):''}
+function setFinance(el,n){el.value=financeFormat(n)}
+function financeValid(el){const n=financeNumber(el);return Number.isSafeInteger(n)&&n>=Number(el.dataset.min)&&n<=Number(el.dataset.max)}
+function refreshFinance(){window.syncFinanceSliders?.()}
+</script><style>
+.thumb-slider{position:relative;width:100%;height:46px;margin:3px 0 0;--range-fill:0%}
+.thumb-slider input[type="range"]{position:absolute!important;inset:auto!important;left:0!important;top:0!important;width:1px!important;height:1px!important;min-width:0!important;min-height:0!important;max-width:1px!important;margin:0!important;padding:0!important;border:0!important;opacity:0!important;clip-path:inset(50%)!important;pointer-events:none!important;touch-action:auto!important;overflow:hidden!important}
+.thumb-slider-rail{position:absolute;inset:0 20px;pointer-events:none}
+.thumb-slider-rail::before{content:"";position:absolute;left:0;right:0;top:50%;height:5px;transform:translateY(-50%);border-radius:999px;background:linear-gradient(to right,var(--accent) 0%,var(--accent) var(--range-fill),#CBD5E1 var(--range-fill),#CBD5E1 100%)}
+.thumb-slider-knob{position:absolute;left:var(--range-fill);top:50%;transform:translate(-50%,-50%);width:40px;height:40px;box-sizing:border-box;border:0;border-radius:50%;background:transparent;box-shadow:none;pointer-events:auto;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+.thumb-slider-knob::before{content:"";position:absolute;left:5px;top:5px;width:30px;height:30px;box-sizing:border-box;border:3px solid #fff;border-radius:50%;background:var(--accent);box-shadow:0 0 0 1px var(--accent),0 2px 5px #0f234233;pointer-events:none}
+.thumb-slider:has(input:focus-visible){outline:2px solid var(--navy);outline-offset:2px;border-radius:8px}
+.thumb-slider.is-disabled{opacity:.35}.thumb-slider.is-disabled .thumb-slider-knob{pointer-events:none}
+.finance-limits{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin:-3px 0 6px}
+input[data-money]{font-variant-numeric:tabular-nums}
+</style><style>
+/* V2.14: modest type increase; protect narrow layouts. */
+body{font-size:17px}
+button,input,select,textarea{font-size:inherit}
+.field input,.field select,.field textarea{min-width:0;max-width:100%}
+#calcTab .res-card strong,.offer-total strong{overflow-wrap:anywhere}
+@media(max-width:760px){html{scroll-padding-top:116px;scroll-padding-bottom:76px}body{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}header .nav-right>*{min-width:0}.fab-wrap>*{min-width:0}#calc-section .term-presets button{white-space:normal}#calcTab .res-card small{overflow-wrap:anywhere}}
+</style><style id="unified-style">
+:root{--accent:#087f5b;--accent-hover:#06684a;--green:#087f5b}
+.hero .btn-primary{background:#0d9d6d;color:#fff}.hero .btn-primary:hover{background:#087f5b}
+.unified-advantages{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:18px 0}.unified-advantages span{padding:10px 12px;border:1px solid #ffffff29;border-radius:12px;background:#ffffff0b;color:#e6eefb;font-size:14px}.hero-assurance{display:none!important}
+.unified-result{background:#0f2342;color:#fff;padding:22px;border-radius:18px;margin-bottom:15px}.unified-result .result-cards{display:block!important;margin:0!important}.unified-result .res-card,.unified-result .res-card.green{padding:0!important;background:none!important;border:0!important;box-shadow:none!important;color:#fff!important}.unified-result .res-card small{color:#bdcde3!important;font-size:15px}.unified-result .res-card strong{color:#44dfab!important;font-size:clamp(27px,5vw,40px)!important;line-height:1.2}.unified-result .res-card.green{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:15px;padding:12px 0!important;border-top:1px solid #ffffff25!important;border-bottom:1px solid #ffffff25!important}.unified-result .res-card.green strong{color:white!important;font-size:19px!important;text-align:right}
+.unified-breakdown{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 12px;margin:16px 0;font-size:15px}.unified-breakdown dt{color:#bfcee3}.unified-breakdown dd{margin:0;text-align:right;font-weight:700;overflow-wrap:anywhere}.unified-note{font-size:12px;color:#bdcde3;border-top:1px solid #ffffff25;padding-top:12px}.unified-note-dark{font-size:13px;color:var(--muted)}
+.unified-compare{display:grid;grid-template-columns:1fr 1fr;gap:18px}.unified-compare article{border:1px solid var(--border);background:white;padding:22px;border-radius:18px;box-shadow:0 7px 24px #0f234208}.unified-compare article.preferred{border-color:#14976e}.unified-compare h3{color:var(--navy);margin-bottom:8px}.unified-compare .preferred h3{color:#087f5b}.unified-compare p{padding:11px 0;border-bottom:1px dashed var(--border);font-size:15px}.unified-compare p:last-child{border:0}
+#servicesGrid .card{padding:18px;gap:14px}#servicesGrid .card h3{font-size:19px}#servicesGrid .card-ico{color:#087f5b}#casesGrid{grid-template-columns:repeat(3,minmax(0,1fr))}#casesGrid .case-saving{color:#087f5b;font-size:clamp(24px,3vw,32px);margin:13px 0 4px}.unified-example-label{display:inline-block;background:#fff3cb;color:#795e0f;border-radius:6px;font-size:11px;font-weight:700;padding:5px 8px;margin-bottom:9px}
+.partners-strip{display:flex!important;flex-wrap:wrap;gap:10px}.partner-pill{width:auto!important;min-width:0!important;flex:0 1 auto;padding:12px 17px!important;border-radius:999px!important;font-size:15px!important}.partner-pill small{display:none}
+.steps-grid{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));grid-auto-flow:row!important;grid-auto-columns:auto!important;overflow:visible!important;gap:12px}.process-controls{display:none!important}.steps-grid .step-item{min-height:0!important}
+.layout-tools{margin:15px auto;padding:14px;border:1px solid var(--border);border-radius:12px;max-width:1160px;background:#fff}.layout-tools button,.layout-buttons button{padding:8px 12px;border:1px solid #cbd5e1;border-radius:8px;background:white;color:#0f2342;font-weight:600}.layout-buttons{display:flex;gap:8px;align-items:center;padding:8px 12px;background:#e4f1ec;border-bottom:1px solid #afd5c5;font-size:13px;flex-wrap:wrap}
+@media(max-width:767px){.unified-compare{grid-template-columns:1fr}.unified-result{padding:17px}.unified-breakdown{font-size:14px}.unified-advantages span{font-size:13px;padding:9px}.steps-grid{grid-template-columns:1fr!important}.steps-grid .step-item{display:grid;grid-template-columns:42px 1fr;gap:3px 12px;text-align:left;align-items:start;padding:16px!important}.step-item .step-num{grid-row:span 2}.step-item h4{margin:0!important}.step-item p{margin:0!important}#servicesGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px}#servicesGrid .card{padding:13px!important}#servicesGrid .card h3{font-size:16px!important;overflow-wrap:anywhere}#servicesGrid .card p{font-size:14px!important}#servicesGrid .card .btn{font-size:13px!important;padding:8px!important}#casesGrid{grid-template-columns:1fr!important}.partner-pill{font-size:13px!important;padding:9px 13px!important}.section{padding:36px 0!important}.unified-result .res-card strong{font-size:32px!important}.unified-result .res-card.green strong{font-size:18px!important}}
+</style><style id="unified-v42">.hero .hero-grid{grid-template-columns:minmax(0,1fr);gap:0}.hero .hero-copy{max-width:850px}.hero .unified-advantages{max-width:720px}</style><style id="market-v43">
+#leasing-market .section-sub{margin-bottom:18px}.market-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:17px}.market-search-label{width:100%;font-size:14px;font-weight:650;color:var(--navy)}#marketSearch{flex:1;min-width:0;max-width:490px;border:1px solid #cad5e0;border-radius:12px;padding:12px 14px;background:white;font-size:16px;color:var(--navy)}#marketClear{border:0;background:transparent;color:var(--navy);padding:8px;cursor:pointer;font-size:14px}.market-list{display:flex;flex-wrap:wrap;gap:9px;align-items:center}.market-chip{display:inline-flex;align-items:center;gap:8px;padding:10px 15px;border:1px solid #dfe6ed;border-radius:999px;background:#fff;color:#152e48;font-size:15px;font-weight:700;line-height:1.35;max-width:100%;overflow-wrap:anywhere}.market-brand{color:var(--brand);border-color:color-mix(in srgb,var(--brand) 24%,white)}.market-dot{width:8px;height:8px;border-radius:50%;background:var(--brand);flex:none}.market-chip[hidden],#marketClear[hidden],#marketMore[hidden]{display:none!important}.market-count{margin:14px 0 10px;font-size:13px;color:var(--muted)}.market-note{margin-top:17px;font-size:13px;color:var(--muted);line-height:1.5}.market-note a{text-decoration:underline;text-underline-offset:2px}#marketMore{min-height:44px}@media(max-width:767px){.market-chip{font-size:14px;padding:9px 12px;gap:6px}.market-list{gap:7px}.market-dot{width:7px;height:7px}}
+</style><style id="premium-v44">
+:root{--accent:#087f5b;--accent-hover:#056c4c;--green:#087f5b;--bg:#f2f6f8;--navy:#10253e;--border:#dfe7ed}
+.hero{background:radial-gradient(ellipse at 95% 0%,#1b6c6255,transparent 65%),linear-gradient(135deg,#10253e,#15384d)!important;position:relative;overflow:hidden}.hero-highlight{color:#64e2b4!important}.hero .hero-copy{max-width:900px}.hero .unified-advantages span{border-radius:12px;background:#ffffff0e;border:1px solid #ffffff25}.hero .btn-primary{background:#087f5b!important}.hero .btn-outline-light{background:white!important;color:#142b45!important;border-color:white!important}
+#services{background:linear-gradient(180deg,#fff,#f2f6f8)}#services .section-sub{margin-bottom:18px}.section-title{letter-spacing:-.02em}.accent-word{color:#087f5b}
+#servicesGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:16px!important}#servicesGrid .service-tile{position:relative;display:flex!important;flex-direction:column!important;overflow:hidden;background:white!important;border:1px solid #dce6ed!important;border-radius:18px!important;box-shadow:0 7px 22px #122a4310;padding:0!important;gap:0!important;min-width:0;transition:box-shadow .2s,border-color .2s,transform .2s;text-decoration:none;color:var(--navy)}
+.service-art{height:132px;display:flex;justify-content:center;align-items:center;background:linear-gradient(135deg,#f7fbfd,color-mix(in srgb,var(--tile) 15%,white));overflow:hidden}.service-art img{width:100%;height:100%;object-fit:contain;max-width:270px;padding:2px 10px 0}.service-copy{padding:15px;display:flex;flex-direction:column;flex:1;min-width:0}.service-copy h3{font-size:19px!important;line-height:1.22!important;color:#10253e!important;margin:0 0 8px!important}.service-copy p{font-size:14px!important;color:#536779!important;line-height:1.45;margin:0 0 14px!important}.service-link{font-size:14px;font-weight:750;color:#087f5b;display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:7px}.service-link span{font-size:20px}.service-tile:focus-visible{outline:3px solid #087f5b;outline-offset:3px}@media(hover:hover){#servicesGrid .service-tile:hover{border-color:#13936c!important;box-shadow:0 12px 30px #0e71572b;transform:translateY(-3px)}}
+#why-broker{background:linear-gradient(180deg,#f2f6f8,#fff)}.unified-compare article{position:relative;border-radius:20px!important;padding:20px!important}.unified-compare article.preferred{background:linear-gradient(145deg,#f0fcf7,#fff 75%);border:1px solid #15986e!important;box-shadow:0 10px 28px #0e71571c}.compare-symbol{height:38px;width:38px;display:grid;place-items:center;border-radius:12px;background:#e9eef3;color:#52677c;font-size:26px;font-weight:750;margin-bottom:12px}.preferred .compare-symbol{background:#087f5b;color:white}.unified-compare h3{font-size:21px;line-height:1.3}.unified-compare p{font-size:15px;line-height:1.55}.unified-compare .preferred p{border-color:#cee9df}.unified-result{background:radial-gradient(ellipse at 100% 0%,#155b5260,transparent 70%),#10253e!important}.card,.offer-card,.calc-box,.step-item{border-radius:16px}.market-chip{box-shadow:0 3px 8px #10253e07}.steps-grid .step-num{background:#10253e;color:#fff}.section .eyebrow{color:#087f5b}
+@media(max-width:767px){#servicesGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}.service-art{height:92px}.service-art img{padding:0 2px}.service-copy{padding:11px 10px 10px}.service-copy h3{font-size:16px!important;line-height:1.25!important}.service-copy p{font-size:13px!important;line-height:1.4!important}.service-link{font-size:13px;min-height:28px}.unified-compare article{padding:17px!important}.unified-compare h3{font-size:20px}.hero .unified-advantages span{font-size:13px}.section-title{font-size:clamp(26px,6.6vw,34px)}}
+@media(prefers-reduced-motion:reduce){.service-tile{transition:none!important}}
+</style><style id="approved-photo-v45">
+#servicesGrid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:15px!important;align-items:stretch}.photo-service{display:block;border-radius:16px;overflow:hidden;line-height:0;background:#fff;box-shadow:0 7px 18px #10253e14;transition:transform .18s,box-shadow .18s;align-self:start}.photo-service img{display:block;width:100%;height:auto;aspect-ratio:auto;object-fit:contain}.photo-service:focus-visible{outline:3px solid #087f5b;outline-offset:3px}.photo-service:hover{box-shadow:0 8px 24px #0e71572b}.photo-extras{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.photo-extras a{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:12px 14px;border:1px solid #dce6ed;background:#fff;border-radius:12px;font-size:14px;font-weight:700;color:#087f5b}.photo-caption{font-size:12px;color:#60748a;line-height:1.5;margin:12px 0 0}.photo-comparison{display:grid;gap:14px}.photo-compare{display:grid;grid-template-columns:30% minmax(0,1fr);align-items:stretch;overflow:hidden;background:linear-gradient(100deg,#e8f0f6,#fff);border:1px solid #dce6ed;border-radius:18px;box-shadow:0 7px 20px #10253e12}.photo-compare.preferred{background:linear-gradient(105deg,#d2f0e6,#f7fffb);border-color:#15986e;box-shadow:0 8px 24px #07845f20}.photo-compare-art{position:relative;min-width:0;overflow:hidden;display:flex;align-items:center}.photo-compare-art img{width:100%;height:auto;display:block;object-fit:contain;mask-image:linear-gradient(to right,#000 82%,transparent 100%)}.photo-compare-content{padding:19px 19px 19px 5px}.photo-compare h3{font-size:clamp(18px,2.2vw,26px);line-height:1.25;margin:0 0 8px;color:#10253e}.photo-compare.preferred h3{color:#087f5b}.photo-compare p{font-size:16px;line-height:1.42;padding:8px 0;border-bottom:1px solid #10253e0f;margin:0}.photo-compare p:last-child{border:0}.photo-compare.preferred p{border-color:#07845f16}
+@media(max-width:767px){#servicesGrid{gap:8px!important}.photo-service{border-radius:10px}.photo-extras{grid-template-columns:1fr}.photo-compare{grid-template-columns:27% minmax(0,1fr);border-radius:14px}.photo-compare-content{padding:13px 10px 13px 3px}.photo-compare h3{font-size:17px}.photo-compare p{font-size:13px;padding:6px 0}.photo-compare-art{align-items:center}.photo-compare-art img{object-fit:contain}.photo-caption{font-size:12px}}
+</style><style id="comparison-v46">
+#why-broker{background:linear-gradient(155deg,#e5f5ee 0%,#f5f8fb 25%,#f2f6f8 100%);padding-block:36px!important}#why-broker .section-title{margin-bottom:20px;max-width:960px}#why-broker .photo-compare{grid-template-columns:30% minmax(0,1fr);min-height:200px}#why-broker .photo-compare-art{align-items:stretch}#why-broker .photo-compare-art img{height:100%;width:100%;object-fit:cover;object-position:left center;mask-image:linear-gradient(to right,#000 72%,transparent 100%)}#why-broker .photo-compare-content{position:relative;padding:20px 22px 20px 7px}#why-broker .photo-compare p{display:flex;gap:9px;align-items:flex-start}#why-broker .photo-compare p span{flex:none;font-weight:800;color:#8292a0}#why-broker .photo-compare.preferred p span{color:#087f5b}#why-broker .photo-caption a{text-decoration:underline;text-underline-offset:2px}#why-broker .photo-compare.preferred{background:linear-gradient(105deg,#d2f0e6,#fff 56%,#e6f7f0)}@media(max-width:767px){#why-broker{padding-block:26px!important}#why-broker .photo-compare{grid-template-columns:28% minmax(0,1fr);min-height:0}#why-broker .photo-compare-art img{height:100%;object-fit:contain;object-position:left center}#why-broker .photo-compare-content{padding:14px 10px 14px 3px}#why-broker .photo-compare h3{font-size:17px;line-height:1.25}#why-broker .photo-compare p{font-size:13px;line-height:1.4;gap:5px}#why-broker .photo-caption{font-size:12px}}
+</style><style id="hero-v47">.hero{padding:25px 0 27px!important}.hero .hero-copy h1{margin-bottom:0!important}.hero .hero-copy .eyebrow{margin-bottom:10px!important}@media(max-width:767px){.hero{padding:20px 0 22px!important}.hero .hero-copy h1{font-size:clamp(26px,7vw,36px)!important;line-height:1.14!important}}</style><style id="comparison-crops-v48">
+#why-broker{padding:25px 0 20px!important;background:linear-gradient(150deg,#e5f5ee,#f6f9fb 45%,#f2f6f8)}#why-broker .section-title{font-size:clamp(25px,4.1vw,42px);line-height:1.15;max-width:none;margin:0 0 18px}.comparison-crops{display:flex;flex-direction:column;gap:14px;max-width:1320px;margin:0 auto}.comparison-crops img{display:block;width:100%;height:auto;max-width:100%;object-fit:contain;border-radius:18px;box-shadow:0 5px 14px #10253e12}.comparison-crops img+img{box-shadow:0 5px 14px #07845f20}@media(max-width:767px){#why-broker{padding:18px 0 16px!important}#why-broker>.container{padding:0 10px!important}#why-broker .section-title{font-size:clamp(23px,6.5vw,32px);margin:0 4px 13px}.comparison-crops{gap:9px}.comparison-crops img{border-radius:9px}#why-broker .photo-caption{padding:0 4px;font-size:11px}}
+</style><style id="comparison-fix-v49">#why-broker .comparison-full{display:block;width:100%;line-height:0;cursor:zoom-in}#why-broker .comparison-full img{display:block;width:100%;height:auto!important;object-fit:contain;max-height:none!important}#why-broker .comparison-full:focus-visible{outline:3px solid #087f5b;outline-offset:2px}</style><style id="compact-v410">#why-broker{padding-bottom:5px!important}#services{padding-top:7px!important}#services .section-title{margin-top:0!important;margin-bottom:8px!important}#services .section-sub{margin-bottom:12px!important}#why-broker .comparison-crops,#why-broker .comparison-full{min-width:0;max-width:100%}#why-broker>.container{box-sizing:border-box;max-width:100%}@media(max-width:767px){#why-broker{padding-bottom:4px!important}#services{padding-top:8px!important}}</style><style id="compact-calc-v411">
+#calcTab .compact-calc-controls>.field{margin:0 0 10px!important}#calcTab .compact-calc-controls>.field:last-child{margin-bottom:0!important}#calcTab .compact-calc-controls .field label{margin:0 0 4px!important;line-height:1.3}#calcTab .thumb-slider{height:44px!important;margin:0!important}#calcTab .thumb-slider-rail{inset:0 22px}#calcTab .thumb-slider-rail::before{height:4px!important}#calcTab .thumb-slider-knob{width:44px!important;height:44px!important}#calcTab .thumb-slider-knob::before{width:22px!important;height:22px!important;left:11px!important;top:11px!important;border-width:2px!important}#calcTab .thumb-slider:has(input:focus-visible){outline:none!important}#calcTab .thumb-slider:not(.is-pointer-drag):has(input:focus-visible) .thumb-slider-knob::before{outline:2px solid #16445e;outline-offset:3px}#calcTab .range-limits{margin:0!important;line-height:1.2;font-size:12px}#calcTab .unified-breakdown{gap:6px 10px;margin:9px 0;font-size:14px;line-height:1.4}#calcTab .unified-note{margin:8px 0 0;padding-top:8px;line-height:1.4}#calcTab .unified-result{margin-bottom:10px;padding:16px}#calcTab .unified-result .res-card.green{margin-top:9px!important;padding:8px 0!important}#calcTab .term-presets{margin-top:5px!important}.calc-live{display:none!important}
+@media(max-width:767px){#calc-section{padding:22px 0!important}#calc-section .section-sub{margin-bottom:8px!important}#calc-section .tabs{margin-bottom:8px!important}#calcTab .calc-box{padding:10px!important}#calcTab .calc-grid{gap:9px!important}#calcTab .compact-calc-controls>.field{margin-bottom:6px!important}#calcTab .compact-calc-controls .field label{font-size:13px!important;margin-bottom:3px!important}#calcTab .compact-calc-controls input[data-money],#calcTab .compact-calc-controls select{min-height:37px!important;height:37px!important;padding:5px 9px!important;font-size:16px!important;border-radius:9px!important;line-height:1.2!important}#calcTab .thumb-slider{height:44px!important}#calcTab .range-limits{font-size:11px!important;margin-top:-4px!important}#calcTab .term-presets{margin-top:4px!important;gap:4px!important}#calcTab .term-presets button{min-height:36px!important;padding:4px 2px!important;font-size:12px!important}#calcTab .unified-result{padding:13px!important;margin-bottom:8px!important}#calcTab .unified-result .res-card small{font-size:13px!important}#calcTab .unified-result .res-card strong{font-size:29px!important}#calcTab .unified-result .res-card.green strong{font-size:16px!important}#calcTab .unified-breakdown{font-size:13px!important;gap:4px 8px!important;margin:8px 0!important}#calcTab .unified-note{font-size:11px!important}#calcTab .calc-live:not([hidden]){display:grid!important;grid-template-columns:1fr 1fr;gap:10px;position:fixed;z-index:90;left:8px;right:8px;bottom:calc(var(--calc-dock-height,64px) + 5px);background:linear-gradient(120deg,#10253e,#123b43);color:#fff;border:1px solid #ffffff26;border-radius:12px;padding:8px 12px;box-shadow:0 4px 18px #10253e35;pointer-events:none;font-variant-numeric:tabular-nums}#calcTab .calc-live small{display:block;font-size:11px;line-height:1.2;color:#c6d7e5}#calcTab .calc-live strong{display:block;font-size:clamp(15px,4.6vw,20px);line-height:1.3;color:#5ce3b0;white-space:nowrap}#calcTab .calc-live>div+div strong{color:#fff}}
+</style><style id="compact-site-v412">
+/* Compact spacing, preserving full-size interactive targets. */
+#offer-compare .offer-grid{gap:12px;align-items:start}
+#offer-compare .offer-card{padding:12px 14px;margin:0;min-width:0}
+#offer-compare .offer-card legend{padding:0 5px;font-size:17px;line-height:1.3}
+#offer-compare .offer-card .field{display:grid;grid-template-columns:minmax(0,1fr) minmax(104px,40%);align-items:center;column-gap:8px;row-gap:0;margin:0 0 7px!important}
+#offer-compare .offer-card .field label{grid-column:1;margin:0!important;font-size:14px;line-height:1.25;overflow-wrap:anywhere}
+#offer-compare .offer-card .field>input:not([type=range]){grid-column:2;min-width:0;width:100%;height:40px;min-height:40px!important;padding:5px 8px!important;font-size:16px;line-height:1.2;border-radius:8px;font-variant-numeric:tabular-nums;text-align:right}
+#offer-compare .offer-card .thumb-slider,#offer-compare .offer-card .finance-limits{grid-column:1/-1}
+#offer-compare .thumb-slider{height:44px;margin:0!important}
+#offer-compare .thumb-slider-rail{inset:0 22px}
+#offer-compare .thumb-slider-rail::before{height:4px}
+#offer-compare .thumb-slider-knob{width:44px;height:44px}
+#offer-compare .thumb-slider-knob::before{width:22px;height:22px;left:11px;top:11px;border-width:2px}
+#offer-compare .thumb-slider:has(input:focus-visible){outline:none!important}
+#offer-compare .thumb-slider:not(.is-pointer-drag):has(input:focus-visible) .thumb-slider-knob::before{outline:2px solid #16445e;outline-offset:3px}
+#offer-compare .finance-limits{margin:-4px 0 0!important;font-size:11px;line-height:1.2}
+#offer-compare .schedule-detail,#offer-compare .discount-detail{margin:6px 0 8px;padding:0 10px 4px}
+#offer-compare .schedule-detail summary,#offer-compare .discount-detail summary{min-height:44px;line-height:1.3;font-size:14px}
+#offer-compare .offer-total{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:10px 12px}
+#offer-compare .offer-total small{font-size:13px;line-height:1.3}
+#offer-compare .offer-total strong{font-size:clamp(19px,3vw,25px);line-height:1.2;text-align:right}
+#offer-compare .offer-result{margin-top:10px;padding:11px 12px;line-height:1.45}
+#offer-compare .offer-visual{margin-top:8px;padding:10px 12px}
+#offer-compare .offer-visual summary{min-height:44px;align-content:center}
+#offer-compare .discount-detail[open]{padding-bottom:10px}
+#offer-compare .discount-detail .field{margin-bottom:8px}
+#offer-compare .section-sub{margin-bottom:12px}
+@media(max-width:767px){
+ main>.section:not(#why-broker):not(#services):not(#calc-section){padding-block:22px!important}
+ main>.section .eyebrow{margin-bottom:5px!important}
+ main>.section .section-title{margin-bottom:8px!important}
+ main>.section .section-sub{margin-bottom:10px!important;line-height:1.45}
+ #offer-compare .offer-grid{grid-template-columns:minmax(0,1fr);gap:13px}
+ #offer-compare .offer-card{padding:8px 12px 11px}
+ #offer-compare .offer-card .field{margin-bottom:5px!important}
+ #offer-compare .offer-card .field label{font-size:13px}
+ #offer-compare .offer-card .field>input:not([type=range]){height:40px;min-height:40px!important}
+ #offer-compare .offer-total strong{font-size:21px}
+ #offer-compare .schedule-detail,#offer-compare .discount-detail{margin-block:4px 7px}
+ #offer-compare .btn{margin-top:4px;min-height:44px}
+ main>.route-section{padding-top:12px!important}
+ main .route-title{margin-bottom:7px!important}
+ main .quick-paths{gap:7px!important}
+ main .quick-paths a,main .quick-paths a+a{padding:9px 10px!important;min-height:64px!important}
+ main .cabinet-banner{margin-bottom:10px!important;padding:10px!important}
+ main .steps-grid{gap:7px!important}
+ main .steps-grid .step-item{padding:10px 12px!important}
+ main .support-grid{gap:8px!important;margin-bottom:8px!important}
+ main .support-grid details{padding:6px 12px!important}
+ main .support-grid details summary{line-height:1.35;min-height:44px}
+ #casesGrid,#blogGrid{gap:9px!important}
+ #casesGrid .card,#blogGrid .card{padding:14px!important}
+ #leasing-market .market-tools{margin-bottom:9px!important}
+ #leasing-market .market-count{margin:9px 0 6px!important}
+ #leasing-market .market-note{margin-top:9px!important}
+ #calcTab .calc-lead-box{margin-top:10px!important;padding:12px!important}
+ #b2b .tabs{margin-bottom:9px!important}
+ #about .about-box{gap:12px!important}
+}
+@media(max-width:350px){#offer-compare .offer-card .field{grid-template-columns:minmax(0,1fr) minmax(96px,43%);column-gap:5px}#offer-compare .offer-card .field>input:not([type=range]){padding-inline:5px!important}}
+</style><style id="compact-v413">
+.demo-submit-result{margin-top:9px;padding:12px;background:#e7f5ef;border:1px solid #c4e3d4;border-radius:10px;color:#164e3b;font-size:14px;line-height:1.4}.demo-submit-result p{margin:5px 0!important}.demo-submit-result .btn{margin-top:4px}.demo-consent-note{margin:4px 0 0!important;font-size:11.5px!important;line-height:1.35}
+main form .field{margin:0 0 7px!important}main form .field label{margin:0 0 4px!important;line-height:1.3}main form .grid-2{gap:7px!important;margin-top:5px!important}main form .consent-block{margin:8px 0!important;padding:9px 10px!important}main form .consent-choice{gap:8px}main form .consent-choice label{font-size:14px;min-height:0;line-height:1.35}main form .consent-links{margin:4px 0 3px 29px;gap:1px 6px;font-size:12px;line-height:1.35}main form .consent-links a{padding:3px 0}main form .thumb-slider{height:44px;margin:0}main form .finance-limits{margin:-4px 0 3px;line-height:1.2}
+main .thumb-slider:has(input:focus-visible){outline:none!important}main .thumb-slider:not(.is-pointer-drag):has(input:focus-visible) .thumb-slider-knob::before{outline:2px solid #16445e;outline-offset:3px}
+main .thumb-slider-knob{width:44px;height:44px}main .thumb-slider-knob::before{width:22px;height:22px;left:11px;top:11px;border-width:2px}main .thumb-slider-rail::before{height:4px}
+@media(max-width:767px){main>.section:not(#why-broker):not(#services):not(#calc-section){padding-block:14px!important}#calc-section{padding-block:16px!important}main>.section .section-sub{margin-bottom:7px!important}main form.card{padding:12px!important;gap:7px!important}main form h3,main form h4{margin:0 0 5px!important;line-height:1.25}main form .field{margin-bottom:5px!important}main form .field label{font-size:13px!important;margin-bottom:3px!important}main form .field input:not([type=range]):not([type=checkbox]),main form .field select{min-height:38px!important;height:38px!important;padding:6px 8px!important;font-size:16px!important;line-height:1.2!important}main form .field textarea{min-height:52px!important;padding:7px 8px!important;font-size:16px!important}main form .grid-2{gap:5px!important;margin-top:4px!important}main form .consent-block{margin:6px 0!important}main form .consent-links{margin-left:0}main form .btn{min-height:44px}#contacts>.container>.grid-2,#b2b>.container>.grid-2{gap:9px!important}#contacts .card{padding:12px!important;gap:8px!important}#contacts .card h3{margin-bottom:6px!important}#contacts .card p{line-height:1.4;margin:0 0 7px!important}#contacts .card div[style*="display:grid;gap:12px"]{gap:5px!important;margin:8px 0!important}#contacts .card div[style*="display:flex;flex-wrap:wrap"]{gap:5px!important;margin-top:8px!important}#contacts .card .btn-sm{min-width:0;padding:5px!important}#about .about-box{padding:12px!important;gap:10px!important}#about .avatar-placeholder{min-height:0!important;padding:14px!important}#about .brand-emblem{width:66px!important;height:66px!important}#about .brand-emblem svg{width:52px!important;height:52px!important}#offer-compare .offer-card .field{margin-bottom:3px!important}#offer-compare .offer-card .field>input:not([type=range]){height:36px;min-height:36px!important}#offer-compare .offer-grid{gap:8px!important}#offer-compare .offer-card{padding:7px 10px 9px!important}#offer-compare .schedule-detail,#offer-compare .discount-detail,#offer-compare .offer-visual{margin-block:4px!important;padding:0 9px 3px!important}#offer-compare .offer-result{margin-top:6px!important;padding:9px!important}#offer-compare .offer-total{padding:8px!important}#b2b .tabs{margin-bottom:6px!important}}
+</style><style id="service-extras-v415">.photo-extras{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.photo-extras a{min-height:44px}@media(max-width:767px){.photo-extras{grid-template-columns:1fr;gap:7px}.photo-extras a{padding:9px 13px}}</style><style id="compare-nav-v417">.comparison-full{cursor:pointer}.comparison-full:focus-visible{outline:3px solid #087f5b;outline-offset:3px}.comparison-full:hover{filter:brightness(.985)}</style>
+<meta name="description" content="Лизинг Компас — подбор и сравнение лизинга для бизнеса: автомобили, спецтехника, оборудование, коммерческая недвижимость. Калькулятор, анализ условий и сопровождение.">
+<link rel="canonical" href="https://talysrus90-cmd.github.io/lizingkompas-unified/">
+<meta property="og:title" content="Лизинг Компас — лизинг для бизнеса, подбор и сравнение условий">
+<meta property="og:description" content="Лизинг Компас — подбор и сравнение лизинга для бизнеса: автомобили, спецтехника, оборудование, коммерческая недвижимость. Калькулятор, анализ условий и сопровождение.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://talysrus90-cmd.github.io/lizingkompas-unified/">
+<meta property="og:locale" content="ru_RU">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://talysrus90-cmd.github.io/lizingkompas-unified/#organization","name":"Лизинг Компас","url":"https://talysrus90-cmd.github.io/lizingkompas-unified/","email":"lizingkompas@mail.ru","telephone":"+7-960-484-41-41"},{"@type":"WebSite","@id":"https://talysrus90-cmd.github.io/lizingkompas-unified/#website","url":"https://talysrus90-cmd.github.io/lizingkompas-unified/","name":"Лизинг Компас","inLanguage":"ru-RU","publisher":{"@id":"https://talysrus90-cmd.github.io/lizingkompas-unified/#organization"}}]}</script>
+<style>.tariel-compare{display:block;line-height:1.45;padding:22px;border:1px solid #cde2d5;border-radius:16px;background:#f0faf4;color:var(--navy);text-align:left}.tariel-compare strong{font-size:clamp(20px,3vw,30px)}.tariel-compare ul{margin:12px 0;padding-left:22px;display:grid;gap:8px}.tariel-compare>span{font-weight:700;color:var(--green)}#request{scroll-margin-top:110px}#blogGrid details.card{display:block}#leasing-market .market-chip{display:flex!important}#send-offer{scroll-margin-top:100px}</style><style>.tariel-service{position:relative;min-height:185px;display:flex;align-items:center;overflow:hidden;border-radius:12px;background:#edf4fa;color:#132941}.tariel-service-art{position:absolute;inset:0 0 0 50%;background-size:auto 100%;background-position:right center;background-repeat:no-repeat}.tariel-service-copy{position:relative;z-index:1;width:61%;min-height:185px;display:flex;flex-direction:column;justify-content:center;padding:14px 8px 14px 15px;background:linear-gradient(90deg,#edf4fa 85%,rgba(237,244,250,0))}.tariel-service-copy strong{font-size:clamp(18px,2.1vw,23px);line-height:1.16}.tariel-service-copy small{font-size:13px;line-height:1.3;margin:8px 0;color:#34465a}.tariel-service-copy span{font-weight:700;font-size:14px;color:#116b43}.photo-service{height:auto!important}</style></head>
+<body>
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+<div class="preview-notice"><div class="container"><span class="preview-dot"></span><strong>Вариант №4 · V4.19 — только MAX</strong><span>Предпросмотр · заявки пока не принимаются</span></div></div>
+
+<div id="toast" class="toast">Заявка отправлена!</div>
+
+<!-- HEADER -->
+<header>
+  <div class="container nav-wrap">
+    <a href="#main" class="logo" aria-label="Лизинг Компас — главная">
+      <div class="logo-mark"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="17" stroke="currentColor" stroke-width="1.4" opacity=".65"/><path d="m32.8 13.6-5.6 13.6-12 7.2 5.6-13.6 12-7.2Z" fill="#F28B49"/><path d="m32.8 13.6-5.6 13.6-6.4-6.4 12-7.2Z" fill="#fff"/><circle cx="24" cy="24" r="2.3" fill="#142b45"/><path d="M24 5v4M24 39v4M5 24h4M39 24h4" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+      <div>
+        Лизинг Компас
+        <small>LEASING COMPASS · Лизинговый брокер</small>
+      </div>
+    </a>
+    <nav class="desktop-nav" aria-label="Основное меню">
+      <a href="#services">Услуги</a>
+      <a href="#calc-section">Калькулятор</a>
+      
+      <a href="#about">О компании</a>
+      <a href="#b2b">Партнёрам</a>
+    </nav>
+    <div class="nav-right">
+      <a href="tel:+79604844141" class="phone-link" data-bind="phone">+7 (960) 484-41-41</a>
+      
+      
+      <a class="msg-ico msg-max" data-bind-href="max" target="_blank" rel="noopener" title="Макс" aria-label="MAX"><span class="app-symbol app-max"><img src="max.svg" alt="" aria-hidden="true"></span><span class="app-name">MAX</span></a>
+      <button type="button" class="callback-trigger" id="callbackTrigger" aria-label="Заказать обратный звонок" aria-haspopup="dialog" aria-controls="callbackDialog"><span class="callback-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7.2 3.5 4.5 4.8c-.7.4-.9 1.2-.7 2C5.6 13.5 10.5 18.4 17.2 20.2c.8.2 1.6 0 2-.7l1.3-2.7c.3-.6.1-1.3-.5-1.7l-3.8-2.4c-.5-.3-1.2-.2-1.6.3l-1.5 1.7a13.4 13.4 0 0 1-3.8-3.8l1.7-1.5c.5-.4.6-1.1.3-1.6L8.9 4c-.4-.6-1.1-.8-1.7-.5Z" fill="currentColor"/><path d="M15 3a7 7 0 0 1 6 6M15 7a3 3 0 0 1 2 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="callback-label">Заказать<span>обратный звонок</span></span></button>
+      <button class="burger" id="burgerBtn" aria-label="Меню" aria-expanded="false" aria-controls="mobileMenu">☰</button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#services">Услуги</a>
+    <a href="#calc-section">Калькулятор и Квиз</a>
+    <a href="#request">Подготовить заявку</a>
+    
+    <a href="#cases">Кейсы экономии</a>
+    <a href="#b2b">Партнерам (B2B)</a>
+    <a href="#blog">База знаний</a>
+    <a href="#about">О брокере</a>
+    <a href="#contacts">Контакты</a>
+    <a href="tel:+79604844141" class="phone-link" data-bind="phone">+7 (960) 484-41-41</a>
+  </div>
+</header>
+
+<main id="main">
+<!-- WHY BROKER -->
+<section class="section" id="why-broker"><div class="container"><h1 class="section-title">Почему <span class="accent-word">«Лизинг Компас»</span>, а не одна лизинговая компания?</h1><div class="comparison-crops"><a class="comparison-full" href="./comparison-direct.html?v=417" aria-label="Подробнее о прямом обращении"><img src="./art/comparison-direct-v49.webp" alt="Одна лизинговая компания — одно предложение. Условия одной компании; отдельные заявки при поиске альтернатив; самостоятельная проверка договора и комиссий; при отказе — новый поиск." width="1444" height="401" fetchpriority="high"></a><a class="comparison-full tariel-compare" href="./comparison-compass.html?v=418"><strong>Через Лизинг Компас</strong><ul><li>Одна заявка — подбор среди 50+ лизинговых компаний</li><li>Запрашиваем индивидуальные условия и скидки</li><li>Сопоставляем платежи, аванс и полную стоимость</li><li>Проверяем доступные программы и сопровождаем сделку</li></ul><span>Подробнее →</span></a></div></div></section>
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="container">
+    <h2 class="section-title">Услуги</h2><p class="section-sub">Выберите направление — внутри виды имущества, условия и персональный расчёт.</p>
+    
+    <div class="grid-3" id="servicesGrid"><a class="photo-service" href="./service-cars.html" aria-label="Новые легковые автомобили — подробнее"><div class="tariel-service"><div class="tariel-service-art" style="background-image:url(./art/photo-cars.webp)" aria-hidden="true"></div><div class="tariel-service-copy"><strong>Новые легковые автомобили</strong><small>Новые авто для бизнеса и корпоративных парков</small><span>Аванс от 5%<br>Подробнее →</span></div></div></a><a class="photo-service" href="./service-trucks.html" aria-label="Грузовой транспорт — подробнее"><div class="tariel-service"><div class="tariel-service-art" style="background-image:url(./art/photo-trucks.webp)" aria-hidden="true"></div><div class="tariel-service-copy"><strong>Грузовой транспорт</strong><small>Тягачи, грузовики, прицепы и полуприцепы</small><span>Аванс от 5%<br>Подробнее →</span></div></div></a><a class="photo-service" href="./service-machines.html" aria-label="Спецтехника — подробнее"><div class="tariel-service"><div class="tariel-service-art" style="background-image:url(./art/photo-machines.webp)" aria-hidden="true"></div><div class="tariel-service-copy"><strong>Спецтехника</strong><small>Строительная, дорожная и складская техника</small><span>Аванс от 5%<br>Подробнее →</span></div></div></a><a class="photo-service" href="./service-equipment.html" aria-label="Лизинг оборудования — подробнее"><div class="tariel-service"><div class="tariel-service-art" style="background-image:url(./art/photo-equipment.webp)" aria-hidden="true"></div><div class="tariel-service-copy"><strong>Лизинг оборудования</strong><small>Станки, медицинское, пищевое и IT-оборудование</small><span>Аванс от 5%<br>Подробнее →</span></div></div></a><a class="photo-service" href="./service-property.html" aria-label="Коммерческая недвижимость — подробнее"><div class="tariel-service"><div class="tariel-service-art" style="background-image:url(./art/photo-property.webp)" aria-hidden="true"></div><div class="tariel-service-copy"><strong>Коммерческая недвижимость</strong><small>Склады, офисы, цеха и торговые объекты</small><span>Аванс от 5%<br>Подробнее →</span></div></div></a><a class="photo-service" href="./service-return.html" aria-label="Возвратный лизинг — подробнее"><div class="tariel-service"><div class="tariel-service-art" style="background-image:url(./art/photo-return.webp)" aria-hidden="true"></div><div class="tariel-service-copy"><strong>Возвратный лизинг</strong><small>Оборотные средства с использованием своего имущества</small><span>Аванс от 5%<br>Подробнее →</span></div></div></a><div class="photo-extras"><a href="./service-used.html">Автомобили с пробегом <span aria-hidden="true">→</span></a><a href="./service-used-machines.html">Спецтехника с пробегом <span aria-hidden="true">→</span></a><a href="./service-buyout.html">Выкуп и рефинансирование <span aria-hidden="true">→</span></a><a href="./service-support.html">Сопровождение договора <span aria-hidden="true">→</span></a></div></div><p class="photo-caption">Аванс от 5%. Изображения — иллюстрации услуг. Аванс, срок и иные условия согласовываются индивидуально; указанные на макете параметры не являются офертой.</p>
+  </div>
+</section>
+
+<div class="container route-section"><h2 class="route-title">С чего начнём?</h2><div class="quick-paths" aria-label="Выбор задачи">
+  <a href="#services"><span class="route-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4zM8 9h8M8 13h3M15 13h1"/></svg></span><span class="route-copy"><strong>Нужен новый лизинг</strong><small>Выбрать имущество</small></span><b>→</b></a>
+  <a href="#send-offer"><span class="route-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V4M4 20h16M8 15l4-5 4 2 4-7"/></svg></span><span class="route-copy"><strong>Есть предложение от лизинговой компании</strong><small>Отправить график на электронную почту</small></span><b>→</b></a>
+  <a href="#request"><span class="route-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 9l2 2 4-4M9 15h6M9 18h4"/></svg></span><span class="route-copy"><strong>Подготовить заявку</strong><small>Короткая заявка для подбора</small></span><b>→</b></a>
+  <a href="#support-route"><span class="route-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-5 8-8 9-3-1-8-4-8-9V6l8-3Zm-4 9 3 3 5-6"/></svg></span><span class="route-copy"><strong>Уже есть договор</strong><small>Выкуп, страхование, график</small></span><b>→</b></a>
+</div></div>
+
+<!-- CALCULATOR & QUIZ -->
+<section class="section section-alt" id="calc-section">
+  <div class="container">
+    <div class="eyebrow">02 / ФИНАНСОВЫЙ ИНСТРУМЕНТ</div>
+    <h2 class="section-title">Рассчитайте лизинг</h2>
+    <p class="section-sub">Предварительный расчёт по пяти условным ставкам. Изменяйте параметры, сравнивайте платежи и полную стоимость.</p>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('calcTab', this)">Калькулятор</button>
+      <button class="tab-btn" onclick="switchTab('quizTab', this)">Подбор за 4 шага</button>
+    </div>
+
+    <!-- TAB 1: CALCULATOR -->
+    <div class="tab-panel active" id="calcTab"><aside id="calcLive" class="calc-live" hidden aria-label="Текущий ориентировочный расчёт"><div><small>Платёж в месяц</small><strong id="liveMonthly">—</strong></div><div><small>Всего выплат</small><strong id="liveTotal">—</strong></div></aside>
+      <div class="calc-box">
+        <div class="calc-grid">
+          <div id="calcControls" class="compact-calc-controls">
+            <div class="field">
+              <label for="cType">Тип имущества</label>
+              <select id="cType" onchange="recalc()">
+                <option value="Новое легковое авто">Новое легковое авто</option>
+                <option value="Авто с пробегом">Автомобиль с пробегом</option>
+                <option value="Оборудование">Оборудование</option>
+                <option value="Коммерческая недвижимость">Коммерческая недвижимость</option>
+                <option value="Спецтехника / Грузовой">Спецтехника / Грузовой транспорт</option>
+                <option value="Рефинансирование / Возвратный лизинг">Рефинансирование / Возвратный лизинг</option><option value="Иное">Иное</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="cPriceNum"><span>Стоимость имущества, ₽</span><strong id="cPriceOut">4 500 000 ₽</strong></label>
+              <input type="text" data-money inputmode="numeric" id="cPriceNum" value="4 500 000" data-min="500000" data-max="150000000" oninput="syncPrice(this.value,false)" onchange="syncPrice(this.value,true)">
+              <div class="thumb-slider" style="--range-fill:40.444%"><input type="range" data-curve="4" id="cPriceRange" aria-label="Стоимость имущества" min="500000" max="150000000" step="10000" value="4500000" oninput="syncPrice(this.value)" style="--range-fill:40.444%"><div class="thumb-slider-rail" aria-hidden="true"><div class="thumb-slider-knob"></div></div></div><div class="range-limits" aria-hidden="true"><span>500 тыс. ₽</span><span>150 млн ₽</span></div>
+            </div>
+            <div class="field">
+              <label>
+                <span>Аванс (<span id="cAdvOut">20% — 900 000 ₽</span>)</span>
+                
+              </label>
+              <input type="text" data-money inputmode="numeric" id="cAdvInput" aria-label="Размер аванса, рубли" value="900 000" data-min="225000" data-max="2205000" oninput="syncAdvInput(false)" onchange="syncAdvInput(true)">
+              <div class="thumb-slider" style="--range-fill:63.888%"><input type="range" data-curve="2" id="cAdvRange" aria-label="Аванс в процентах" min="5" max="49" step="0.1" value="20" oninput="syncAdvRange()" style="--range-fill:63.888%"><div class="thumb-slider-rail" aria-hidden="true"><div class="thumb-slider-knob"></div></div></div><div class="range-limits" aria-hidden="true"><span>5%</span><span>49%</span></div>
+            </div>
+            <div class="field">
+              <label for="cTerm"><span>Срок лизинга</span><strong id="cTermOut">36 мес.</strong></label>
+              <div class="thumb-slider" style="--range-fill:33.333%"><input type="range" id="cTerm" min="12" max="84" step="6" value="36" oninput="recalc()" style="--range-fill:33.333%"><div class="thumb-slider-rail" aria-hidden="true"><div class="thumb-slider-knob"></div></div></div><div class="range-limits" aria-hidden="true"><span>12 мес.</span><span>84 мес.</span></div><div class="term-presets" aria-label="Быстрый выбор срока"><button type="button" data-term="24" aria-pressed="false">24 мес.</button><button type="button" data-term="36" aria-pressed="true">36 мес.</button><button type="button" data-term="48" aria-pressed="false">48 мес.</button><button type="button" data-term="60" aria-pressed="false">60 мес.</button></div>
+            </div>
+          </div>
+
+          <div>            <div class="unified-result" id="calcFullResult" aria-live="polite"><div class="result-cards">
+              <div class="res-card">
+                <small>Платёж в месяц (ориентир)</small>
+                <strong id="resMonthly">0 ₽</strong>
+              </div>
+              <div class="res-card green">
+                <small id="resTaxLabel">Общая сумма выплат</small>
+                <strong id="resTax">0 ₽</strong>
+              </div>
+            </div><dl class="unified-breakdown"><dt>Стоимость имущества</dt><dd id="uPrice">—</dd><dt>Аванс</dt><dd id="uAdvance">—</dd><dt>Срок</dt><dd id="uTerm">—</dd><dt>Удорожание за срок / в год</dt><dd id="uRate">—</dd><dt>Переплата</dt><dd id="uOver">—</dd><dt>Налоговый эффект</dt><dd>Индивидуально</dd></dl><p class="unified-note">Условная модель равных платежей без отдельного выкупа, страхования, комиссий и налоговых вычетов. Не оферта.</p></div>
+
+            <details class="scenario-details" id="scenarioDetails"><summary>Сравнить все 5 сценариев <span>условные ставки</span></summary><div class="table-wrap"><table class="lk-table" aria-label="Иллюстративные сценарии">
+              <thead>
+                <tr><th scope="col">Сценарий</th><th scope="col">Платёж/мес.</th><th scope="col">Всего</th><th scope="col">Переплата</th></tr>
+              </thead>
+              <tbody id="lkCompareBody"></tbody>
+            </table></div></details><button type="button" class="sample-link" id="saveCurrentCalc">↓ Скачать текущий расчёт (CSV)</button><button type="button" class="sample-link" id="resetCalc">Сбросить параметры</button>
+
+            <form class="calc-lead-box" onsubmit="submitForm(event, 'Калькулятор пяти сценариев')">
+              <h4>Получить индивидуальный расчёт</h4>
+              
+              <div class="grid-2" style="gap:10px;">
+                <div class="field" style="margin:0;"><input type="text" name="name" placeholder="Ваше имя / Компания" required></div>
+                <div class="field" style="margin:0;"><input type="tel" name="phone" placeholder="+7 (___) ___-__-__" required></div>
+              </div>
+              <div class="grid-2" style="gap:10px;margin-top:10px;">
+                <div class="field" style="margin:0;"><input type="text" name="inn" placeholder="ИНН (необязательно)"></div>
+                <div class="field" style="margin:0;">
+                  <select name="messenger">
+                    
+                    
+                    <option value="Макс">Прислать в Макс</option>
+                    <option value="Телефон">Перезвонить</option>
+                  </select>
+                </div>
+              </div>
+              <div class="consent-block">
+  <div class="consent-choice"><input type="checkbox" id="pdConsent1" name="pdConsent" value="1" required><label for="pdConsent1">Даю согласие на обработку моих персональных данных</label></div>
+  <div class="consent-links"><a href="./consent.html" target="_blank" rel="noopener">Текст согласия</a><span aria-hidden="true">·</span><a href="./privacy.html" target="_blank" rel="noopener">Политика обработки персональных данных</a></div>
+  
+</div>
+              <button type="submit" class="btn btn-primary" style="width:100%;">Запросить расчёт — демо</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: 4-STEP QUIZ -->
+    <div class="tab-panel" id="quizTab">
+      <div class="calc-box" style="max-width:780px;margin:0 auto;">
+        <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:700;color:var(--muted);margin-bottom:8px;">
+          <span id="quizStepLabel">Шаг 1 из 4</span>
+          <span>Демонстрация подбора</span>
+        </div>
+        <div class="quiz-progress"><div class="quiz-bar" id="quizBar"></div></div>
+
+        <div class="quiz-step active" data-step="1">
+          <h3>1. Что планируете приобрести в лизинг?</h3>
+          <div class="quiz-opts">
+            <button type="button" class="quiz-opt" onclick="pickQuiz(1,'Новое легковое авто',this)">Новое легковое авто</button>
+            <button type="button" class="quiz-opt" onclick="pickQuiz(1,'Автомобиль с пробегом',this)">Автомобиль с пробегом</button>
+            <button type="button" class="quiz-opt" onclick="pickQuiz(1,'Оборудование / Спецтехника',this)">Оборудование / Спецтехника</button>
+            <button type="button" class="quiz-opt" onclick="pickQuiz(1,'Коммерческая недвижимость',this)">Коммерческая недвижимость</button>
+            <button type="button" class="quiz-opt" onclick="pickQuiz(1,'Выкуп / Рефинансирование',this)">Выкуп / Рефинансирование</button>
+            <button type="button" class="quiz-opt" onclick="pickQuiz(1,'Возвратный лизинг',this)">Возвратный лизинг</button>
+          </div>
+        </div>
+
+        <div class="quiz-step" data-step="2">
+          <h3>2. Ориентировочный бюджет и желаемый аванс</h3>
+          <div class="field"><label for="qBudget">Бюджет, ₽</label><input type="text" id="qBudget" data-money inputmode="numeric" data-min="500000" data-max="150000000" data-slider="15000000" data-quantum="50000" value="4 500 000"></div><div class="field"><label for="qAdv">Желаемый аванс, ₽</label><input type="text" id="qAdv" data-money inputmode="numeric" data-min="225000" data-max="4500000" data-slider="1000000" data-quantum="5000" value="900 000"></div>
+          <div style="display:flex;gap:10px;"><button type="button" class="btn btn-outline btn-sm" onclick="goQuiz(1)">← Назад</button><button type="button" class="btn btn-primary btn-sm" onclick="goQuiz(3)">Далее →</button></div>
+        </div>
+
+        <div class="quiz-step" data-step="3">
+          <h3>3. Статус покупателя и опции в графике</h3>
+          <div class="quiz-opts">
+            <button type="button" class="quiz-opt" onclick="pickQuiz(3,'ООО с НДС (ОСНО)',this)">ООО с НДС (ОСНО)</button>
+            <button type="button" class="quiz-opt" onclick="pickQuiz(3,'ООО / ИП на УСН',this)">ООО / ИП на УСН</button>
+            <button type="button" class="quiz-opt" onclick="pickQuiz(3,'Физическое лицо',this)">Физическое лицо</button>
+            <button type="button" class="quiz-opt" onclick="pickQuiz(3,'Нужна консультация по налогам',this)">Нужна консультация по налогам</button>
+          </div>
+          <div class="field"><label>Опции (КАСКО, ОСАГО, шины, ТО)</label><input type="text" id="qOpts" maxlength="80" placeholder="Например: включить КАСКО + ОСАГО в график"></div>
+          <div style="display:flex;gap:10px;"><button type="button" class="btn btn-outline btn-sm" onclick="goQuiz(2)">← Назад</button><button type="button" class="btn btn-primary btn-sm" onclick="goQuiz(4)">Далее →</button></div>
+        </div>
+
+        <div class="quiz-step" data-step="4">
+          <h3>4. Проверьте параметры и выберите способ связи</h3><div id="quizReview" class="quiz-review" aria-label="Ваши ответы"></div>
+          <form onsubmit="submitForm(event, 'Квиз 4 шага')" style="margin-top:14px;">
+            <div class="grid-2" style="gap:12px;">
+              <div class="field"><label>Куда отправить</label>
+                <select name="messenger"><option>Макс</option><option>Позвонить по телефону</option></select>
+              </div>
+              <div class="field"><label>Телефон *</label><input type="tel" name="phone" placeholder="+7 (___) ___-__-__" required></div>
+            </div>
+            <div class="grid-2" style="gap:12px;">
+              <div class="field"><label>Ваше имя *</label><input type="text" name="name" placeholder="Иван Петров" required></div>
+              <div class="field"><label>ИНН компании (ускорит скоринг)</label><input type="text" name="inn" placeholder="Необязательно"></div>
+            </div>
+            <div class="consent-block">
+  <div class="consent-choice"><input type="checkbox" id="pdConsent2" name="pdConsent" value="1" required><label for="pdConsent2">Даю согласие на обработку моих персональных данных</label></div>
+  <div class="consent-links"><a href="./consent.html" target="_blank" rel="noopener">Текст согласия</a><span aria-hidden="true">·</span><a href="./privacy.html" target="_blank" rel="noopener">Политика обработки персональных данных</a></div>
+  
+</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-outline" onclick="goQuiz(3)">← Назад</button>
+              <button type="submit" class="btn btn-primary">Получить сводное КП</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="send-offer"><div class="container"><h2 class="section-title">Есть предложение от лизинговой компании?</h2><p class="section-sub">Отправьте график платежей на нашу электронную почту и укажите свои комментарии. Прикрепите полученное предложение к письму самостоятельно.</p><a class="btn btn-primary" href="mailto:lizingkompas@mail.ru?subject=%D0%93%D1%80%D0%B0%D1%84%D0%B8%D0%BA%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%B5%D0%B9%20%D0%B4%D0%BB%D1%8F%20%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B8&amp;body=%D0%94%D0%BE%D0%B1%D1%80%D1%8B%D0%B9%20%D0%B4%D0%B5%D0%BD%D1%8C!%0A%D0%9D%D0%B0%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D1%8F%D1%8E%20%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D0%BA%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%B5%D0%B9.%0A%D0%9A%D0%BE%D0%BC%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%80%D0%B8%D0%B8%3A%20%0A">Отправить график по электронной почте</a><p style="margin-top:10px"><a href="mailto:lizingkompas@mail.ru">lizingkompas@mail.ru</a></p></div></section>
+<section class="section support-route" id="support-route"><div class="container"><div class="eyebrow">СОПРОВОЖДЕНИЕ</div><h2 class="section-title">Уже есть договор лизинга?</h2><p class="section-sub">Выберите задачу, чтобы подготовиться к разговору со специалистом. Без загрузки документов.</p><div class="support-grid">
+<details><summary>Досрочный выкуп</summary><p>Подготовьте действующий график, остаток обязательств и условия выкупа. Сравните итоговые расходы до и после выкупа.</p></details>
+<details><summary>Изменение графика платежей</summary><p>Уточните задолженность, желаемый платёж и период изменения графика. Новые условия зависят от согласия сторон.</p></details>
+<details><summary>Страховой случай</summary><p>Подготовьте договор лизинга, страховой полис и документы о событии. Не отправляйте их через демонстрационный сайт.</p></details>
+<details><summary>Завершение договора</summary><p>Проверьте остаток платежей, выкупную стоимость, порядок передачи имущества и закрывающие документы.</p></details></div><button class="btn btn-primary" type="button" onclick="document.getElementById('callbackTrigger').click()">Обсудить условия →</button></div></section>
+<!-- HOW WE WORK -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="eyebrow">04 / ПРОЦЕСС</div>
+    <h2 class="section-title">Как мы работаем</h2>
+    <div class="steps-grid">
+      <div class="step-item"><div class="step-num">1</div><h4>Заявка и потребности</h4><p>Определяем имущество, бюджет и срок.</p></div>
+      <div class="step-item"><div class="step-num">2</div><h4>Подбор и предварительная оценка</h4><p>Запрашиваем подходящие варианты финансирования.</p></div>
+      <div class="step-item"><div class="step-num">3</div><h4>Сводное коммерческое предложение</h4><p>Сводим условия и проверяем расходы.</p></div>
+      <div class="step-item"><div class="step-num">4</div><h4>Одобрение, договор, выдача</h4><p>Согласовываем документы и график.</p></div>
+      <div class="step-item"><div class="step-num">5</div><h4>Поддержка после сделки</h4><p>Помогаем с вопросами по договору.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CASES -->
+<section class="section" id="cases">
+  <div class="container">
+    <div class="eyebrow">05 / ПРИМЕРЫ</div>
+    <h2 class="section-title">Примеры задач по лизингу</h2>
+    
+    <p class="section-sub">Модельные расчёты, не результаты реальных клиентов.</p><div class="grid-2" id="casesGrid"><div class="card"><div><span class="unified-example-label">ДЕМОНСТРАЦИОННЫЙ РАСЧЁТ</span><h3>Парк из 5 седанов для такси</h3><p>Стоимость 12 млн ₽, аванс 20%, срок 36 мес. Разница полной стоимости между условными ставками 18% и 26%, без отдельного выкупа и дополнительных расходов. Не реальная сделка.</p><div class="case-saving">≈ 1 430 171 ₽</div><small>Разница между двумя условными сценариями</small></div><a class="btn btn-outline btn-sm" style="align-self:flex-start;" href="#calc-section" onclick="loadUnifiedCase(0);return false">Рассчитать этот пример</a></div><div class="card"><div><span class="unified-example-label">ДЕМОНСТРАЦИОННЫЙ РАСЧЁТ</span><h3>Станок ЧПУ для цеха</h3><p>Стоимость 6 млн ₽, аванс 20%, срок 48 мес. Разница полной стоимости между условными ставками 18% и 26%, без отдельного выкупа и дополнительных расходов. Не реальная сделка.</p><div class="case-saving">≈ 1 000 468 ₽</div><small>Разница между двумя условными сценариями</small></div><a class="btn btn-outline btn-sm" style="align-self:flex-start;" href="#calc-section" onclick="loadUnifiedCase(1);return false">Рассчитать этот пример</a></div><div class="card"><div><span class="unified-example-label">ДЕМОНСТРАЦИОННЫЙ РАСЧЁТ</span><h3>Склад 1 200 м²</h3><p>Стоимость 45 млн ₽, аванс 20%, срок 84 мес. Разница полной стоимости между условными ставками 18% и 26%, без отдельного выкупа и дополнительных расходов. Не реальная сделка.</p><div class="case-saving">≈ 14 928 464 ₽</div><small>Разница между двумя условными сценариями</small></div><a class="btn btn-outline btn-sm" style="align-self:flex-start;" href="#calc-section" onclick="loadUnifiedCase(2);return false">Рассчитать этот пример</a></div></div>
+  </div>
+</section>
+
+<!-- MARKET DIRECTORY V4.3 -->
+<section class="section section-alt" id="leasing-market"><div class="container"><h2 class="section-title">Лизинговые компании партнёры</h2><p class="section-sub">Перечень для согласования перед запуском. Партнёрские отношения и доступность условий необходимо подтвердить.</p><div class="market-list"><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>Дельта Лизинг</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>Каркаде</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>Европлан</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>Финсмарт</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>Газпромбанк Лизинг</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>ИнтерЛизинг</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>РБ Лизинг</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>Реалист Банк</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>Роделен</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>Металлинвестбанк Лизинг</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>Пруссия</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>Сбербанк Лизинг</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>Флит Автолизинг</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>Челинд Лизинг</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>Ресо-Лизинг</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>Совкомбанк Лизинг</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>МСБ Лизинг</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>Азия Корпорейшн</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>МК Лизинг</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>Элемент Лизинг</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>Южноуральский лизинговый центр</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>Лизинг Медицина</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>Лизинг Трейд</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>КФЛ Лизинг</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>АТБ Лизинг</div><div class="market-chip"><span class="market-dot" aria-hidden="true"></span>БалтЛиз</div></div></div></section>
+<!-- B2B PARTNERS -->
+<section class="section" id="b2b">
+  <div class="container">
+    <div class="badge">Для B2B-партнеров</div>
+    <h2 class="section-title">Партнерская программа: автосалонам, поставщикам и брокерам</h2>
+    <p class="section-sub">Помогаем закрывать сделки, которые срываются из-за отказа одной лизинговой компании или нехватки оборотных средств у вашего покупателя.</p>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchB2B('b2bAuto', this)">Автосалонам</button>
+      <button class="tab-btn" onclick="switchB2B('b2bEquip', this)">Поставщикам оборудования</button>
+      <button class="tab-btn" onclick="switchB2B('b2bRealty', this)">Брокерам недвижимости</button>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div id="b2bAuto" class="b2b-pane">
+          <h3>Механика «Спасение отказников» для МОПов и РОПов</h3>
+          <p>Если лизинговая компания салона отказала клиенту или предложила высокий аванс — не теряйте продажу. Пришлите ИНН и ПТС/счет: подберём возможные варианты финансирования после запуска сервиса.</p>
+          <ul style="padding-left:18px;font-size:15px;display:grid;gap:8px;color:var(--slate);">
+            <li>Выплата партнерского бонуса после выдачи авто.</li>
+            <li>Встречный поток наших клиентов с одобренным лимитом в ваш салон.</li>
+            <li>Удобный канал общения после запуска.</li>
+          </ul>
+        </div>
+        <div id="b2bEquip" class="b2b-pane" style="display:none;">
+          <h3>«Лизинговый отдел на аутсорсе» для поставщиков</h3>
+          <p>Дополним ваши коммерческие предложения расчётом: встроим расчёт лизинга прямо в ваши КП, чтобы покупатель видел комфортный ежемесячный платёж вместо поэтапной оплаты, состоящей из 1–3 частей.</p>
+          <ul style="padding-left:18px;font-size:15px;display:grid;gap:8px;color:var(--slate);">
+            
+            <li>Финансируем станки, медоборудование, складские и пищевые линии.</li>
+            
+          </ul>
+        </div>
+        <div id="b2bRealty" class="b2b-pane" style="display:none;">
+          <h3>Лизинг коммерческой недвижимости (чеки 15–150+ млн ₽)</h3>
+          <p>Когда коммерческая ипотека недоступна или невыгодна, лизинг складов, цехов, клиник и офисов позволяет клиенту выкупить объект с индивидуальной оценкой налоговых условий.</p>
+          <ul style="padding-left:18px;font-size:15px;display:grid;gap:8px;color:var(--slate);">
+            <li>Структурирование сделки под ключ через профильные лизинговые компании.</li>
+            <li>Прозрачный агентский договор с брокером недвижимости.</li>
+          </ul>
+        </div>
+      </div>
+
+      <form class="card" onsubmit="submitForm(event, 'B2B Партнер')">
+        <h3>Передать клиента или стать партнером</h3>
+        <p>Демонстрация партнёрской формы.</p>
+        <div class="field"><input type="text" name="name" placeholder="Имя / Организация (автосалон, поставщик)" required></div>
+        <div class="field"><input type="tel" name="phone" placeholder="Контактный телефон *" required></div>
+        <div class="field"><textarea name="comment" rows="2" placeholder="Коротко о задаче или клиенте (можно указать ИНН)"></textarea></div>
+        <div class="consent-block">
+  <div class="consent-choice"><input type="checkbox" id="pdConsent3" name="pdConsent" value="1" required><label for="pdConsent3">Даю согласие на обработку моих персональных данных</label></div>
+  <div class="consent-links"><a href="./consent.html" target="_blank" rel="noopener">Текст согласия</a><span aria-hidden="true">·</span><a href="./privacy.html" target="_blank" rel="noopener">Политика обработки персональных данных</a></div>
+  
+</div>
+        <button type="submit" class="btn btn-primary" style="width:100%;">Отправить партнерскую заявку</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section section-alt" id="about">
+  <div class="container">
+    <div class="about-box">
+      <div class="avatar-placeholder"><div class="brand-emblem"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="17" stroke="currentColor" stroke-width="1.4" opacity=".65"/><path d="m32.8 13.6-5.6 13.6-12 7.2 5.6-13.6 12-7.2Z" fill="#F28B49"/><path d="m32.8 13.6-5.6 13.6-6.4-6.4 12-7.2Z" fill="#fff"/><circle cx="24" cy="24" r="2.3" fill="#142b45"/><path d="M24 5v4M24 39v4M5 24h4M39 24h4" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg></div><h3>Лизинг Компас</h3><p>LEASING COMPASS</p><div class="brand-caption">Подбор · сравнение · сопровождение</div></div>
+      <div>
+        <div class="eyebrow">О КОМПАНИИ</div>
+        <h2 class="section-title">О брокере «Лизинг Компас»</h2>
+        <p class="about-text">«Лизинг Компас» — проект независимого брокера по подбору и сопровождению лизинговых сделок. </p><p class="about-text">ИНН 231207234403 · ОГРНИП 323237500416632.</p><div class="about-points"><div>✓ Сравнение на единых параметрах</div><div>✓ Индивидуальные условия сопровождения</div><div>✓ Работа с договором и графиком платежей</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOG -->
+<section class="section" id="blog"><div class="container"><div class="badge">База знаний</div><h2 class="section-title">Полезные материалы о лизинге</h2><div class="grid-2" id="blogGrid"><details class="card"><summary style="cursor:pointer;font-weight:700;color:var(--navy)">Что такое лизинг</summary><p style="margin-top:12px">Финансовая аренда: лизингодатель приобретает имущество и предоставляет его клиенту за плату на согласованных условиях. Выкуп возможен, если предусмотрен договором.</p><p><a style="color:var(--navy-2);text-decoration:underline" href="./article-return-leasing.html">Отдельный вид: возвратный лизинг →</a></p></details><details class="card"><summary style="cursor:pointer;font-weight:700;color:var(--navy)">Юридические аспекты лизинга</summary><p style="margin-top:12px">До подписания договора изучите права и обязанности сторон, переход собственности, порядок выкупа, страхование, санкции и основания расторжения.</p><p><a style="color:var(--navy-2);text-decoration:underline" href="./article-leasing-contract-check.html">Что проверить в договоре →</a></p></details><details class="card"><summary style="cursor:pointer;font-weight:700;color:var(--navy)">Бухгалтерские аспекты лизинга</summary><p style="margin-top:12px">Учёт зависит от условий договора, применимого стандарта и статуса сторон. Проверьте порядок отражения права пользования, обязательств и платежей с бухгалтером.</p><p><a style="color:var(--navy-2);text-decoration:underline" href="./article-leasing-tax-check.html">Подготовка к консультации с бухгалтером →</a></p></details><details class="card"><summary style="cursor:pointer;font-weight:700;color:var(--navy)">Федеральный закон о лизинге</summary><p style="margin-top:12px">Основной профильный акт — Федеральный закон от 29.10.1998 № 164-ФЗ «О финансовой аренде (лизинге)». Проверяйте действующую редакцию.</p><p><a style="color:var(--navy-2);text-decoration:underline" href="./article-leasing-subsidy-check.html">Дополнительно: условия льготных программ →</a></p></details><details class="card"><summary style="cursor:pointer;font-weight:700;color:var(--navy)">Статьи Гражданского кодекса, касающиеся лизинговой сферы</summary><p style="margin-top:12px">Глава 34, § 6 ГК РФ (статьи 665–670) регулирует финансовую аренду. Применяются также общие положения об аренде и обязательствах.</p></details><details class="card"><summary style="cursor:pointer;font-weight:700;color:var(--navy)">Возврат НДС при лизинге</summary><p style="margin-top:12px">Право на вычет НДС зависит от налогового статуса, использования имущества в облагаемых операциях и наличия необходимых документов. Сам факт лизинга не гарантирует возврат налога.</p></details><details class="card"><summary style="cursor:pointer;font-weight:700;color:var(--navy)">Чем отличается лизинг от кредита и что выгоднее?</summary><p style="margin-top:12px">Сравнивайте полную стоимость, аванс, график, обеспечение, страхование, выкуп и налоговые последствия на одинаковых условиях. Универсально более выгодного инструмента нет.</p><p><a style="color:var(--navy-2);text-decoration:underline" href="./article-compare-leasing-offers.html">Методика сравнения условий →</a></p></details><details class="card"><summary style="cursor:pointer;font-weight:700;color:var(--navy)">Основные термины, использующиеся в лизинге</summary><p style="margin-top:12px">Лизингодатель, лизингополучатель, предмет лизинга, аванс, график платежей, выкупная стоимость, срок договора.</p><p><a style="color:var(--navy-2);text-decoration:underline" href="./article-broker-or-direct.html">Как работает брокер и лизингодатель →</a></p></details></div><p class="photo-caption">Справочные материалы; не заменяют индивидуальную юридическую или налоговую консультацию.</p></div></section>
+
+<section class="section section-alt" id="faq"><div class="container"><div class="eyebrow">ВОПРОСЫ</div><h2 class="section-title">Частые вопросы</h2><div class="support-grid"><details><summary>Чем лизинг отличается от кредита?</summary><p>Имущество приобретается лизингодателем и передаётся в пользование на договорных условиях. Порядок перехода собственности зависит от договора.</p></details><details><summary>Как сравнить два предложения?</summary><p>Сравните аванс, все платежи, выкуп и дополнительные расходы при одинаковых условиях. Отправьте нам графики платежей по электронной почте для индивидуального сравнения.</p></details><details><summary>Можно ли изменить действующий договор?</summary><p>Изменения зависят от договора и согласия сторон. Подготовьте график и документы для консультации.</p></details><details><summary>Почему налоговая экономия не указана одной цифрой?</summary><p>Она зависит от налогового режима, права на вычет и условий сделки. Универсальная цифра может вводить в заблуждение.</p></details></div></div></section>
+<!-- CONTACTS -->
+<section class="section section-alt" id="contacts">
+  <div class="container">
+    <div class="badge">Свяжитесь удобным способом</div>
+    <h2 class="section-title">Контакты и заявка на лизинг</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div>
+          <h3>Прямая связь по всей России</h3>
+          <p>Связаться с нами можно по телефону. Онлайн-заявки пока в демонстрационном режиме.</p>
+          <div style="display:grid;gap:12px;margin:18px 0;font-size:16px;">
+            <div><strong>Телефон:</strong> <a href="tel:+79604844141" data-bind="phone" style="color:var(--navy);font-weight:800;">+7 (960) 484-41-41</a></div>
+            <div><strong>E-mail:</strong> <a href="mailto:lizingkompas@mail.ru" data-bind="email" style="color:var(--navy-2);font-weight:700;">lizingkompas@mail.ru</a></div>
+            <div><strong>Реквизиты:</strong> ИНН <span data-bind="ipInn">231207234403</span>, ОГРНИП <span data-bind="ipOgrnip">323237500416632</span></div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;">
+            
+            
+            <a class="btn btn-sm" style="background:#4F46E5;color:#fff;" data-bind-href="max" target="_blank" rel="noopener" aria-label="MAX"><span class="app-symbol app-max"><img src="max.svg" alt="" aria-hidden="true"></span><span class="app-name">MAX</span></a>
+            
+            
+            
+          </div>
+        </div>
+      </div>
+
+      <form id="request" class="card" onsubmit="event.preventDefault();document.getElementById('requestStatus').textContent='Демонстрация: заявка не отправлена. Для связи используйте телефон или электронную почту.'"><h3>Подготовить заявку</h3><p>Предпросмотр формы. Используйте только тестовые данные.</p><div class="field"><label for="reqOrg">Наименование организации</label><input id="reqOrg" name="organization" required></div><div class="field"><label for="reqInn">ИНН</label><input id="reqInn" name="inn" inputmode="numeric" pattern="[0-9]{10}|[0-9]{12}" required></div><div class="field"><label for="reqRevenue">Средняя ежемесячная выручка, ₽</label><input id="reqRevenue" name="revenue" type="number" min="0" required></div><div class="field"><label for="reqName">ФИО контактного лица</label><input id="reqName" name="name" required></div><div class="field"><label for="reqPhone">Контактный телефон</label><input id="reqPhone" name="phone" type="tel" required></div><div class="field"><label for="reqComment">Комментарий: предмет лизинга, пожелания и т. д.</label><textarea id="reqComment" name="comment" rows="3"></textarea></div><div class="consent-block"><div class="consent-choice"><input type="checkbox" id="pdConsent4" name="pdConsent" required><label for="pdConsent4">Даю согласие на обработку персональных данных</label></div><div class="consent-links"><a href="./consent.html">Текст согласия</a> · <a href="./privacy.html">Политика обработки персональных данных</a></div></div><button class="btn btn-primary" type="submit">Подготовить заявку — демо</button><p id="requestStatus" role="status"></p></form>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-identity">
+        <a href="#main" class="footer-brand" aria-label="Лизинг Компас — на главную"><span class="footer-mark"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="17" stroke="currentColor" stroke-width="1.4" opacity=".65"/><path d="m32.8 13.6-5.6 13.6-12 7.2 5.6-13.6 12-7.2Z" fill="#F28B49"/><path d="m32.8 13.6-5.6 13.6-6.4-6.4 12-7.2Z" fill="#fff"/><circle cx="24" cy="24" r="2.3" fill="#142b45"/><path d="M24 5v4M24 39v4M5 24h4M39 24h4" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg></span><span><strong>Лизинг Компас</strong><small>LEASING COMPASS</small></span></a>
+        <p>Подбор, сравнение и сопровождение лизинговых сделок по всей России.</p>
+      </div>
+      <div>
+        <h4>Навигация</h4>
+        <ul><li><a href="#services">Услуги</a></li><li><a href="#calc-section">Калькулятор</a></li><li><a href="#request">Подготовить заявку</a></li><li><a href="#about">О компании</a></li><li><a href="#b2b">Партнёрам</a></li><li><a href="#contacts">Контакты и реквизиты</a></li></ul>
+      </div>
+      <div>
+        <h4>Правовая информация</h4>
+        <ul><li><a href="./privacy.html" target="_blank" rel="noopener">Политика обработки персональных данных</a></li><li><a href="./consent.html" target="_blank" rel="noopener">Согласие на обработку персональных данных</a></li></ul>
+      </div>
+      <div class="footer-contacts">
+        <h4>Связаться с нами</h4>
+        <a class="footer-phone" href="tel:+79604844141" data-bind="phone">+7 (960) 484-41-41</a>
+        <span class="footer-email-label">Электронная почта</span><a class="footer-email" href="mailto:lizingkompas@mail.ru" data-bind="email">lizingkompas@mail.ru</a>
+        <button type="button" class="footer-callback" onclick="document.getElementById('callbackTrigger').click()">Заказать обратный звонок →</button>
+        <button type="button" id="callbackMotionToggle" class="motion-toggle" aria-pressed="false">Отключить анимацию звонка</button>
+      </div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 «Лизинг Компас»</span><span>Расчёты носят информационный характер и не являются публичной офертой.</span></div>
+  </div>
+</footer>
+
+<!-- FLOATING QUICK CONTACT -->
+<div class="fab-wrap">
+  
+  
+  <a class="fab msg-max" data-bind-href="max" target="_blank" rel="noopener" title="Написать в Макс" aria-label="MAX"><span class="app-symbol app-max"><img src="max.svg" alt="" aria-hidden="true"></span><span class="app-name">MAX</span></a>
+
+  <button type="button" class="callback-trigger" id="callbackDock" aria-label="Заказать обратный звонок" aria-haspopup="dialog" aria-controls="callbackDialog"><span class="callback-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7.2 3.5 4.5 4.8c-.7.4-.9 1.2-.7 2C5.6 13.5 10.5 18.4 17.2 20.2c.8.2 1.6 0 2-.7l1.3-2.7c.3-.6.1-1.3-.5-1.7l-3.8-2.4c-.5-.3-1.2-.2-1.6.3l-1.5 1.7a13.4 13.4 0 0 1-3.8-3.8l1.7-1.5c.5-.4.6-1.1.3-1.6L8.9 4c-.4-.6-1.1-.8-1.7-.5Z" fill="currentColor"/><path d="M15 3a7 7 0 0 1 6 6M15 7a3 3 0 0 1 2 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="callback-label">Заказать<span>обратный звонок</span></span></button>
+</div>
+
+<!-- MODAL: GENERIC DETAIL (SERVICE / CASE / ARTICLE) -->
+<div class="modal-bg" id="detailModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('detailModal')">×</button>
+    <div id="detailContent"></div>
+  </div>
+</div>
+
+<!-- MODAL: LEAD MAGNET KP -->
+
+
+<!-- MODAL: EXIT INTENT -->
+<div class="modal-bg" id="exitModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('exitModal')">×</button>
+    <h3>Проверка условий лизинга</h3><p>Демонстрация. Приём обращений не подключён.</p>
+  </div>
+</div>
+
+<!-- Legal documents are independent pages: privacy.html and consent.html -->
+<script>
+  const DEFAULTS = {
+    heroTitle: "Лизинг для бизнеса. Выбирайте осознанно.",
+    phone: "+7 (960) 484-41-41",
+    email: "lizingkompas@mail.ru",
+
+    ipInn: "231207234403",
+    ipOgrnip: "323237500416632",
+    tg: "leasing_kompas",
+    wa: "79604844141",
+    max: "https://max.ru/",
+
+    rates: [{ name: "Сценарий 1", rate: 18 }, { name: "Сценарий 2", rate: 20 }, { name: "Сценарий 3", rate: 22 }, { name: "Сценарий 4", rate: 24 }, { name: "Сценарий 5", rate: 26 }]
+  };
+
+  const SERVICES = [{"slug":"cars","title":"Новые легковые автомобили","desc":"Новые авто для бизнеса и корпоративных парков.","type":"Новое легковое авто","meta":"Транспорт","price":["Выберите автомобиль и поставщика","Сравните аванс, график и выкуп","Уточните страхование, ТО и ограничения пробега"],"color":4500000},{"slug":"used","title":"Автомобили с пробегом","desc":"Легковые авто с проверкой документов и условий.","type":"Авто с пробегом","meta":"Транспорт","price":["Проверьте историю и состояние автомобиля","Уточните ограничения возраста и продавца","Сравните условия выкупа и страхования"],"color":2500000},{"slug":"used-machines","title":"Спецтехника с пробегом","desc":"Экскаваторы, погрузчики, тракторы, тягачи и самосвалы.","type":"Спецтехника / Грузовой","meta":"Строительство и логистика","price":["Проверьте моточасы или пробег и техническое состояние","Уточните год выпуска, документы и продавца","Сравните график, выкуп и страхование"],"color":6500000},{"slug":"trucks","title":"Грузовой транспорт","desc":"Тягачи, грузовики, прицепы и полуприцепы.","type":"Спецтехника / Грузовой","meta":"Логистика","price":["Согласуйте комплектацию и поставку","Учитывайте сезонность и рейсовую нагрузку","Проверьте страхование и обслуживание"],"color":12000000},{"slug":"machines","title":"Спецтехника","desc":"Строительная, дорожная и складская техника.","type":"Спецтехника / Грузовой","meta":"Строительство","price":["Уточните модель, моточасы и поставщика","Сопоставьте платежи с загрузкой техники","Проверьте условия эксплуатации и страхования"],"color":8500000},{"slug":"equipment","title":"Лизинг оборудования","desc":"Станки, медицинское, пищевое и IT-оборудование.","type":"Оборудование","meta":"Производство","price":["Согласуйте спецификацию и срок поставки","Уточните монтаж и момент начала платежей","Оцените окупаемость и дополнительные расходы"],"color":6000000},{"slug":"property","title":"Коммерческая недвижимость","desc":"Склады, офисы, цеха и торговые объекты.","type":"Коммерческая недвижимость","meta":"Недвижимость","price":["Проверьте права на объект и документы","Сопоставьте сроки, расходы и выкуп","Уточните условия регистрации и передачи"],"color":45000000},{"slug":"buyout","title":"Выкуп и рефинансирование","desc":"Пересмотр условий действующего договора.","type":"Рефинансирование / Возвратный лизинг","meta":"Действующий договор","price":["Получите текущий остаток обязательств","Проверьте порядок выкупа и комиссии","Сравните общую стоимость вариантов"],"color":4500000},{"slug":"return","title":"Возвратный лизинг","desc":"Оборотные средства с использованием своего имущества.","type":"Рефинансирование / Возвратный лизинг","meta":"Оборотный капитал","price":["Подтвердите право собственности и обременения","Оцените стоимость продажи и новый график","Проверьте налоговые и договорные последствия"],"color":5000000},{"slug":"support","title":"Сопровождение договора","desc":"Страховые случаи, реструктуризация и выкуп.","type":"","meta":"Поддержка","price":["Подготовьте договор, график и полис","Уточните обстоятельства и сроки","Обсудите возможные решения со специалистом"],"color":0}];
+
+  const DEFAULT_CASES = [{"title":"Парк из 5 седанов для такси","save":"≈ 1 430 171 ₽","body":"Стоимость 12 млн ₽, аванс 20%, срок 36 мес. Разница полной стоимости между условными ставками 18% и 26%, без отдельного выкупа и дополнительных расходов. Не реальная сделка.","price":12000000,"term":36},{"title":"Станок ЧПУ для цеха","save":"≈ 1 000 468 ₽","body":"Стоимость 6 млн ₽, аванс 20%, срок 48 мес. Разница полной стоимости между условными ставками 18% и 26%, без отдельного выкупа и дополнительных расходов. Не реальная сделка.","price":6000000,"term":48},{"title":"Склад 1 200 м²","save":"≈ 14 928 464 ₽","body":"Стоимость 45 млн ₽, аванс 20%, срок 84 мес. Разница полной стоимости между условными ставками 18% и 26%, без отдельного выкупа и дополнительных расходов. Не реальная сделка.","price":45000000,"term":84}];
+  const DEFAULT_ARTICLES = [
+  {
+    "tag": "Налоги и учёт",
+    "title": "Что проверить с бухгалтером перед лизингом",
+    "body": "Налоговый эффект зависит от режима, права на вычет НДС, состава платежей и условий договора. Не следует складывать проценты налоговых ставок как гарантированную экономию."
+  },
+  {
+    "tag": "Господдержка",
+    "title": "Как проверить право на льготную программу",
+    "body": "Уточняйте действующие условия программы, тип имущества, доступность лимитов и требования к получателю. Льготы не являются универсальными."
+  },
+  {
+    "tag": "Договор",
+    "title": "Как сравнить предложения лизинговых компаний",
+    "body": "Сравнивайте одинаковые параметры: стоимость имущества, аванс, полный график, выкуп, комиссии, страхование и досрочное завершение."
+  },
+  {
+    "tag": "Оборотный капитал",
+    "title": "Что такое возвратный лизинг",
+    "body": "Владелец продаёт имущество лизинговой компании и получает его обратно по договору лизинга. Условия и риски требуют индивидуальной оценки."
+  },
+  {
+    "tag": "Выбор лизингодателя",
+    "title": "Прямое обращение или лизинговый брокер?",
+    "body": "Прямое обращение может быть разумным при проверенных условиях. Брокер помогает подобрать альтернативы и сопоставить расходы. Сравнивайте одинаковое имущество, аванс, срок, график, выкуп, страхование и комиссии. Уточняйте стоимость брокерских услуг. Решение о финансировании принимает лизингодатель."
+  },
+  {
+    "tag": "Договор",
+    "title": "Семь условий, которые стоит проверить до подписания",
+    "body": "Проверьте полную сумму платежей; аванс; отдельный выкуп; страхование и дополнительные расходы; правила досрочного выкупа; санкции и порядок расторжения; условия передачи имущества и закрывающие документы. При необходимости привлеките профильного юриста."
+  }
+];
+
+  let state = JSON.parse(JSON.stringify(DEFAULTS));
+  let casesData = DEFAULT_CASES;
+  let articlesData = DEFAULT_ARTICLES;
+
+  let quizAnswers = { q1: "", q2: "", q3: "" };
+
+  const fmt = n => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " ₽";
+
+  function applyBindings() {
+    document.querySelectorAll("[data-bind]").forEach(el => {
+      const k = el.getAttribute("data-bind");
+      if (state[k]) el.textContent = state[k];
+      if (k === "phone" && el.tagName === "A") el.href = "tel:" + state.phone.replace(/[^\d+]/g, "");
+      if (k === "email" && el.tagName === "A") el.href = "mailto:" + state.email;
+    });
+    const preText = encodeURIComponent("Здравствуйте! Хочу рассчитать лизинг на ");
+    document.querySelectorAll("[data-bind-href]").forEach(el => {
+      const k = el.getAttribute("data-bind-href");
+      if (k === "tg") el.href = `https://t.me/${state.tg}?text=${preText}`;
+      if (k === "wa") el.href = `https://wa.me/${state.wa}?text=${preText}`;
+      if (k === "max") el.href = state.max || "https://max.ru/";
+    });
+  }
+
+  function renderServices(){ /* Static HTML: already rendered. */ }
+  function renderCases() { /* Static HTML: already rendered. */ }
+
+  function loadUnifiedCase(i){const c=casesData[i];syncPrice(c.price,true);document.getElementById("cAdvRange").value=20;syncAdvRange();document.getElementById("cTerm").value=c.term;document.getElementById("cType").selectedIndex=i===0?0:i===1?2:3;switchTab("calcTab",document.querySelector("#calc-section .tab-btn"));recalc();document.getElementById("calc-section").scrollIntoView({behavior:"smooth"});}
+  function renderBlog() { /* Static HTML: already rendered. */ }
+
+  function selectServiceCalc(type) {
+    document.getElementById("cType").value = type;
+    switchTab("calcTab",document.querySelector("#calc-section .tab-btn"));
+    recalc();
+    document.getElementById("calc-section").scrollIntoView({ behavior: "smooth" });
+  }
+
+  function openServiceDetail(i) {
+    const s = SERVICES[i];
+    document.getElementById("detailContent").innerHTML = `
+      <div class="badge">${s.meta}</div>
+      <h3 style="color:var(--navy);margin-bottom:10px;">${s.title}</h3>
+      <p style="margin-bottom:16px;font-size:16px;">${s.full}</p>
+      <button class="btn btn-primary" onclick="closeModal('detailModal');selectServiceCalc('${s.type}')">Перейти к расчету →</button>
+    `;
+    openModal("detailModal");
+  }
+
+  function openCaseDetail(i) {
+    const c = casesData[i];
+    document.getElementById("detailContent").innerHTML = `
+      <div class="case-saving">${c.save}</div>
+      <h3 style="color:var(--navy);margin-bottom:10px;">${c.title}</h3>
+      <p style="margin-bottom:18px;font-size:16px;">${c.body}</p>
+      <a href="#calc-section" class="btn btn-primary" onclick="closeModal('detailModal')">Рассчитать такой же вариант</a>
+    `;
+    openModal("detailModal");
+  }
+
+  function openArticleDetail(i) {
+    const a = articlesData[i];
+    document.getElementById("detailContent").innerHTML = `
+      <div class="badge">${a.tag}</div>
+      <h3 style="color:var(--navy);margin-bottom:12px;">${a.title}</h3>
+      <p style="margin-bottom:18px;font-size:16px;line-height:1.65;">${a.body}</p>
+      <a href="#calc-section" class="btn btn-primary" onclick="closeModal('detailModal')">Запросить расчет под ваш бизнес</a>
+    `;
+    openModal("detailModal");
+  }
+
+  // Calculator Logic
+  function calcPrice(){return Math.min(150000000,Math.max(500000,financeNumber(document.getElementById("cPriceNum"))||500000));}
+  function syncPrice(v,commit=true){
+    const priceField=document.getElementById("cPriceNum"),val=Math.min(150000000,Math.max(500000,Number(String(v).replace(/\s/g,''))||500000));
+    if(commit)setFinance(priceField,val);
+    document.getElementById("cPriceRange").value=val;
+    const field=document.getElementById("cAdvInput");field.dataset.min=String(Math.ceil(val*.05));field.dataset.max=String(Math.round(val*.49));setFinance(field,Math.round(val*Number(document.getElementById("cAdvRange").value)/100));recalc();
+  }
+  function syncAdvRange(){setFinance(document.getElementById("cAdvInput"),Math.round(calcPrice()*Number(document.getElementById("cAdvRange").value)/100));recalc();}
+  function syncAdvInput(commit=true){const field=document.getElementById("cAdvInput"),price=calcPrice(),val=Math.min(Math.round(price*.49),Math.max(Math.ceil(price*.05),financeNumber(field)||0));if(commit)setFinance(field,val);document.getElementById("cAdvRange").value=val/price*100;recalc();}
+  function pmt(annualRate, months, principal, buyout=0) {
+    const r = (annualRate / 100) / 12;
+    if (r === 0) return (principal-buyout) / months;
+    return (principal-buyout/Math.pow(1+r,months)) * (r * Math.pow(1 + r, months)) / (Math.pow(1 + r, months) - 1);
+  }
+
+  let calcFrame=0,calcRows=[],calcSnapshot=null;
+  function recalc(){if(calcFrame)return;calcFrame=requestAnimationFrame(()=>{calcFrame=0;paintCalc();});}
+  function paintRange(id,description) {
+    const el=document.getElementById(id),min=Number(el.min),max=Number(el.max);
+    const fill=(sliderFraction(Number(el.value),min,max,Number(el.dataset.curve)||1)*100)+'%';
+    el.style.setProperty('--range-fill',fill);
+    if(el.parentElement?.classList.contains('thumb-slider'))el.parentElement.style.setProperty('--range-fill',fill);
+    el.setAttribute('aria-valuetext',description);
+  }
+  function paintCalc() {
+    const price=calcPrice();
+    const raw=Math.max(Math.ceil(price*.05),financeNumber(document.getElementById("cAdvInput"))||0);
+    const advRub=Math.min(price*.49,raw);
+    const pct=advRub/price*100;
+    const term=Number(document.getElementById("cTerm").value)||36;
+    const financed=price-advRub;
+    document.getElementById("cPriceOut").textContent=fmt(price);
+    document.getElementById("cAdvOut").textContent=pct.toLocaleString("ru-RU",{maximumFractionDigits:2})+"% — "+fmt(advRub);
+    document.getElementById("cTermOut").textContent=term+" мес.";
+    paintRange("cPriceRange",fmt(price));paintRange("cAdvRange",pct.toLocaleString("ru-RU",{maximumFractionDigits:2})+"%, "+fmt(advRub));paintRange("cTerm",term+" мес.");
+    const rows=state.rates.map(lk=>{
+      const mPay=pmt(lk.rate,term,financed);
+      const total=advRub+mPay*term;
+      return {name:lk.name,rate:lk.rate,mPay,total,overpay:total-price};
+    }).sort((a,b)=>a.total-b.total);
+    const best=rows[0]; calcRows=rows; calcSnapshot={price,advRub,term};
+    document.getElementById("resMonthly").textContent=fmt(best.mPay); document.getElementById("liveMonthly").textContent=fmt(best.mPay); document.getElementById("liveTotal").textContent=fmt(best.total);
+    
+    document.getElementById("resTax").textContent=fmt(best.total); const u={uPrice:fmt(price),uAdvance:fmt(advRub),uTerm:term+" мес.",uRate:(best.overpay/price*100).toFixed(1)+"% / "+(best.overpay/price*1200/term).toFixed(1)+"%",uOver:fmt(best.overpay)};for(const [id,value] of Object.entries(u))document.getElementById(id).textContent=value;
+    const tbody=document.getElementById("lkCompareBody");
+    if(tbody.children.length!==rows.length){tbody.innerHTML=rows.map((x,i)=>'<tr class="'+(i===0?'best':'')+'"><td data-label="Сценарий"><strong>'+x.rate+'%</strong><small>'+(i===0?'Минимум в модели':'Условная ставка')+'</small></td><td data-label="Платёж/мес."></td><td data-label="Всего"></td><td data-label="Переплата"></td></tr>').join("");}
+    rows.forEach((x,i)=>{const cells=tbody.children[i].cells;[fmt(x.mPay),fmt(x.total),fmt(x.overpay)].forEach((v,j)=>{if(cells[j+1].textContent!==v)cells[j+1].textContent=v;});});
+    document.querySelectorAll("[data-term]").forEach(b=>b.setAttribute("aria-pressed",String(Number(b.dataset.term)===term)));
+  }
+
+  // Tabs & Quiz
+  function switchTab(id, btn) {
+    document.querySelectorAll("#calc-section .tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll("#calc-section .tab-panel").forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById(id).classList.add("active");
+  }
+
+  function switchB2B(id, btn) {
+    document.querySelectorAll("#b2b .tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".b2b-pane").forEach(p => p.style.display = "none");
+    btn.classList.add("active");
+    document.getElementById(id).style.display = "block";
+  }
+
+  function pickQuiz(step, val, btn) {
+    quizAnswers["q" + step] = val;
+    btn.parentElement.querySelectorAll(".quiz-opt").forEach(b => b.classList.remove("selected"));
+    btn.classList.add("selected");
+    if (step === 1) goQuiz(2);
+  }
+
+  function goQuiz(step) {
+    if(step>=3){const b=document.getElementById("qBudget"),a=document.getElementById("qAdv");a.dataset.min=String(Math.ceil((financeNumber(b)||0)*.05));a.dataset.max=String(financeNumber(b)||0);if(!financeValid(b)||!financeValid(a)){showToast("Проверьте бюджет и аванс.");return;}quizAnswers.q2=fmt(financeNumber(b));}
+    if(step===3 && !quizAnswers.q2 || step===4 && (!quizAnswers.q2 || !quizAnswers.q3)){showToast("Выберите подходящий вариант.");return;}
+    document.querySelectorAll(".quiz-step").forEach(s => s.classList.toggle("active", Number(s.dataset.step) === step));
+    document.getElementById("quizStepLabel").textContent = `Шаг ${step} из 4`;
+    document.getElementById("quizBar").style.width = (step * 25) + "%";
+    if(step===4){const box=document.getElementById("quizReview");box.replaceChildren(...[["Имущество",quizAnswers.q1,1],["Бюджет",quizAnswers.q2,2],["Аванс",fmt(financeNumber(document.getElementById("qAdv"))),2],["Статус",quizAnswers.q3,3]].map(([label,value,n])=>{const row=document.createElement("div"),copy=document.createElement("span"),button=document.createElement("button");copy.textContent=label+": "+(value||"Не указано");button.type="button";button.textContent="Изменить";button.setAttribute("aria-label","Изменить: "+label);button.onclick=()=>goQuiz(n);row.append(copy,button);return row;}));}
+  }
+
+  // Lead Submission + Optional Telegram Bot / Webhook + Sample KP download
+  async function submitForm(e, source, downloadSample = false) {
+    e.preventDefault();
+    const form=e.currentTarget||e.target;
+    let status=form.querySelector('.demo-submit-result');
+    if(!status){status=document.createElement('div');status.className='demo-submit-result';status.setAttribute('role','status');status.tabIndex=-1;form.append(status);}
+    status.replaceChildren();
+    const title=document.createElement('strong');title.textContent='Демонстрационный расчёт подготовлен';
+    const note=document.createElement('p');note.textContent='Заявка не отправлена: сервис работает в тестовом режиме. Для индивидуального предложения свяжитесь с нами.';
+    status.append(title);
+    if(source==='Калькулятор пяти сценариев'){paintCalc();const p=document.createElement('p');p.textContent='Платёж в месяц: '+document.getElementById('resMonthly').textContent+' · Всего: '+document.getElementById('resTax').textContent;status.append(p);}
+    else if(source==='Расширенная форма КП'){title.textContent='Параметры заявки подготовлены';}
+    else if(source==='B2B Партнер'){title.textContent='Демонстрация партнёрской заявки';}
+    else {title.textContent='Параметры подбора подготовлены';}
+    status.append(note);const link=document.createElement('a');link.href='tel:+79604844141';link.className='btn btn-outline btn-sm';link.textContent='Позвонить специалисту';status.append(link);status.focus({preventScroll:true});status.scrollIntoView({block:'nearest',behavior:'smooth'});
+    if(downloadSample)downloadSampleKP();
+  }
+
+  function downloadSampleKP() {
+    const price=4550000,advance=910000,term=36;
+    const rows=state.rates.map(x=>{const m=pmt(x.rate,term,price-advance);return "<tr><td>"+x.rate+"%</td><td>"+fmt(m)+"</td><td>"+fmt(advance+m*term)+"</td></tr>";}).join("");
+    const html='<!doctype html><html lang="ru"><meta charset="UTF-8"><title>Пример сравнения — Лизинг Компас</title><style>body{font:16px Arial;padding:28px;color:#142b45}table{border-collapse:collapse;width:100%}td,th{padding:12px;border:1px solid #ddd;text-align:left}</style><h1>Лизинг Компас — учебный пример</h1><p>Стоимость 4 550 000 ₽ · аванс 910 000 ₽ · срок 36 мес.</p><p>Условные ставки, не предложения компаний. Модель равных платежей без отдельных комиссий, выкупа и налогового эффекта.</p><table><tr><th>Ставка</th><th>Платёж/мес.</th><th>Всего с авансом</th></tr>'+rows+'</table></html>';
+    const url=URL.createObjectURL(new Blob([html],{type:"text/html;charset=utf-8"}));
+    const a=document.createElement("a");a.href=url;a.download="Leasing_Compass_Primer.html";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }
+
+  // UI Helpers
+  function openModal(id) { const el=document.getElementById(id); if(!el)return;el.classList.add("open");el.setAttribute("role","dialog");el.setAttribute("aria-modal","true");el.querySelector(".modal-close")?.focus(); }
+  function closeModal(id) { document.getElementById(id)?.classList.remove("open"); }
+  function showToast(txt) {
+    const t = document.getElementById("toast");
+    t.textContent = txt;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 3600);
+  }
+
+
+  document.getElementById("burgerBtn").addEventListener("click", () => {
+    const open=document.getElementById("mobileMenu").classList.toggle("open");document.getElementById("burgerBtn").setAttribute("aria-expanded",String(open));
+  });
+  document.querySelectorAll("#mobileMenu a").forEach(a => a.addEventListener("click", () => {
+    document.getElementById("mobileMenu").classList.remove("open");document.getElementById("burgerBtn").setAttribute("aria-expanded","false");
+  }));
+  document.querySelectorAll(".modal-bg").forEach(bg => bg.addEventListener("click", e => {
+    if (e.target === bg) bg.classList.remove("open");
+  }));
+
+  // Exit-intent pop-up (once per session)
+  // Unsolicited exit popup disabled in V4.
+
+  // Init
+  applyBindings();
+  renderServices();
+  renderCases();
+  renderBlog();
+  paintCalc();
+
+</script>
+<script>
+document.querySelectorAll('form:not(#request)').forEach(f=>{
+  f.querySelectorAll('input:not([type=checkbox]):not([data-finance]),textarea').forEach(x=>{x.readOnly=true;x.removeAttribute('required');x.placeholder='Демо: данные не вводятся';});
+  f.querySelectorAll('[required]:not([name="pdConsent"])').forEach(x=>x.removeAttribute('required'));
+});
+document.querySelectorAll('[data-bind-href="tg"],[data-bind-href="max"],a[href="https://vk.com/"],a[href="https://rutube.ru/"],a[href="https://youtube.com/"]').forEach(x=>{x.removeAttribute('href');x.removeAttribute('target');x.setAttribute('aria-disabled','true');});
+
+
+
+document.querySelector('#cases .section-title').textContent='Кейсы и примеры экономии';
+
+document.querySelectorAll('.partners-strip').forEach(x=>{x.parentElement.querySelector('.eyebrow').textContent='УЧАСТНИКИ РЫНКА';x.parentElement.querySelector('h2').textContent='Лизинговые компании';x.parentElement.querySelector('.section-sub').textContent='Партнёрские отношения не подтверждены.';});
+</script>
+<dialog id="callbackDialog" class="callback-dialog" aria-labelledby="callbackTitle">
+<button type="button" class="modal-close" id="callbackClose" aria-label="Закрыть">×</button>
+<h2 id="callbackTitle">Заказать обратный звонок</h2>
+<p>Оставьте номер телефона, чтобы специалист мог связаться с вами.</p>
+<p class="demo-note">Демонстрация формы. Реальные заявки пока не принимаются; личные данные вводить не нужно.</p>
+<div class="field"><label for="callbackPhone">Ваш телефон</label><input id="callbackPhone" type="tel" placeholder="+7 (___) ___-__-__" readonly aria-describedby="callbackResult"></div>
+<div class="consent-block">
+  <div class="consent-choice"><input type="checkbox" id="callbackConsent" name="pdConsent" value="1" required><label for="callbackConsent">Даю согласие на обработку моих персональных данных</label></div>
+  <div class="consent-links"><a href="./consent.html" target="_blank" rel="noopener">Текст согласия</a><span aria-hidden="true">·</span><a href="./privacy.html" target="_blank" rel="noopener">Политика обработки персональных данных</a></div>
+  
+</div>
+<button type="button" class="btn" id="callbackDemo" disabled>Заказать звонок — демо</button>
+<p id="callbackResult" role="status" aria-live="polite"></p><div class="direct-contact"><span>Или позвоните самостоятельно</span><a href="tel:+79604844141" data-bind="phone" class="direct-call">+7 (960) 484-41-41</a></div>
+</dialog>
+<script>
+(() => {
+const dialog=document.getElementById('callbackDialog');
+const result=document.getElementById('callbackResult');
+const trigger=document.getElementById('callbackTrigger');
+let lastTrigger=trigger;[trigger,document.getElementById('callbackDock')].forEach(btn=>btn.addEventListener('click',()=>{lastTrigger=btn;result.textContent='';document.getElementById('callbackConsent').checked=false;document.getElementById('callbackDemo').disabled=true;dialog.showModal();}));
+document.getElementById('callbackClose').addEventListener('click',()=>dialog.close());
+document.getElementById('callbackConsent').addEventListener('change',e=>{document.getElementById('callbackDemo').disabled=!e.target.checked;});
+document.getElementById('callbackDemo').addEventListener('click',()=>{if(!document.getElementById('callbackConsent').checked)return;result.textContent='Так будет работать заказ звонка. В демоверсии заявка не отправляется.';});
+dialog.addEventListener('click',e=>{if(e.target===dialog){const b=dialog.getBoundingClientRect();if(e.clientX<b.left||e.clientX>b.right||e.clientY<b.top||e.clientY>b.bottom)dialog.close();}});
+dialog.addEventListener('close',()=>lastTrigger.focus());
+})();
+</script>
+<script>
+document.querySelectorAll('form .field').forEach((field,i)=>{
+ const el=field.querySelector('input,select,textarea');if(!el)return;
+ if(!el.id)el.id='previewField'+i;
+ let label=field.querySelector('label');
+ if(!label){label=document.createElement('label');label.className='field-label';label.textContent=({name:'Имя / организация',phone:'Телефон для связи',inn:'ИНН (необязательно)',messenger:'Способ связи',clientType:'Тип клиента',asset:'Предмет лизинга',budget:'Бюджет и срок',comment:'Комментарий (необязательно)'}[el.name])||'Дополнительные сведения';field.prepend(label);}
+ label.htmlFor=el.id;
+});
+document.querySelectorAll('a[aria-disabled="true"]').forEach(el=>{el.tabIndex=0;el.addEventListener('click',e=>{e.preventDefault();showToast('Демонстрация: канал связи ещё не подключён.');});el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});});
+</script>
+<script>
+document.querySelectorAll('form').forEach(form=>{
+ const check=form.querySelector('[name="pdConsent"]');if(!check)return;
+ const submit=form.querySelector('button[type="submit"]');if(!submit)return;
+ // No personal data is collected in this static demo. Consent is shown only as a preview.
+ check.checked=false;check.removeAttribute('required');submit.disabled=false;
+ const note=document.createElement('small');note.className='demo-consent-note';note.textContent='В демо согласие не требуется: личные данные не вводятся и не отправляются.';check.closest('.consent-block').append(note);
+});
+</script>
+<script>
+(() => {
+  const toggle = document.getElementById('callbackMotionToggle');
+  if (!toggle) return;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  function syncMotion() {
+    const off = document.body.classList.contains('callback-motion-off');
+    toggle.setAttribute('aria-pressed', String(off || reduced.matches));
+    toggle.textContent = reduced.matches ? 'Анимация отключена настройками устройства' : off ? 'Включить анимацию звонка' : 'Отключить анимацию звонка';
+    toggle.disabled = reduced.matches;
+  }
+  toggle.addEventListener('click', () => { document.body.classList.toggle('callback-motion-off'); syncMotion(); });
+  if (reduced.addEventListener) reduced.addEventListener('change', syncMotion);
+  syncMotion();
+})();
+</script>
+<script>
+(() => {
+ const byId=id=>document.getElementById(id);
+ document.querySelectorAll('[data-term]').forEach(b=>b.addEventListener('click',()=>{byId('cTerm').value=b.dataset.term;recalc();}));
+ byId('resetCalc').addEventListener('click',()=>{setFinance(byId('cPriceNum'),4500000);byId('cPriceRange').value=4500000;byId('cAdvRange').value=20;byId('cAdvInput').dataset.min='225000';byId('cAdvInput').dataset.max='2205000';setFinance(byId('cAdvInput'),900000);byId('cTerm').value=36;recalc();});
+ byId('saveCurrentCalc').addEventListener('click',()=>{paintCalc();const x=calcSnapshot;const lines=['Лизинг Компас — учебная модель, не оферта','Стоимость;Аванс;Срок (мес.)',[Math.round(x.price),Math.round(x.advRub),x.term].join(';'),'Условная ставка (%);Платёж в месяц;Всего с авансом;Переплата',...calcRows.map(r=>[r.rate,Math.round(r.mPay),Math.round(r.total),Math.round(r.overpay)].join(';'))];const u=URL.createObjectURL(new Blob(['\uFEFF'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=u;a.download='Leasing_Compass_calculation.csv';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);});
+ // Native scrolling: adapted from KASKAD mobile process controls, no gesture interception.
+ const track=document.querySelector('.steps-grid');
+ if(track){const cards=[...track.children];const nav=document.createElement('div');nav.className='process-controls';nav.innerHTML='<button type="button">← Назад</button><span aria-live="polite"></span><button type="button">Далее →</button>';track.after(nav);const [prev,next]=nav.querySelectorAll('button');const count=nav.querySelector('span');const near=()=>{if(track.scrollLeft<=2)return 0;if(track.scrollLeft>=track.scrollWidth-track.clientWidth-2)return cards.length-1;return cards.reduce((best,c,i)=>Math.abs(c.offsetLeft-cards[0].offsetLeft-track.scrollLeft)<Math.abs(cards[best].offsetLeft-cards[0].offsetLeft-track.scrollLeft)?i:best,0)};const sync=()=>{const i=near();count.textContent='Этап '+(i+1)+' из '+cards.length;prev.disabled=i===0;next.disabled=i===cards.length-1;};const go=d=>{const i=Math.max(0,Math.min(cards.length-1,near()+d));track.scrollTo({left:cards[i].offsetLeft-cards[0].offsetLeft,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});};prev.onclick=()=>go(-1);next.onclick=()=>go(1);let pending=false;track.addEventListener('scroll',()=>{if(!pending){pending=true;requestAnimationFrame(()=>{pending=false;sync()})}},{passive:true});window.addEventListener('resize',sync,{passive:true});sync();}
+ // Do not consume animation frames for invisible phone icons.
+ const triggers=[...document.querySelectorAll('.callback-trigger')];if('IntersectionObserver'in window){const observer=new IntersectionObserver(entries=>entries.forEach(e=>e.target.classList.toggle('lab-visible',e.isIntersecting)),{threshold:.1});triggers.forEach(x=>observer.observe(x));}else triggers.forEach(x=>x.classList.add('lab-visible'));
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.modal-bg.open').forEach(m=>closeModal(m.id));}});
+})();
+</script>
+
+<script>
+(() => {
+ const controls=[];
+ const short=(n,m)=>m?financeFormat(n)+' ₽':String(n);
+ function install(input,after){
+   const wrapper=input.parentElement,rail=wrapper.querySelector('.thumb-slider-rail'),knob=rail.querySelector('.thumb-slider-knob');
+   function paint(){const min=Number(input.min),max=Number(input.max);wrapper.style.setProperty('--range-fill',(100*sliderFraction(Number(input.value),min,max,Number(input.dataset.curve)||1))+'%');wrapper.classList.toggle('is-disabled',input.disabled);}
+   input.addEventListener('input',paint);paint();let drag=null;
+   knob.addEventListener('pointerdown',e=>{
+     if(input.disabled||drag||e.isPrimary===false||e.button!==0)return;
+     const r=knob.getBoundingClientRect(),dx=e.clientX-r.left-r.width/2,dy=e.clientY-r.top-r.height/2;
+     if(dx*dx+dy*dy>(r.width/2)**2)return;
+     const width=rail.getBoundingClientRect().width;if(!width)return;
+     e.preventDefault();const min=Number(input.min),max=Number(input.max),power=Number(input.dataset.curve)||1;
+     drag={id:e.pointerId,x:e.clientX,y:e.clientY,start:sliderFraction(Number(input.value),min,max,power),width,min,max,power,step:Number(input.step)||1,active:false};
+     wrapper.classList.add("is-pointer-drag");input.focus({preventScroll:true});knob.setPointerCapture(e.pointerId);
+   });
+   knob.addEventListener('pointermove',e=>{
+     if(!drag||e.pointerId!==drag.id||input.disabled)return;
+     e.preventDefault();const d=drag,dx=e.clientX-d.x,dy=e.clientY-d.y;
+     if(!d.active){if(Math.abs(dx)<2||Math.abs(dx)<Math.abs(dy))return;d.active=true;}
+     const raw=sliderValue(d.start+dx/d.width,d.min,d.max,d.power),precision=(String(d.step).split('.')[1]||'').length;
+     const next=Number(Math.max(d.min,Math.min(d.max,d.min+Math.round((raw-d.min)/d.step)*d.step)).toFixed(precision));
+     if(next===Number(input.value))return;input.value=String(next);paint();input.dispatchEvent(new Event('input',{bubbles:true}));
+   });
+   function stop(e){if(!drag||e.pointerId!==drag.id)return;drag=null;wrapper.classList.remove("is-pointer-drag");if(knob.hasPointerCapture(e.pointerId))knob.releasePointerCapture(e.pointerId);after?.();}
+   ['pointerup','pointercancel','lostpointercapture'].forEach(k=>knob.addEventListener(k,stop));
+   return {paint,get dragging(){return !!drag}};
+ }
+ document.querySelectorAll('input[data-money]').forEach(el=>{
+   el.addEventListener('input',()=>{const old=el.value,pos=el.selectionStart??old.length,count=old.slice(0,pos).replace(/\D/g,'').length;el.value=old.replace(/\D/g,'').slice(0,12).replace(/\B(?=(\d{3})+(?!\d))/g,' ');let i=0,n=0;while(i<el.value.length&&n<count){if(/\d/.test(el.value[i]))n++;i++;}try{el.setSelectionRange(i,i)}catch{}},true);
+   el.addEventListener('keydown',e=>{if(e.key==='Backspace'&&el.selectionStart===el.selectionEnd&&el.value[el.selectionStart-1]===' '){const p=el.selectionStart;el.setSelectionRange(p-1,p-1);}});
+   setFinance(el,financeNumber(el));
+ });
+ document.querySelectorAll('.thumb-slider input[type="range"]').forEach(input=>{const c=install(input);controls.push(()=>c.paint())});
+ document.querySelectorAll('input[data-slider]').forEach(el=>{
+   const money=el.hasAttribute('data-money'),min=Number(el.dataset.min??el.min),base=Number(el.dataset.slider),quantum=Number(el.dataset.quantum||1);
+   const wrapper=document.createElement('div');wrapper.className='thumb-slider';
+   const input=document.createElement('input');input.type='range';input.min=String(min);input.step=String(money?1:quantum);if(money)input.dataset.curve='3';
+   input.setAttribute('aria-label',(document.querySelector('label[for="'+el.id+'"]')?.textContent||'Значение').trim());
+   const rail=document.createElement('div');rail.className='thumb-slider-rail';rail.setAttribute('aria-hidden','true');const knob=document.createElement('div');knob.className='thumb-slider-knob';rail.append(knob);wrapper.append(input,rail);
+   const limits=document.createElement('div');limits.className='finance-limits';limits.setAttribute('aria-hidden','true');const lo=document.createElement('span'),hi=document.createElement('span');limits.append(lo,hi);el.after(wrapper,limits);
+   let c;function sync(){const value=money?financeNumber(el):Number(el.value);const hard=Number(el.dataset.max??el.max);let max=Math.min(hard,Math.max(base,Number.isFinite(value)?Math.ceil(value/base)*base:base));if(max<=min)max=min+1;if(!c?.dragging)input.max=String(max);
+     input.disabled=el.disabled||el.readOnly||hard<=min;input.value=String(Number.isFinite(value)?Math.min(Number(input.max),Math.max(min,value)):min);input.setAttribute('aria-valuetext',short(Number(input.value),money));lo.textContent=short(min,money);hi.textContent=short(Number(input.max),money);c?.paint();}
+   sync();c=install(input,sync);sync();controls.push(sync);el.addEventListener('input',sync);
+   input.addEventListener('input',()=>{let n=Number(input.value);if(money){n=Math.max(min,Math.min(Number(el.dataset.max??el.max),n===Number(input.max)?n:Math.round(n/quantum)*quantum));setFinance(el,n);}else el.value=String(n);el.dispatchEvent(new Event('input',{bubbles:true}));});
+ });
+ window.syncFinanceSliders=()=>controls.forEach(f=>f());refreshFinance();
+})();
+</script><script>
+document.getElementById('qBudget').addEventListener('input',()=>{const a=document.getElementById('qAdv'),max=Math.max(0,financeNumber(document.getElementById('qBudget'))||0);a.dataset.min=String(Math.ceil(max*.05));a.dataset.max=String(max);if(financeNumber(a)>max)setFinance(a,max);if(financeNumber(a)<Math.ceil(max*.05))setFinance(a,Math.ceil(max*.05));refreshFinance();});
+</script>
+<script id="unified-layout">(()=>{if(new URLSearchParams(location.search).get('layout')!=='1')return;const main=document.querySelector('main'),blocks=[...main.children].filter(e=>e.matches('section,.route-section'));const original=blocks.slice();const bar=document.createElement('div');bar.className='layout-tools';bar.innerHTML='<strong>Конструктор блоков — только предпросмотр</strong><p>Перемещайте блоки стрелками. Изменения не затрагивают опубликованный порядок и сохраняются только в этом браузере.</p><button type="button" id="uLayoutReset">Вернуть порядок</button>';main.before(bar);const key='lc-unified-layout-v1';blocks.forEach((el,i)=>{el.dataset.layoutId=String(i);const name=el.querySelector('h1,h2')?.textContent||'Блок';const controls=document.createElement('div');controls.className='layout-buttons';const label=document.createElement('strong');label.textContent=name;controls.append(label);for(const [txt,dir] of [['↑ Выше',-1],['↓ Ниже',1]]){const b=document.createElement('button');b.type='button';b.textContent=txt;b.onclick=()=>{const list=[...main.children].filter(x=>x.dataset.layoutId!==undefined),j=list.indexOf(el);if(dir<0&&j>0)main.insertBefore(el,list[j-1]);if(dir>0&&j<list.length-1)main.insertBefore(list[j+1],el);try{localStorage.setItem(key,JSON.stringify([...main.children].filter(x=>x.dataset.layoutId!==undefined).map(x=>x.dataset.layoutId)))}catch{}el.scrollIntoView({block:'start'});};controls.append(b)}el.prepend(controls)});try{const saved=JSON.parse(localStorage.getItem(key)||'null');if(Array.isArray(saved)&&saved.length===blocks.length&&new Set(saved).size===blocks.length&&saved.every(x=>blocks[Number(x)]))saved.forEach(x=>main.append(blocks[Number(x)]))}catch{}document.getElementById('uLayoutReset').onclick=()=>{original.forEach(x=>main.append(x));try{localStorage.removeItem(key)}catch{}window.scrollTo(0,0)};})();
+</script><script id="service-routing-v44">(()=>{const p=new URLSearchParams(location.search);const service=SERVICES.find(s=>s.slug===p.get('service'));if(service&&service.type){document.getElementById('cType').value=service.type;syncPrice(service.color,true);recalc()}if(p.get('callback')==='1'){document.getElementById('callbackTrigger')?.click()}})();</script><script id="calc-live-v411">(()=>{const live=document.getElementById('calcLive'),controls=document.getElementById('calcControls'),result=document.getElementById('resMonthly'),tab=document.getElementById('calcTab'),header=document.querySelector('header'),dock=document.querySelector('.fab-wrap'),mq=matchMedia('(max-width:767px)');let frame=0;function update(){frame=0;if(!mq.matches||!tab.classList.contains('active')){live.hidden=true;return}const h=window.innerHeight,headerBottom=Math.max(0,header?.getBoundingClientRect().bottom||0),dockRect=dock?.getBoundingClientRect(),dockHeight=dockRect&&getComputedStyle(dock).position==='fixed'?Math.max(0,h-dockRect.top):0,viewportBottom=h-dockHeight,ctrl=controls.getBoundingClientRect(),res=result.getBoundingClientRect();live.style.setProperty('--calc-dock-height',dockHeight+'px');const controlsVisible=ctrl.bottom>headerBottom+16&&ctrl.top<viewportBottom-45;const paymentVisible=res.top>=headerBottom&&res.bottom<=viewportBottom;live.hidden=!(controlsVisible&&!paymentVisible)}function schedule(){if(!frame)frame=requestAnimationFrame(update)}window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule,{passive:true});document.addEventListener('click',schedule);document.addEventListener('input',schedule);if(window.ResizeObserver){const ro=new ResizeObserver(schedule);[controls,header,dock].filter(Boolean).forEach(x=>ro.observe(x))}schedule()})();</script></body>
+</html>
