@@ -1,7 +1,7 @@
 name: V5.05 interface regression
 on:
   push:
-    paths: ['variant-5.html','lk-ui-v504.js','lk-ui-v505.js','tests/ui-v505.test.cjs','tests/desktop-layout.test.cjs','tests/release-safety.test.cjs','tests/v5-navigation.test.cjs','lk-share-v3.js','lk-growth-v2.js','lk-app.webmanifest','tests/ui-v504.test.cjs','tests/mobile-back.test.cjs','.github/workflows/ui-v504.yml']
+    paths: ['variant-5.html','lk-ui-v504.js','lk-ui-v505.js','tests/ui-v505.test.cjs','tests/desktop-layout.test.cjs','tests/release-safety.test.cjs','tests/v5-navigation.test.cjs','lk-share-v3.js','lk-growth-v2.js','lk-app.webmanifest','tests/ui-v504.test.cjs','tests/mobile-back.test.cjs','broker-preview.html','broker-preview.js','tests/broker-preview.test.cjs','.github/workflows/ui-v504.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -14,5 +14,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node --check lk-ui-v505.js && node --check lk-ui-v504.js && node --check lk-share-v3.js && node --check lk-growth-v2.js
-      - run: node --test tests/v5-navigation.test.cjs tests/release-safety.test.cjs tests/desktop-layout.test.cjs tests/ui-v505.test.cjs tests/ui-v504.test.cjs tests/mobile-back.test.cjs tests/growth.test.cjs tests/share.test.cjs
+      - run: node --check lk-ui-v505.js && node --check lk-ui-v504.js && node --check lk-share-v3.js && node --check lk-growth-v2.js && node --check broker-preview.js
+      - run: node --test tests/v5-navigation.test.cjs tests/release-safety.test.cjs tests/desktop-layout.test.cjs tests/ui-v505.test.cjs tests/ui-v504.test.cjs tests/mobile-back.test.cjs tests/broker-preview.test.cjs tests/growth.test.cjs tests/share.test.cjs
