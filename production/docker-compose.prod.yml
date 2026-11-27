@@ -1,0 +1,68 @@
+name: leasing-compass
+services:
+  db:
+    image: postgres:16-bookworm
+    restart: unless-stopped
+    env_file: .env.production
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 8
+    networks: [private]
+    security_opt: [no-new-privileges:true]
+
+  app:
+    build:
+      context: ..
+      dockerfile: production/Dockerfile
+    restart: unless-stopped
+    env_file: .env.production
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD","python","-c","import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz',timeout=4)"]
+      interval: 15s
+      timeout: 6s
+      retries: 6
+      start_period: 25s
+    ports:
+      # Administrative interface: SSH tunnel ONLY, never public 0.0.0.0
+      - "127.0.0.1:8001:8000"
+    networks: [private]
+    read_only: true
+    tmpfs: [/tmp:rw,noexec,nosuid,size=64m]
+    security_opt: [no-new-privileges:true]
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    env_file: .env.production
+    ports: ["80:80","443:443","443:443/udp"]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      # Publication requires a separate explicitly approved production build.
+      - ./production-site:/srv/site:ro
+      - caddydata:/data
+      - caddyconfig:/config
+    depends_on:
+      app:
+        condition: service_healthy
+    networks: [private,public]
+    security_opt: [no-new-privileges:true]
+
+volumes:
+  pgdata:
+  caddydata:
+  caddyconfig:
+networks:
+  private:
+    internal: true
+  public:
