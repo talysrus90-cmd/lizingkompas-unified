@@ -30,6 +30,12 @@ class ReleaseV5(unittest.TestCase):
             home=(target/"index.html").read_text(encoding="utf-8")
             self.assertIn("Лизинг Компас",home)
             self.assertIn('href="/apply/"',home)
+            self.assertEqual(home.count('data-compass-intake="production"'),4)
+            self.assertNotIn('onsubmit="submitForm(',home)
+            # Old disabled form inputs must never look like live PII submission.
+            self.assertNotIn('name="pdConsent"',home)
+            self.assertNotIn('name="phone"',home)
+            self.assertIn('id="request" data-compass-intake="production"',home)
             self.assertIn('<meta name="robots" content="index,follow">',home)
             self.assertIn('rel="canonical" href="https://leasingcompass.ru/"',home)
             self.assertNotIn("talysrus90-cmd.github.io",home)
