@@ -1,13 +1,14 @@
 # Initial minimal-schema migration for the production financial/contacts workflow.
 import uuid
 import django.utils.timezone
+from django.conf import settings
 from django.db import migrations, models
 from django.core.validators import MinValueValidator, MaxValueValidator
 import intake.crypto
 
 class Migration(migrations.Migration):
     initial = True
-    dependencies = []
+    dependencies = [migrations.swappable_dependency(settings.AUTH_USER_MODEL)]
     operations = [
         migrations.CreateModel(
             name="Lead",
@@ -22,6 +23,10 @@ class Migration(migrations.Migration):
                     choices=[("new","Новая"),("review","В работе"),
                              ("quotes","Сбор предложений"),("compare","Сравнение"),
                              ("closed","Завершена")])),
+                ("assigned_to",models.ForeignKey(
+                    blank=True,null=True,on_delete=models.PROTECT,
+                    related_name="assigned_leasing_leads",to=settings.AUTH_USER_MODEL,
+                )),
                 ("client_name", intake.crypto.EncryptedTextField()),
                 ("phone", intake.crypto.EncryptedTextField()),
                 ("email", intake.crypto.EncryptedTextField(blank=True, default="")),
