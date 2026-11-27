@@ -1,0 +1,24 @@
+name: Broker access policy regression (isolated)
+on:
+  push:
+    paths:
+      - 'broker/**'
+      - '.github/workflows/broker-policy.yml'
+  pull_request:
+    paths:
+      - 'broker/**'
+      - '.github/workflows/broker-policy.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  policy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s broker -p 'test_*.py' -v
+      - run: python -m py_compile broker/access_policy.py broker/test_access_policy.py
