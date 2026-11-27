@@ -11,7 +11,7 @@ from django.conf import settings
 from django.db import transaction
 from django.db.models import F
 from django.utils import timezone
-from .models import Lead, SubmissionAttempt, AuditEvent
+from .models import Lead, CallbackRequest, SubmissionAttempt, AuditEvent
 
 CONSENT_PURPOSE = (
     "обработка предоставленных контактных данных и параметров имущества "
@@ -72,3 +72,33 @@ def save_application(data,request):
         lead.save(force_insert=True)
         AuditEvent.objects.create(lead=lead,action="lead.received",actor="public_submission")
         return lead, True
+
+CALLBACK_PURPOSE = (
+    "обработка указанного номера телефона и имени исключительно для обратного "
+    "звонка по запросу пользователя"
+)
+
+def callback_consent_text():
+    return (f"Я даю согласие {settings.OPERATOR_NAME} (ИНН {settings.OPERATOR_INN}) "
+            f"на {CALLBACK_PURPOSE}. Ознакомлен(а) с политикой обработки "
+            f"персональных данных и понимаю право отозвать согласие.")
+
+def save_callback(data, request):
+    """Persist minimal callback info and consent evidence, no raw IP."""
+    with transaction.atomic():
+        existing=CallbackRequest.objects.filter(request_key=data["request_key"]).first()
+        if existing:
+            return existing,False
+        item=CallbackRequest(
+            request_key=data["request_key"],
+            name=data.get("name",""),
+            phone=data["phone"],
+            consent_version=settings.CONSENT_VERSION,
+            consent_text_sha256=hashlib.sha256(
+                callback_consent_text().encode("utf-8")
+            ).hexdigest(),
+            source_ip_digest=ip_digest(request),
+        )
+        item.full_clean()
+        item.save(force_insert=True)
+        return item,True
