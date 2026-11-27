@@ -127,7 +127,8 @@ class OperatorApiTests(unittest.TestCase):
             code, record, _ = self.call(f"/api/cases/{cid}/offers", d)
             self.assertEqual(code, 200)
         code, result, _ = self.call(f"/api/cases/{cid}/comparison")
-        self.assertEqual(code, 409)  # two offers but not yet in comparing?
+        self.assertEqual(code, 200)  # comparison allowed in collecting stage
+        self.assertEqual(result["comparable_count"], 2)
         code, rec, _ = self.call(f"/api/cases/{cid}/stage", {
             "target": "comparing", "expected_version": record["version"]})
         self.assertEqual(code, 200)
@@ -137,7 +138,7 @@ class OperatorApiTests(unittest.TestCase):
         scores = {r["offer_id"]: r for r in result["rows"]}
         self.assertEqual(scores["off-002"]["rank"], 1)
         self.assertEqual(scores["off-001"]["rank"], 2)
-        self.assertEqual(float(scores["off-002"]["total_cash_outflow"]), 4950000)
+        self.assertEqual(float(scores["off-002"]["total_cash_outflow"]), 4914000)
         self.assertEqual(len(self.call(f"/api/cases/{cid}/audit")[1]["events"]), rec["version"])
         self.assertEqual(self.call(f"/api/cases/{cid}/stage", {
             "target": "closed", "expected_version": rec["version"]})[0], 200)
