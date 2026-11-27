@@ -13,7 +13,11 @@ permissions:
   contents: read
 jobs:
   policy:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
@@ -21,5 +25,6 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m unittest discover -s broker -p 'test_*.py' -v
-      - run: python -m py_compile broker/access_policy.py broker/test_access_policy.py broker/offer_comparison.py broker/test_offer_comparison.py broker/case_workflow.py broker/test_case_workflow.py broker/demo.py
+      - run: python -m py_compile broker/access_policy.py broker/test_access_policy.py broker/offer_comparison.py broker/test_offer_comparison.py broker/case_workflow.py broker/test_case_workflow.py broker/demo.py broker/sqlite_store.py broker/test_sqlite_store.py broker/sqlite_demo.py
       - run: python broker/demo.py
+      - run: python broker/sqlite_demo.py
