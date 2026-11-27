@@ -3,6 +3,8 @@ from . import views
 
 app_name = "intake"
 urlpatterns = [
-    path("", views.apply, name="apply"),
-    path("success/", views.success, name="success"),
+    path("apply/", views.apply, name="apply"),
+    path("apply/success/", views.success, name="success"),
+    path("callback/", views.callback, name="callback"),
+    path("callback/success/", views.callback_success, name="callback_success"),
 ]
