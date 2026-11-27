@@ -44,3 +44,16 @@ test('ergonomic broker workspace supports light/dark without storing secrets',()
   const liveCode=localUI.replace(/\/\*[\s\S]*?\*\//g,'');
   assert.doesNotMatch(liveCode,/(?:localStorage|sessionStorage|sendBeacon|WebSocket)/);
 });
+
+test('local operator UI rejects arbitrary loopback ports and non-loopback URLs',()=>{
+  const locked={get body(){throw new Error('operator UI must stay inactive')}};
+  for(const location of [
+    {hostname:'127.0.0.1',protocol:'http:',port:'58766'},
+    {hostname:'127.0.0.1',protocol:'https:',port:'8765'},
+    {hostname:'localhost',protocol:'http:',port:'8765'},
+    {hostname:'talysrus90-cmd.github.io',protocol:'https:',port:''}
+  ]){
+    assert.doesNotThrow(()=>vm.runInNewContext(localUI,{document:locked,location}));
+  }
+  assert.match(localUI,/location\.port !== "8765"/);
+});
