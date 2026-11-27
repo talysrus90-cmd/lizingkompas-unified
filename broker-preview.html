@@ -80,6 +80,11 @@
     [hidden]{display:none!important}\n    .local-only{display:none!important}
     body[data-local-active="true"] .local-only{display:block!important}
     body[data-local-active="true"] .nav button.local-only{display:flex!important}
+    /* Browser example tabs are not operational on the workstation: do not
+       present synthetic quote navigation as if it belonged to the local DB. */
+    body[data-local-active="true"] .nav button:is(
+      [data-tab="deals"],[data-tab="offers"],[data-tab="documents"],[data-tab="analytics"]
+    ){display:none!important}
     .local-auth,.local-workarea{background:var(--panel2);border:1px solid var(--stroke);padding:19px;border-radius:14px}
     .local-workarea{display:grid;gap:18px}
     .local-case-list{display:grid;gap:8px;margin:12px 0}
@@ -134,9 +139,9 @@
       <div class="top-actions"><button type="button" id="themeToggle" class="theme-toggle" aria-label="Переключить тему оформления">Тёмная тема</button><span class="demo" id="modeBadge">● ПРИМЕР • БЕЗ ДАННЫХ КЛИЕНТОВ</span></div>
     </header>
     <section class="metrics" aria-label="Тестовые показатели">
-      <div class="metric"><small id="metricCasesLabel">Сделок в примере</small><strong id="metricCases">3</strong><em>синтетические</em></div>
-      <div class="metric"><small id="metricOffersLabel">Предложений в примере</small><strong id="metricOffers">7</strong><em>без реальных КП</em></div>
-      <div class="metric"><small>Проверено брокером</small><strong id="metricVerified">6</strong><em>только флаги тестовых данных</em></div>
+      <div class="metric"><small id="metricCasesLabel">Сделок в примере</small><strong id="metricCases">3</strong><em id="metricCasesNote">синтетические</em></div>
+      <div class="metric"><small id="metricOffersLabel">Предложений в примере</small><strong id="metricOffers">7</strong><em id="metricOffersNote">без реальных КП</em></div>
+      <div class="metric"><small>Проверено брокером</small><strong id="metricVerified">6</strong><em id="metricVerifiedNote">только флаги тестовых данных</em></div>
       <div class="metric"><small>Активных интеграций</small><strong id="metricIntegrations">0</strong><em>без отправки данных</em></div>
     </section>
 
