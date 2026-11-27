@@ -952,6 +952,40 @@ header .logo{font-size:11.5px!important}
 #why-broker .lk-direct{background:linear-gradient(105deg,#e6edf5,#f6f9fc)!important}
 #why-broker .lk-compass{background:linear-gradient(105deg,#cceee1,#edf8f2)!important;border-color:#87c8ae!important}
 }
+</style><style id="lk-desktop-layout-v1">
+.lk-desktop-only{display:none!important}
+@media(min-width:1024px){
+main>.section{padding-block:40px!important}
+main>.section .container{max-width:1320px;padding-inline:24px}
+#calcTab .calc-grid{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.12fr)!important;grid-template-rows:auto 1fr;gap:14px 26px!important;align-items:start}
+#calcTab #calcControls{grid-column:1;grid-row:1;min-width:0}
+#calcTab .lk-calc-side{display:contents}
+#calcTab .lk-calc-results{grid-column:2;grid-row:1/3;min-width:0;align-self:start}
+#calcTab .calc-lead-box{grid-column:1;grid-row:2;min-width:0;align-self:start;margin-top:0!important}
+#calcTab .calc-lead-box .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+#calcTab .calc-box{padding:24px}
+#calcTab .lk-calc-results .sample-link{margin-block:5px}
+#send-offer .lk-offer-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.82fr);gap:28px;align-items:center}
+#send-offer .lk-offer-copy{min-width:0}
+#send-offer .lk-offer-review{display:grid!important;gap:13px;padding:20px;background:linear-gradient(125deg,#fff,#eef7f4);border:1px solid #d6e7e0;border-radius:15px;color:#142b45}
+.lk-review-top{display:flex;align-items:center;gap:12px}
+.lk-review-icon{display:grid;place-items:center;width:54px;height:54px;border-radius:12px;background:#e0f2e9;color:#087f5b;flex:none}
+.lk-review-icon svg{width:34px;height:34px}
+.lk-review-top strong{display:block;font-size:20px;line-height:1.2}
+.lk-review-top small{display:block;color:#526577;font-size:13px;margin-top:3px}
+.lk-offer-review ul{display:grid;gap:7px;list-style:none;padding:0;margin:0;font-size:15px}
+.lk-offer-review li{display:flex;gap:9px;line-height:1.4}
+.lk-offer-review li:before{content:"✓";color:#087f5b;font-weight:800}
+.lk-offer-review>a{color:#087f5b;font-weight:750}
+#b2b>.container>.grid-2{align-items:start;gap:18px!important}
+#b2b .lk-partner-flow{display:block!important;border-top:1px solid #e0e9e6;padding-top:14px;margin-top:18px}
+.lk-partner-flow h4{color:#142b45;font-size:17px;margin:0 0 11px}
+.lk-partner-flow ol{padding:0;margin:0;display:grid;gap:10px;list-style:none}
+.lk-partner-flow li{display:flex;gap:10px;align-items:center}
+.lk-partner-flow li>span{display:grid;place-items:center;border-radius:50%;width:30px;height:30px;background:#e4f4ec;color:#087f5b;font-weight:800;flex:none}
+.lk-partner-flow li strong{display:block;font-size:14px;line-height:1.3;color:#142b45}
+.lk-partner-flow li small{display:block;font-size:13px;line-height:1.4;color:#526577}
+}
 </style></head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
@@ -1056,7 +1090,7 @@ header .logo{font-size:11.5px!important}
             </div>
           </div>
 
-          <div>            <div class="unified-result" id="calcFullResult" aria-live="polite"><div class="result-cards">
+          <div class="lk-calc-side"><div class="lk-calc-results"><div class="unified-result" id="calcFullResult" aria-live="polite"><div class="result-cards">
               <div class="res-card">
                 <small>Платёж в месяц (ориентир)</small>
                 <strong id="resMonthly">0 ₽</strong>
@@ -1074,7 +1108,7 @@ header .logo{font-size:11.5px!important}
               <tbody id="lkCompareBody"></tbody>
             </table></div></details><button type="button" class="sample-link" id="saveCurrentCalc">↓ Скачать текущий расчёт (CSV)</button><button type="button" class="sample-link" id="resetCalc">Сбросить параметры</button><div class="lk-growth-actions"><button type="button" data-lk-share="calculation" aria-label="Поделиться параметрами расчёта">Поделиться расчётом</button><a href="./leasing-checklist.html" target="_blank" rel="noopener">Чек-лист сделки</a></div><p class="lk-growth-note">Передаются только параметры расчёта, без контактных данных. Суммы могут измениться при пересчёте.</p><p id="lkCalcRestored" hidden>Параметры из полученной ссылки восстановлены. Результат пересчитан по текущим условным ставкам.</p>
 
-            <form class="calc-lead-box" onsubmit="submitForm(event, 'Калькулятор пяти сценариев')">
+            </div><form class="calc-lead-box" onsubmit="submitForm(event, 'Калькулятор пяти сценариев')">
               <h4>Получить индивидуальный расчёт</h4>
               
               <div class="grid-2" style="gap:10px;">
@@ -1172,7 +1206,7 @@ header .logo{font-size:11.5px!important}
   </div>
 </section>
 
-<section class="section section-alt" id="send-offer"><div class="container"><h2 class="section-title">Есть предложение от лизинговой компании?</h2><p class="section-sub">Отправьте график платежей на нашу электронную почту и укажите свои комментарии. Прикрепите полученное предложение к письму самостоятельно.</p><a class="btn btn-primary" href="mailto:lizingkompas@mail.ru?subject=%D0%93%D1%80%D0%B0%D1%84%D0%B8%D0%BA%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%B5%D0%B9%20%D0%B4%D0%BB%D1%8F%20%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B8&amp;body=%D0%94%D0%BE%D0%B1%D1%80%D1%8B%D0%B9%20%D0%B4%D0%B5%D0%BD%D1%8C!%0A%D0%9D%D0%B0%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D1%8F%D1%8E%20%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D0%BA%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%B5%D0%B9.%0A%D0%9A%D0%BE%D0%BC%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%80%D0%B8%D0%B8%3A%20%0A">Отправить график по электронной почте</a><p style="margin-top:10px"><a href="mailto:lizingkompas@mail.ru">lizingkompas@mail.ru</a></p></div></section>
+<section class="section section-alt" id="send-offer"><div class="container lk-offer-grid"><div class="lk-offer-copy"><h2 class="section-title">Есть предложение от лизинговой компании?</h2><p class="section-sub">Отправьте график платежей на нашу электронную почту и укажите свои комментарии. Прикрепите полученное предложение к письму самостоятельно.</p><a class="btn btn-primary" href="mailto:lizingkompas@mail.ru?subject=%D0%93%D1%80%D0%B0%D1%84%D0%B8%D0%BA%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%B5%D0%B9%20%D0%B4%D0%BB%D1%8F%20%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B8&amp;body=%D0%94%D0%BE%D0%B1%D1%80%D1%8B%D0%B9%20%D0%B4%D0%B5%D0%BD%D1%8C!%0A%D0%9D%D0%B0%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D1%8F%D1%8E%20%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D0%BA%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B5%D0%B6%D0%B5%D0%B9.%0A%D0%9A%D0%BE%D0%BC%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%80%D0%B8%D0%B8%3A%20%0A">Отправить график по электронной почте</a><p style="margin-top:10px"><a href="mailto:lizingkompas@mail.ru">lizingkompas@mail.ru</a></p></div><aside class="lk-desktop-only lk-offer-review" aria-label="Что проверить в предложении"><div class="lk-review-top"><span class="lk-review-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><rect x="10" y="5" width="27" height="38" rx="4" stroke="currentColor" stroke-width="2.5"/><path d="M16 14h15M16 21h15M16 28h9M17 35l4 4 9-10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><strong>Что важно сравнить</strong><small>Проверка условий перед подписанием</small></div></div><ul><li>Аванс, график и полная сумма выплат</li><li>Выкупная стоимость и дополнительные комиссии</li><li>Страхование и условия досрочного выкупа</li><li>Штрафы, ограничения и риски договора</li></ul><a href="./leasing-checklist.html">Открыть чек-лист сделки →</a></aside></div></section>
 <section class="section support-route" id="support-route"><div class="container"><div class="eyebrow">СОПРОВОЖДЕНИЕ</div><h2 class="section-title">Уже есть договор лизинга?</h2><p class="section-sub">Выберите задачу, чтобы подготовиться к разговору со специалистом. Без загрузки документов.</p><div class="support-grid">
 <details><summary>Досрочный выкуп</summary><p>Подготовьте действующий график, остаток обязательств и условия выкупа. Сравните итоговые расходы до и после выкупа.</p></details>
 <details><summary>Изменение графика платежей</summary><p>Уточните задолженность, желаемый платёж и период изменения графика. Новые условия зависят от согласия сторон.</p></details>
@@ -1246,7 +1280,7 @@ header .logo{font-size:11.5px!important}
             <li>Прозрачный агентский договор с брокером недвижимости.</li>
           </ul>
         </div>
-      </div>
+<div class="lk-desktop-only lk-partner-flow"><h4>Как строится сотрудничество</h4><ol><li><span>1</span><div><strong>Передача клиента</strong><small>Уточняем потребность и параметры имущества.</small></div></li><li><span>2</span><div><strong>Подбор финансирования</strong><small>Сопоставляем доступные предложения.</small></div></li><li><span>3</span><div><strong>Сопровождение сделки</strong><small>Согласуем условия и документы.</small></div></li><li><span>4</span><div><strong>Партнёрское вознаграждение</strong><small>По условиям согласованного агентского договора.</small></div></li></ol></div>      </div>
 
       <form class="card" onsubmit="submitForm(event, 'B2B Партнер')">
         <h3>Передать клиента или стать партнером</h3>
