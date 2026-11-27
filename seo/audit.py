@@ -50,7 +50,10 @@ for url in locs:
         if len(articles)<6: errors.append("Missing static article links")
     for href in page.hrefs:
         u=urlsplit(href)
-        if not u.scheme and not u.netloc and u.path and (u.path.endswith(".html") or u.path.endswith("/")):\n            target=(root/u.path.lstrip("/") if u.path.startswith("/") else f.parent/u.path)\n            if u.path.endswith("/"): target=target/"index.html"\n            if not target.is_file(): errors.append(name+": broken local link "+href)
+        if not u.scheme and not u.netloc and u.path and (u.path.endswith(".html") or u.path.endswith("/")):
+            target=(root/u.path.lstrip("/") if u.path.startswith("/") else f.parent/u.path)
+            if u.path.endswith("/"): target=target/"index.html"
+            if not target.is_file(): errors.append(name+": broken local link "+href)
 if a.production:
     keys=[p for p in root.glob("*.txt") if p.name!="robots.txt" and 8<=len(p.stem)<=128 and p.read_text(encoding="utf-8").strip()==p.stem]
     if len(keys)!=1: errors.append("Missing or ambiguous IndexNow ownership key")

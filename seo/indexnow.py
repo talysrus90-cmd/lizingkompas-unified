@@ -18,7 +18,8 @@ def main():
     for url in urls:
         u=urlsplit(url)
         if u.scheme!="https" or u.netloc!=urlsplit(BASE).netloc or u.query or u.fragment or "%" in u.path: p.error("Unexpected sitemap URL")
-        f=u.path.lstrip("/")\n        if not f or f.endswith("/"): f+="index.html"
+        f=u.path.lstrip("/")
+        if not f or f.endswith("/"): f+="index.html"
         if ".." in pathlib.PurePosixPath(f).parts: p.error("Invalid path")
         file=root/f
         if not file.is_file(): p.error("Missing file "+f)
