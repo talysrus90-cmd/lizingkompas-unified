@@ -1,0 +1,44 @@
+name: V5 real Chromium mobile smoke (isolated)
+on:
+  push:
+    paths:
+      - 'variant-5.html'
+      - 'lk-ui-v504.js'
+      - 'broker-preview.html'
+      - 'broker-preview.js'
+      - 'broker-local-ui.js'
+      - 'tests/real-browser-mobile.cjs'
+      - '.github/workflows/browser-mobile.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  real-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      LK_BROWSER_BASE: http://127.0.0.1:58766/
+      PYTHONUTF8: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check test syntax
+        run: node --check tests/real-browser-mobile.cjs
+      - name: Start isolated static preview
+        run: |
+          python3 -m http.server 58766 --bind 127.0.0.1 > /tmp/lk-v5-static.log 2>&1 &
+          echo $! > /tmp/lk-v5-static.pid
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:58766/broker-preview.html > /dev/null; then exit 0; fi
+            sleep .2
+          done
+          cat /tmp/lk-v5-static.log
+          exit 1
+      - name: Chromium Android viewport, menu Back and broker theme
+        run: node tests/real-browser-mobile.cjs
+      - name: Stop isolated preview
+        if: always()
+        run: |
+          if [ -f /tmp/lk-v5-static.pid ]; then kill "$(cat /tmp/lk-v5-static.pid)" || true; fi
