@@ -8,10 +8,15 @@ const html=fs.readFileSync('broker-preview.html','utf8');
 const publicSite=fs.readFileSync('variant-5.html','utf8');
 const script=fs.readFileSync('broker-preview.js','utf8');
 
-test('standalone preview remains noindex and cannot accept client data',()=>{
+test('standalone preview remains noindex; financial forms only work on localhost',()=>{
   assert.match(html,/<meta name="robots" content="noindex,nofollow,noarchive">/);
   assert.match(html,/form-action 'none'/);
-  assert.doesNotMatch(html,/<form\b|<input\b|contenteditable|<iframe\b/i);
+  assert.match(html,/id="view-workspace" class="section local-only"/);
+  assert.ok(html.includes('id="localLoginForm"'));
+  assert.ok(html.includes('id="localCaseForm"'));
+  assert.ok(html.includes('id="localOfferForm"'));
+  assert.ok(html.includes('src="./broker-local-ui.js"'));
+  assert.doesNotMatch(html,/name="(?:phone|inn|email|client_name)"/i);
   assert.doesNotMatch(html,/<script[^>]+src="https?:/i);
   assert.doesNotMatch(script,/\b(fetch|XMLHttpRequest|sendBeacon|localStorage|sessionStorage|WebSocket)\b/);
   assert.ok(html.includes('src="./broker-preview.js"'));
