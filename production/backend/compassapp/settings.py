@@ -130,6 +130,18 @@ OPERATOR_NAME = os.getenv("COMPASS_OPERATOR_NAME", "")
 OPERATOR_INN = os.getenv("COMPASS_OPERATOR_INN", "")
 THROTTLE_SECRET = os.getenv("COMPASS_THROTTLE_SECRET", "")
 if LIVE_INTAKE:
+    # Validate real key material at boot, not on the first customer write.
+    from cryptography.fernet import Fernet
+    def _real_secret(value,minimum):
+        return isinstance(value,str) and len(value)>=minimum and (
+            "REPLACE" not in value.upper() and "TEST-ONLY" not in value.upper()
+        )
+    valid_encryption=bool(DATA_ENCRYPTION_KEYS)
+    for candidate in DATA_ENCRYPTION_KEYS:
+        try:
+            Fernet(candidate.encode("ascii"))
+        except (ValueError,TypeError,UnicodeError):
+            valid_encryption=False
     required = {
         "production_flag": PRODUCTION,
         "postgresql": bool(dsn),
@@ -138,10 +150,10 @@ if LIVE_INTAKE:
         "confirmed_rkn_scope": os.getenv("COMPASS_RKN_SCOPE_CONFIRMED") == "yes",
         "verified_backup_restore": os.getenv("COMPASS_RESTORE_TEST_PASSED") == "yes",
         "operator": bool(OPERATOR_NAME and OPERATOR_INN),
-        "consent_version": bool(CONSENT_VERSION),
-        "encryption": bool(DATA_ENCRYPTION_KEYS),
-        "throttle_secret": len(THROTTLE_SECRET) >= 32,
-        "strong_secret": len(SECRET_KEY) >= 50,
+        "consent_version": _real_secret(CONSENT_VERSION, 6),
+        "encryption": valid_encryption,
+        "throttle_secret": _real_secret(THROTTLE_SECRET, 32),
+        "strong_secret": _real_secret(SECRET_KEY, 50),
     }
     missing = [name for name, is_ok in required.items() if not is_ok]
     if missing:
