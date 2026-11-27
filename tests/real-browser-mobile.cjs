@@ -182,13 +182,18 @@ async function smoke(){
     contentWidth:document.querySelector('.content').getBoundingClientRect().width,
     metricWidth:document.querySelector('.metric').getBoundingClientRect().width,
     navClientWidth:document.querySelector('.nav').clientWidth,
-    navScrollWidth:document.querySelector('.nav').scrollWidth
+    navScrollWidth:document.querySelector('.nav').scrollWidth,
+    metricsWidth:document.querySelector('.metrics').getBoundingClientRect().width,
+    metricsCols:getComputedStyle(document.querySelector('.metrics')).gridTemplateColumns,
+    gridCss:getComputedStyle(document.querySelector('.shell')).gridTemplateColumns,
+    mq760:matchMedia('(max-width:760px)').matches,
+    shellScrollWidth:document.querySelector('.shell').scrollWidth
   })`);
   check(broker.bodyWidth<=broker.viewportWidth+2,
       'broker has horizontal page overflow: '+broker.bodyWidth+' vs '+broker.viewportWidth);
   check(broker.contentWidth<=broker.viewportWidth+2,
       'broker content wider than mobile screen: '+broker.contentWidth);
-  check(broker.metricWidth<=220,
+  console.log('BROKER_LAYOUT',JSON.stringify(broker));\n  check(broker.metricWidth<=220,
       'broker KPI cards are oversized on mobile: '+broker.metricWidth);
   check(!broker.publicApiUsed,'public GitHub page incorrectly enabled local backend');
   check(broker.theme==='light','broker not opening in calm light theme');
