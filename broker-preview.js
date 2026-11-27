@@ -71,6 +71,16 @@
   function initialise(doc){
     let selected=0;
     const by=id=>doc.getElementById(id);
+    const themeButton=by("themeToggle");
+    if(themeButton){
+      const setTheme=dark=>{
+        doc.documentElement.dataset.theme=dark?"dark":"light";
+        themeButton.textContent=dark?"Светлая тема":"Тёмная тема";
+        themeButton.setAttribute("aria-pressed",String(dark));
+      };
+      setTheme(false); // Low-glare neutral light theme for long work by default.
+      themeButton.addEventListener("click",()=>setTheme(doc.documentElement.dataset.theme!=="dark"));
+    }
     const nav=Array.from(doc.querySelectorAll('[data-tab]'));
     function showTab(tab){
       nav.forEach(btn=>btn.setAttribute('aria-current',btn.dataset.tab===tab?'page':'false'));
