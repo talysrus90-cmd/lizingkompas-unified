@@ -93,6 +93,20 @@ class CaseWorkflowTests(unittest.TestCase):
         # In the prototype, assignment must be issued by an already assigned
         # supervisor. Production assignment follows a separately approved policy.
 
+    def test_supervisor_can_assign_team_and_close_after_comparison(self):
+        supervisor = Actor("supervisor-a", "tenant-a", "supervisor")
+        record = self.desk.create(supervisor, S)
+        record = self.desk.assign(supervisor, record.case_id, self.broker.user_id, record.version)
+        self.assertEqual(self.desk.get(self.broker, record.case_id).case_id, record.case_id)
+        record = self.desk.move(self.broker, record.case_id, "collecting", record.version)
+        record = self.desk.add_offer(self.broker, record.case_id, quote("off-1"), record.version)
+        record = self.desk.add_offer(self.broker, record.case_id, quote("off-2"), record.version)
+        record = self.desk.move(self.broker, record.case_id, "comparing", record.version)
+        closed = self.desk.move(supervisor, record.case_id, "closed", record.version)
+        self.assertEqual(closed.stage, "closed")
+        with self.assertRaisesRegex(ValueError, "offers_locked"):
+            self.desk.add_offer(self.broker, record.case_id, quote("off-3"), closed.version)
+
     def test_broker_cannot_create_with_admin_role(self):
         with self.assertRaises(PermissionError):
             self.desk.create(Actor("admin-1", "tenant-a", "admin"), S)
