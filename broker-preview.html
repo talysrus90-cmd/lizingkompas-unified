@@ -5,10 +5,18 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow,noarchive">
   <meta name="description" content="Лизинг Компас — синтетический прототип брокерского кабинета. Без данных клиентов и внешних интеграций.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; connect-src 'self'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'">
   <title>Compass Broker — интерактивный прототип</title>
   <style>
-    :root{color-scheme:dark;font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;font-size:15px;--bg:#101b25;--panel:#182734;--panel2:#203342;--stroke:#35495b;--ink:#f4f7f8;--muted:#a3b8c6;--mint:#70dfca;--amber:#ffc985}
+    :root{color-scheme:light;font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;font-size:15px;
+      --bg:#edf2f5;--panel:#fff;--panel2:#f4f7f8;--stroke:#d5e0e6;--ink:#203543;
+      --muted:#576c79;--mint:#216b65;--amber:#805a27;--rail:#e8eef1;
+      --nav:#dceae5;--notice:#fff6e8;--notice-ink:#624927;--hover:#ebf3f3;
+      --badge:#e3eeeb;--badge-ink:#20604f;--focus:#137668}
+    :root[data-theme="dark"]{color-scheme:dark;--bg:#1b2832;--panel:#24343f;--panel2:#2e404c;
+      --stroke:#455a67;--ink:#e8f0f4;--muted:#bdcdd6;--mint:#a2e3d6;--amber:#ffd29b;
+      --rail:#20313b;--nav:#385752;--notice:#453b31;--notice-ink:#f2dcba;
+      --hover:#354954;--badge:#35534c;--badge-ink:#b4f4e6;--focus:#a9ede1}
     *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink)}button,a{font:inherit}button{cursor:pointer}a{color:var(--mint)}
     .shell{display:grid;grid-template-columns:252px minmax(0,1fr);min-height:100dvh}.rail{border-right:1px solid var(--stroke);padding:27px 16px 20px;background:#111e29;display:flex;flex-direction:column;gap:24px}
     .brand{display:flex;align-items:center;gap:11px;padding:0 12px}.mark{display:grid;place-items:center;width:39px;height:39px;border:1px solid #69dbca;border-radius:12px;color:var(--mint);font-size:24px}.brand strong{font-size:16px;letter-spacing:.02em}.brand span{display:block;color:var(--muted);font-size:11px;margin-top:3px}
@@ -32,25 +40,79 @@
     @media(max-width:1160px){.workspace{grid-template-columns:1fr}.cases{grid-template-columns:repeat(3,minmax(0,1fr))}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(max-width:760px){.shell{grid-template-columns:1fr}.rail{padding:13px 14px;gap:12px;border-right:0;border-bottom:1px solid var(--stroke)}.brand{padding:0 4px}.nav{display:flex;overflow-x:auto;gap:5px;scrollbar-width:thin}.nav button{white-space:nowrap;padding:10px 12px}.rail-foot{display:none}.content{padding:23px 13px 32px}.top{flex-direction:column;gap:12px;margin-bottom:17px}.metrics{gap:8px}.metric{padding:13px;min-height:94px}.metric strong{font-size:23px}.workspace{gap:11px}.cases{grid-template-columns:1fr;padding:9px}.case{padding:12px}.case strong{margin:5px 0}.panel-head,.panel-body{padding:15px}.facts{grid-template-columns:repeat(2,minmax(0,1fr))}.list-item{align-items:flex-start}.demo{font-size:11px}}
     @media(prefers-reduced-motion:no-preference){.case,.nav button,.primary,.secondary{transition:background .18s,border-color .18s}}
-  </style>
+  
+    /* Ergonomic workspace: quiet neutral surfaces, comfortable contrast,
+       no neon large-area backgrounds, distinct focus and 44px targets. */
+    .rail{background:var(--rail)!important}
+    .nav button{color:var(--ink)!important}
+    .nav button[aria-current="page"]{background:var(--nav)!important;border-color:var(--stroke)!important;color:var(--ink)!important}
+    .nav button:hover{background:var(--hover)!important}
+    .brand .mark{border-color:var(--mint)!important}
+    .metric em{color:var(--mint)!important}
+    .case{background:var(--panel2)!important;color:var(--ink)!important;border-color:var(--stroke)!important}
+    .case[aria-pressed="true"]{background:var(--nav)!important;border-color:var(--mint)!important}
+    .status,.status.wait,.status.draft{background:var(--badge)!important;color:var(--badge-ink)!important}
+    .fact,.list-item{background:var(--panel2)!important;border-color:var(--stroke)!important}
+    tbody tr:first-child{background:var(--hover)!important}
+    .rank{background:var(--nav)!important;color:var(--mint)!important}
+    .primary{color:var(--bg)!important}
+    .secondary{color:var(--ink)!important;border-color:var(--stroke)!important}
+    .secondary:hover{background:var(--hover)!important}
+    .notice{background:var(--notice)!important;color:var(--notice-ink)!important;border-color:var(--amber)!important}
+    .demo{background:var(--badge)!important;color:var(--badge-ink)!important;border-color:var(--stroke)!important}
+    .theme-toggle{border:1px solid var(--stroke);background:var(--panel);color:var(--ink);border-radius:11px;padding:10px 13px;min-height:44px}
+    .top-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+    .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .field{display:grid;gap:7px;font-size:13px;font-weight:650;color:var(--ink)}
+    .field small{font-weight:400;color:var(--muted)}
+    .field input,.field select{
+      width:100%;max-width:100%;padding:11px 12px;min-height:44px;
+      background:var(--panel2);border:1px solid var(--stroke);border-radius:10px;
+      color:var(--ink);font:inherit
+    }
+    .field input:focus-visible,.field select:focus-visible,.theme-toggle:focus-visible{
+      outline:2px solid var(--focus);outline-offset:2px
+    }
+    .form-actions{display:flex;gap:11px;align-items:center;flex-wrap:wrap;margin-top:17px}
+    .local-only{display:none!important}
+    body[data-local-active="true"] .local-only{display:block!important}
+    body[data-local-active="true"] .nav button.local-only{display:flex!important}
+    .local-auth,.local-workarea{background:var(--panel2);border:1px solid var(--stroke);padding:19px;border-radius:14px}
+    .local-workarea{display:grid;gap:18px}
+    .local-case-list{display:grid;gap:8px;margin:12px 0}
+    .local-case-list button{min-height:44px;text-align:left;padding:11px;border-radius:9px;
+      border:1px solid var(--stroke);background:var(--panel);color:var(--ink)}
+    .local-case-list button[aria-pressed="true"]{border-color:var(--mint);background:var(--nav)}
+    .local-status{min-height:24px;color:var(--muted);font-size:13px;margin:8px 0;overflow-wrap:anywhere}
+    .local-status.error{color:#b34434}
+    :root[data-theme="dark"] .local-status.error{color:#ffada3}
+    .local-table{width:100%;min-width:530px}
+    .local-table td,.local-table th{padding:10px;text-align:left}
+    .local-intro{color:var(--muted);line-height:1.6;max-width:760px}
+    @media(max-width:760px){
+      .field-grid{grid-template-columns:1fr}.top-actions{justify-content:flex-start}
+      .local-auth,.local-workarea{padding:13px}.nav button.local-only{white-space:nowrap}
+    }
+</style>
 </head>
 <body>
 <div class="shell">
   <aside class="rail">
-    <div class="brand"><span class="mark" aria-hidden="true">✦</span><div><strong>Лизинг Компас</strong><span>COMPASS BROKER / DEMO</span></div></div>
+    <div class="brand"><span class="mark" aria-hidden="true">✦</span><div><strong>Лизинг Компас</strong><span>COMPASS BROKER / WORKSPACE</span></div></div>
     <nav class="nav" aria-label="Разделы кабинета">
       <button type="button" data-tab="deals" aria-current="page">▦ <span>Сделки</span></button>
       <button type="button" data-tab="offers">≋ <span>Сравнение КП</span></button>
       <button type="button" data-tab="documents">▤ <span>Документы</span></button>
       <button type="button" data-tab="analytics">◫ <span>Аналитика</span></button>
       <button type="button" data-tab="security">◇ <span>Безопасность</span></button>
+      <button type="button" data-tab="workspace" class="local-only">▤ <span>Рабочие сделки</span></button>
     </nav>
-    <div class="rail-foot">Здесь нет настоящих заявок, партнёров и личных данных. Демо не имеет входа в систему.<a href="./variant-5.html?v=508">← Вернуться на сайт V5</a></div>
+    <div class="rail-foot">Общедоступный предпросмотр использует только искусственные данные. Локальный режим на ПК требует пароль.<a href="./variant-5.html?v=508">← Вернуться на сайт V5</a></div>
   </aside>
   <main class="content">
     <header class="top">
-      <div><div class="crumb">Рабочее пространство / только демонстрация</div><h1>Кабинет брокера</h1><p class="sub">Сделки, предложения и контроль документов — на одном экране.</p></div>
-      <span class="demo">● ДЕМО • НЕТ ПОДКЛЮЧЕНИЯ К CRM</span>
+      <div><div class="crumb">Рабочее пространство / брокер</div><h1>Кабинет брокера</h1><p class="sub">Сделки, предложения и контроль документов — на одном экране.</p></div>
+      <div class="top-actions"><button type="button" id="themeToggle" class="theme-toggle" aria-label="Переключить тему оформления">Тёмная тема</button><span class="demo" id="modeBadge">● ПРИМЕР • БЕЗ ДАННЫХ КЛИЕНТОВ</span></div>
     </header>
     <section class="metrics" aria-label="Тестовые показатели">
       <div class="metric"><small>Сделок в примере</small><strong>3</strong><em>синтетические</em></div>
@@ -88,23 +150,81 @@
     </section>
 
     <section id="view-documents" class="section" aria-labelledby="docs-heading">
-      <div class="panel"><div class="panel-head"><h2 id="docs-heading">Compass Document / Legal</h2><span class="demo">ПРОТОТИП</span></div>
+      <div class="panel"><div class="panel-head"><h2 id="docs-heading">Compass Document / Legal</h2><span class="muted">В разработке</span></div>
       <div class="panel-body"><p class="readout">Будущий поток: <strong>загрузка → карантин и проверка → OCR → подтверждение брокером → анализ юридических условий</strong>. Пока ничего не загружается и не распознаётся.</p><div class="list" id="documentList"></div></div></div>
     </section>
 
     <section id="view-analytics" class="section" aria-labelledby="analytics-heading">
-      <div class="panel"><div class="panel-head"><h2 id="analytics-heading">Compass Analytics</h2><span class="demo">СИНТЕТИЧЕСКАЯ АНАЛИТИКА</span></div>
+      <div class="panel"><div class="panel-head"><h2 id="analytics-heading">Compass Analytics</h2><span class="muted">Пример данных</span></div>
       <div class="panel-body"><div class="list"><div class="list-item"><div><strong>Сделки по стадиям</strong><small>Черновик: 1 · Сбор КП: 1 · Сравнение: 1</small></div><span>3</span></div><div class="list-item"><div><strong>Подтверждённые тестовые КП</strong><small>6 из 7. Это не фактические ответы лизингодателей.</small></div><span>86%</span></div><div class="list-item"><div><strong>Интеграции, реальные лиды и договоры</strong><small>Не подключены, статистики нет.</small></div><span>—</span></div></div></div></div>
     </section>
 
     <section id="view-security" class="section" aria-labelledby="security-heading">
-      <div class="panel"><div class="panel-head"><h2 id="security-heading">Compass Security</h2><span class="demo">НЕ ПРОДАКШЕН</span></div>
+      <div class="panel"><div class="panel-head"><h2 id="security-heading">Compass Security</h2><span class="muted">Локальные проверки</span></div>
       <div class="panel-body readout"><p><strong>Что уже тестируется в исходном коде:</strong> разграничение ролей, проверка принадлежности сделки и организации, атомарное обновление версии, защита от дублей и журнал событий в тестовой SQLite-базе.</p><p><strong>Чего здесь пока нет:</strong> настоящего входа, MFA, серверных сессий, персональных данных, защищённого российского хостинга, резервного восстановления и шифрования документов. Данные на этой странице заранее вымышлены.</p><p>До выполнения перечисленного никакие реальные документы или заявки принимать нельзя.</p></div></div>
     </section>
 
-    <footer>Лизинг Компас • Концепт брокерского кабинета • Только синтетическая демонстрация, без API и сохранения данных. <a href="./variant-5.html?v=508">Открыть основной сайт V5</a></footer>
+
+    <section id="view-workspace" class="section local-only" aria-labelledby="workspace-heading">
+      <div class="panel">
+        <div class="panel-head"><div><h2 id="workspace-heading">Рабочие финансовые сделки</h2><span class="muted">Локальная база SQLite · доступ только с этого ПК</span></div><button id="localLogout" class="secondary" type="button" hidden>Выйти</button></div>
+        <div class="panel-body">
+          <p class="local-intro">Здесь данные действительно сохраняются и сравниваются сервером. Не вводите ФИО, телефон, ИНН, реквизиты клиентов или содержание договоров. Режим не рассчитан на персональные данные.</p>
+          <div id="localAuth" class="local-auth">
+            <form id="localLoginForm" autocomplete="off">
+              <label class="field" for="localPassword">Пароль локального оператора<input id="localPassword" name="password" type="password" minlength="14" required autocomplete="current-password"></label>
+              <div class="form-actions"><button class="primary" type="submit">Войти в рабочую базу</button></div>
+            </form>
+          </div>
+          <div id="localWorkArea" class="local-workarea" hidden>
+            <form id="localCaseForm">
+              <h3>Новая сделка</h3>
+              <div class="field-grid">
+                <label class="field">Стоимость имущества, ₽<input name="asset_price" type="number" min="1" step="0.01" required value="4500000"></label>
+                <label class="field">Аванс, ₽<input name="advance" type="number" min="0" step="0.01" required value="900000"></label>
+                <label class="field">Срок, месяцев<input name="term_months" type="number" min="12" max="84" step="1" required value="36"></label>
+                <label class="field">База НДС<select name="vat_basis"><option value="included">НДС включён</option><option value="excluded">Без включённого НДС</option><option value="not_applicable">Не применяется</option></select></label>
+              </div>
+              <div class="form-actions"><button class="primary" type="submit">Создать сделку</button></div>
+            </form>
+            <div>
+              <h3>Сделки в локальной базе</h3>
+              <div id="localCaseList" class="local-case-list" aria-label="Сохранённые сделки"></div>
+            </div>
+            <div id="localSelectedCase" hidden>
+              <h3 id="localSelectedTitle">Выбранная сделка</h3>
+              <p class="muted" id="localSelectedDescription"></p>
+              <div class="form-actions"><button id="localNextStage" class="secondary" type="button">Продолжить обработку</button><button id="localCompare" class="secondary" type="button">Сравнить КП</button><button id="localAudit" class="secondary" type="button">Журнал действий</button></div>
+              <form id="localOfferForm">
+                <h3>Добавить КП к сделке</h3>
+                <div class="field-grid">
+                  <label class="field">Идентификатор КП<input name="offer_id" required minlength="3" maxlength="64" pattern="[A-Za-z0-9_-]{3,64}" placeholder="offer-001"></label>
+                  <label class="field">Название лизингодателя<input name="lessor" required minlength="2" maxlength="160" placeholder="Лизинговая компания"></label>
+                  <label class="field">Идентификатор оригинала<input name="source_document_id" required minlength="3" maxlength="64" pattern="[A-Za-z0-9_-]{3,64}" placeholder="doc-001"></label>
+                  <label class="field">Дата получения<input name="received_on" type="date" required></label>
+                  <label class="field">Действует до<input name="valid_until" type="date" required></label>
+                  <label class="field">Ежемесячный платёж, ₽<input name="monthly_payment" type="number" min="0" step="0.01" required></label>
+                  <label class="field">Выкуп, ₽<input name="buyout" type="number" min="0" step="0.01" required value="0"></label>
+                  <label class="field">Разовая комиссия, ₽<input name="upfront_fee" type="number" min="0" step="0.01" required value="0"></label>
+                  <label class="field">Ежемесячная комиссия, ₽<input name="recurring_monthly_fee" type="number" min="0" step="0.01" required value="0"></label>
+                  <label class="field">Страхование за весь срок, ₽<input name="insurance_total" type="number" min="0" step="0.01" required value="0"></label>
+                  <label class="field">Прочие расходы, ₽<input name="other_costs" type="number" min="0" step="0.01" required value="0"></label>
+                  <label class="field">Проверка оригинала<select name="verified_by_broker"><option value="false">Не проверен</option><option value="true">Проверен брокером</option></select></label>
+                </div>
+                <div class="form-actions"><button type="submit" class="primary">Сохранить КП</button></div>
+              </form>
+              <div id="localResults" class="table-scroll" aria-live="polite"></div>
+            </div>
+          </div>
+          <p class="local-status" id="localStatus" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+
+    <footer>Лизинг Компас • Брокерское рабочее пространство • На публичной странице только пример; локальные финансовые записи доступны исключительно на ПК с паролем. <a href="./variant-5.html?v=508">Открыть основной сайт V5</a></footer>
   </main>
 </div>
 <script src="./broker-preview.js"></script>
+<script src="./broker-local-ui.js"></script>
 </body>
 </html>
