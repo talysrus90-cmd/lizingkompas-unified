@@ -762,6 +762,7 @@ header .nav-right .lk-share-top svg{width:25px;height:25px}
 @media(max-width:680px){.lk-growth-grid{grid-template-columns:1fr}.lk-growth-tool{padding:13px}.lk-growth-actions button,.lk-growth-actions a{flex:1 1 auto}.lk-growth-qr img{width:110px;height:110px}}
 </style><meta property="og:image" content="https://talysrus90-cmd.github.io/lizingkompas-unified/art/photo-compass.webp"><meta property="og:image:alt" content="Лизинг Компас — фирменный компас"><meta name="twitter:card" content="summary"><style id="lk-v504">
 header .desktop-nav{display:none!important}
+@media(min-width:1250px){header .desktop-nav{display:flex!important;gap:18px;align-items:center}}
 header .nav-wrap{min-height:76px;gap:10px}
 header .nav-right{display:flex!important;flex-flow:row nowrap!important;align-items:center!important;justify-content:flex-end!important;gap:12px!important;width:auto!important}
 header .nav-right>.phone-link{display:none!important}
@@ -983,7 +984,7 @@ html{scroll-padding-top:145px!important}
   <div class="consent-links"><a href="./consent.html" target="_blank" rel="noopener">Текст согласия</a><span aria-hidden="true">·</span><a href="./privacy.html" target="_blank" rel="noopener">Политика обработки персональных данных</a></div>
   
 </div>
-              <button type="submit" class="btn btn-primary" style="width:100%;">Запросить расчёт</button>
+              <button type="submit" class="btn btn-primary" style="width:100%;" disabled>Подготовить расчёт</button>
             </form>
           </div>
         </div>
@@ -1049,7 +1050,7 @@ html{scroll-padding-top:145px!important}
 </div>
             <div style="display:flex;gap:10px;flex-wrap:wrap;">
               <button type="button" class="btn btn-outline" onclick="goQuiz(3)">← Назад</button>
-              <button type="submit" class="btn btn-primary">Получить сводное КП</button>
+              <button type="submit" class="btn btn-primary" disabled>Подготовить параметры подбора</button>
             </div>
           </form>
         </div>
@@ -1145,7 +1146,7 @@ html{scroll-padding-top:145px!important}
   <div class="consent-links"><a href="./consent.html" target="_blank" rel="noopener">Текст согласия</a><span aria-hidden="true">·</span><a href="./privacy.html" target="_blank" rel="noopener">Политика обработки персональных данных</a></div>
   
 </div>
-        <button type="submit" class="btn btn-primary" style="width:100%;">Отправить партнерскую заявку</button>
+        <button type="submit" class="btn btn-primary" style="width:100%;" disabled>Подготовить партнёрскую заявку</button>
       </form>
     </div>
   <div class="lk-growth-tool" id="partner-tools"><h3>Калькулятор на сайте поставщика</h3><p>Бесплатный инструмент для автосалонов и поставщиков. Покупатель сможет оценить платёж и перейти к нам за консультацией.</p><div class="lk-growth-actions"><a href="./partner-calculator.html" target="_blank" rel="noopener">Открыть калькулятор</a></div><details><summary>Получить ссылку и код для сайта</summary><label for="lkPartnerCode">Условный код партнёра</label><input id="lkPartnerCode" type="text" maxlength="32" placeholder="например: dealer-01" autocomplete="off"><p class="lk-growth-note">Не указывайте ФИО, телефоны, ИНН и другие данные клиентов. Используйте условный код.</p><button type="button" id="lkPartnerGenerate">Создать ссылку и код</button><label for="lkPartnerLink">Ссылка с меткой</label><input id="lkPartnerLink" readonly><button type="button" id="lkPartnerCopyLink">Копировать ссылку</button><label for="lkPartnerEmbed">HTML-код встраивания</label><textarea id="lkPartnerEmbed" readonly></textarea><button type="button" id="lkPartnerCopyEmbed">Копировать HTML</button><p id="lkPartnerStatus" role="status" aria-live="polite"></p><p class="lk-growth-note">Метки пока не подтверждают принадлежность лида и не создают право на выплату. Договор и учёт рекомендаций — после запуска серверной части.</p></details></div></div>
@@ -1195,7 +1196,7 @@ html{scroll-padding-top:145px!important}
         </div>
       </div>
 
-      <form id="request" class="card" onsubmit="submitForm(event, 'Заявка')"><h3>Подготовить заявку</h3><p>Подготовьте параметры обращения. Отправка через сайт пока недоступна.</p><div class="field"><label for="reqOrg">Наименование организации</label><input id="reqOrg" name="organization" required></div><div class="field"><label for="reqInn">ИНН</label><input id="reqInn" name="inn" inputmode="numeric" pattern="[0-9]{10}|[0-9]{12}" required></div><div class="field"><label for="reqRevenue">Средняя ежемесячная выручка, ₽</label><input id="reqRevenue" name="revenue" type="number" min="0" required></div><div class="field"><label for="reqName">ФИО контактного лица</label><input id="reqName" name="name" required></div><div class="field"><label for="reqPhone">Контактный телефон</label><input id="reqPhone" name="phone" type="tel" required></div><div class="field"><label for="reqComment">Комментарий: предмет лизинга, пожелания и т. д.</label><textarea id="reqComment" name="comment" rows="3"></textarea></div><div class="consent-block"><div class="consent-choice"><input type="checkbox" id="pdConsent4" name="pdConsent" required><label for="pdConsent4">Даю согласие на обработку персональных данных</label></div><div class="consent-links"><a href="./consent.html">Текст согласия</a> · <a href="./privacy.html">Политика обработки персональных данных</a></div></div><button class="btn btn-primary" type="submit">Подготовить заявку</button><p id="requestStatus" role="status"></p></form>
+      <form id="request" class="card" onsubmit="submitForm(event, 'Заявка')"><h3>Подготовить заявку</h3><p>Подготовьте параметры обращения. Отправка через сайт пока недоступна.</p><div class="field"><label for="reqOrg">Наименование организации</label><input id="reqOrg" name="organization" required></div><div class="field"><label for="reqInn">ИНН</label><input id="reqInn" name="inn" inputmode="numeric" pattern="[0-9]{10}|[0-9]{12}" required></div><div class="field"><label for="reqRevenue">Средняя ежемесячная выручка, ₽</label><input id="reqRevenue" name="revenue" type="number" min="0" required></div><div class="field"><label for="reqName">ФИО контактного лица</label><input id="reqName" name="name" required></div><div class="field"><label for="reqPhone">Контактный телефон</label><input id="reqPhone" name="phone" type="tel" required></div><div class="field"><label for="reqComment">Комментарий: предмет лизинга, пожелания и т. д.</label><textarea id="reqComment" name="comment" rows="3"></textarea></div><div class="consent-block"><div class="consent-choice"><input type="checkbox" id="pdConsent4" name="pdConsent" required><label for="pdConsent4">Даю согласие на обработку персональных данных</label></div><div class="consent-links"><a href="./consent.html">Текст согласия</a> · <a href="./privacy.html">Политика обработки персональных данных</a></div></div><button class="btn btn-primary" type="submit" disabled>Подготовить заявку</button><p id="requestStatus" role="status"></p></form>
     </div>
   </div>
 </section>
@@ -1571,7 +1572,7 @@ document.querySelectorAll('form').forEach(form=>{
  const check=form.querySelector('[name="pdConsent"]');if(!check)return;
  const submit=form.querySelector('button[type="submit"]');if(!submit)return;
  // No personal data is collected in this static demo. Consent is shown only as a preview.
- check.checked=false;check.removeAttribute('required');submit.disabled=false;
+ check.checked=false;check.removeAttribute('required');if(typeof submitForm==="function")submit.disabled=false;
  const note=document.createElement('small');note.className='demo-consent-note';note.textContent='Данные не отправляются через эту форму.';check.closest('.consent-block').append(note);
 });
 </script>
