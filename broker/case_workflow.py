@@ -120,6 +120,9 @@ class CaseDesk:
                 raise ValueError("offer_scenario_mismatch")
             if offer.offer_id in self._offers[case_id]:
                 raise ValueError("duplicate_offer")
+            if any(old.source_document_id == offer.source_document_id
+                   for old in self._offers[case_id].values()):
+                raise ValueError("duplicate_original_document")
             if len(record.offer_ids) >= 20:
                 raise ValueError("offer_limit")
             # Store only verified provenance metadata/terms, never original documents.
