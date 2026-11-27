@@ -15,6 +15,6 @@ def health(request):
 
 urlpatterns = [
     path("healthz", health, name="health"),
-    path("apply/", include("intake.urls")),
+    path("", include("intake.urls")),
     path("admin/", admin.site.urls),  # SSH tunnel / private ingress ONLY
 ]
