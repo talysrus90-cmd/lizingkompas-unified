@@ -14,6 +14,7 @@ import re
 import sqlite3
 import uuid
 from dataclasses import dataclass
+from contextlib import contextmanager
 from decimal import Decimal
 
 from access_policy import Actor, Resource, allowed
@@ -120,12 +121,16 @@ class SqliteCaseDesk:
         if os.name != "nt":
             os.chmod(path, 0o600)
 
-    def _db(self) -> sqlite3.Connection:
+    @contextmanager
+    def _db(self):
         c = sqlite3.connect(self.db_path, timeout=5, isolation_level=None)
-        c.row_factory = sqlite3.Row
-        c.execute("PRAGMA foreign_keys=ON")
-        c.execute("PRAGMA busy_timeout=5000")
-        return c
+        try:
+            c.row_factory = sqlite3.Row
+            c.execute("PRAGMA foreign_keys=ON")
+            c.execute("PRAGMA busy_timeout=5000")
+            yield c
+        finally:
+            c.close()
 
     @staticmethod
     def _check_actor(actor: Actor) -> None:
