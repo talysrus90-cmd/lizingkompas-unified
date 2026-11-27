@@ -204,6 +204,23 @@ class SqliteCaseDesk:
         with self._db() as c:
             return self._read(c, actor, case_id, "read")[0]
 
+    def list_assigned(self, actor: Actor) -> tuple[CaseRecord, ...]:
+        """List only cases assigned to this authenticated tenant actor.
+
+        Do not trust actor.case_ids from the browser; assignments come from DB.
+        """
+        self._check_actor(actor)
+        with self._db() as c:
+            rows = c.execute(
+                "SELECT cases.case_id FROM cases "
+                "JOIN assignments ON assignments.case_id=cases.case_id "
+                "WHERE cases.tenant_id=? AND assignments.user_id=? "
+                "ORDER BY cases.created_at DESC, cases.case_id DESC",
+                (actor.tenant_id, actor.user_id)
+            ).fetchall()
+            return tuple(self._read(c, actor, row["case_id"], "read")[0]
+                         for row in rows)
+
     def assign(self, actor: Actor, case_id: str, user_id: str,
                expected_version: int) -> CaseRecord:
         # Membership of assignee in tenant must be checked by a future identity service.
