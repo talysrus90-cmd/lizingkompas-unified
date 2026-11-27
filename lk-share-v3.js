@@ -1,7 +1,7 @@
 /* Leasing Compass — voluntary site sharing, no third-party SDK, no contact access. */
 (function () {
   "use strict";
-  const PREVIEW = "https://talysrus90-cmd.github.io/lizingkompas-unified/variant-5.html";
+  const PREVIEW = "https://talysrus90-cmd.github.io/lizingkompas-unified/variant-5.html?v=508";
   const PRODUCTION = "https://leasingcompass.ru/";
   const TITLE = "Лизинг Компас";
   function shareData(locationHref, position) {
