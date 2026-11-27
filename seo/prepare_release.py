@@ -9,7 +9,7 @@ import pathlib
 import re
 import secrets
 import shutil
-from xml.etree.ElementTree import Element, SubElement, ElementTree
+from xml.etree.ElementTree import Element, SubElement, ElementTree, register_namespace
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 PROD="https://leasingcompass.ru/"
@@ -115,7 +115,7 @@ try:
                "self-service.html","preview-419.html","broker-local-ui.js"}
     if any((out/name).exists() for name in forbidden):
         raise RuntimeError("Private/demo asset reached production build")
-    ElementTree.register_namespace("", "http://www.sitemaps.org/schemas/sitemap/0.9")
+    register_namespace("", "http://www.sitemaps.org/schemas/sitemap/0.9")
     urlset=Element("{http://www.sitemaps.org/schemas/sitemap/0.9}urlset")
     for name in INDEXABLE:
         item=SubElement(urlset,"{http://www.sitemaps.org/schemas/sitemap/0.9}url")
