@@ -1,0 +1,60 @@
+name: Production CRM and secure intake (isolated)
+on:
+  push:
+    paths:
+      - "production/**"
+      - ".github/workflows/production-backend.yml"
+  pull_request:
+    paths:
+      - "production/**"
+      - ".github/workflows/production-backend.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      COMPASS_TEST_MODE: "1"
+      DJANGO_ALLOWED_HOSTS: "testserver,127.0.0.1,localhost"
+      PYTHONUTF8: "1"
+      PYTHONPATH: "${{ github.workspace }}:${{ github.workspace }}/production/backend"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: production/requirements.txt
+      - name: Install pinned LTS-compatible production dependencies
+        run: python -m pip install -r production/requirements.txt
+      - name: Generate temporary encryption secret for TEST database only
+        run: |
+          python - <<'PY'
+          import os
+          from cryptography.fernet import Fernet
+          with open(os.environ["GITHUB_ENV"],"a",encoding="utf-8") as f:
+              f.write("COMPASS_FERNET_KEYS="+Fernet.generate_key().decode("ascii")+"\n")
+              f.write("DJANGO_SECRET_KEY="+"test-only-"+os.urandom(48).hex()+"\n")
+          PY
+      - name: Check project and migration stability
+        working-directory: production/backend
+        run: |
+          python manage.py check
+          python manage.py makemigrations --check --dry-run
+      - name: Validate encrypted lead intake, security, staff comparison
+        working-directory: production/backend
+        run: python manage.py test intake --verbosity 2
+      - name: Fail-closed: live intake cannot start without real launch prerequisites
+        working-directory: production/backend
+        run: |
+          if COMPASS_TEST_MODE=0 COMPASS_PRODUCTION=1 COMPASS_LIVE_INTAKE=yes python manage.py check; then
+            echo "ERROR: production started with missing secrets and launch gates"
+            exit 1
+          fi
+      - name: Validate Docker Compose parser without any deployment
+        run: |
+          if command -v docker >/dev/null 2>&1; then
+            docker compose --version
+          fi
