@@ -50,6 +50,7 @@
     .nav button[aria-current="page"]{background:var(--nav)!important;border-color:var(--stroke)!important;color:var(--ink)!important}
     .nav button:hover{background:var(--hover)!important}
     .brand .mark{border-color:var(--mint)!important}
+    .brand .mark svg{width:31px;height:31px;display:block}
     .metric em{color:var(--mint)!important}
     .case{background:var(--panel2)!important;color:var(--ink)!important;border-color:var(--stroke)!important}
     .case[aria-pressed="true"]{background:var(--nav)!important;border-color:var(--mint)!important}
@@ -111,7 +112,12 @@
 <body>
 <div class="shell">
   <aside class="rail">
-    <div class="brand"><span class="mark" aria-hidden="true">✦</span><div><strong>Лизинг Компас</strong><span>COMPASS BROKER / WORKSPACE</span></div></div>
+    <div class="brand"><span class="mark" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="24" cy="24" r="17" stroke="currentColor" stroke-width="1.5" opacity=".7"/>
+      <path d="m33 13-6 14-12 8 6-14 12-8Z" fill="#dc965f"/>
+      <path d="m33 13-6 14-6-6 12-8Z" fill="currentColor"/>
+      <circle cx="24" cy="24" r="2.3" fill="#122d40"/>
+      </svg></span><div><strong>Лизинг Компас</strong><span>COMPASS BROKER / WORKSPACE</span></div></div>
     <nav class="nav" aria-label="Разделы кабинета">
       <button type="button" data-tab="deals" aria-current="page">▦ <span>Сделки</span></button>
       <button type="button" data-tab="offers">≋ <span>Сравнение КП</span></button>
