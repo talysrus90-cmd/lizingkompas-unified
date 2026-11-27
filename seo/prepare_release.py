@@ -96,6 +96,28 @@ def replace_legacy_demo_forms(html):
     return html
 
 
+def replace_callback_demo(html):
+    """Turn disabled red callback dialog into entry to working Django form."""
+    start='<p class="demo-note">Номер остаётся на устройстве.'
+    end='<p id="callbackResult"'
+    if html.count(start)!=1 or html.count(end)!=1:
+        raise RuntimeError("Callback dialog layout changed; secure converter needs update")
+    left=html.index(start)
+    right=html.index(end,left)
+    stub=(
+        '<p>Закажите звонок на защищённой странице. Телефон отправится только '
+        'после вашего отдельного согласия.</p>'
+        '<a href="/callback/" class="btn btn-primary" '
+        'style="display:inline-flex;align-items:center;justify-content:center;'
+        'min-height:48px;margin:10px 0 16px">Заказать обратный звонок</a>'
+        '<div hidden aria-hidden="true">'
+        '<input id="callbackPhone" type="tel">'
+        '<input id="callbackConsent" type="checkbox">'
+        '<button type="button" id="callbackDemo" disabled></button></div>'
+    )
+    return html[:left]+stub+html[right:]
+
+
 def transform(text,name):
     text=text.replace(PREVIEW,PROD)
     text=text.replace('href="./variant-5.html"','href="/"')
@@ -109,6 +131,7 @@ def transform(text,name):
     # Explicit application entry on the real domain only.
     if name==MAIN:
         text=replace_legacy_demo_forms(text)
+        text=replace_callback_demo(text)
         cta=('\n<div style="padding:12px 18px;text-align:center;background:#e9f4f1;'
              'border-bottom:1px solid #c1ddd6"><a href="/apply/" '
              'style="display:inline-block;color:#fff;background:#226b65;'
