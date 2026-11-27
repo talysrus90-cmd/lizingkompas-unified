@@ -1,7 +1,7 @@
 /* Public growth tools; no cookies, contact access, or network submission. */
 (function(){
 "use strict";
-const PREVIEW="https://talysrus90-cmd.github.io/lizingkompas-unified/variant-5.html", PROD="https://leasingcompass.ru/";
+const PREVIEW="https://talysrus90-cmd.github.io/lizingkompas-unified/variant-5.html?v=508", PROD="https://leasingcompass.ru/";
 const TYPES=["Новое легковое авто","Авто с пробегом","Оборудование","Коммерческая недвижимость","Спецтехника / Грузовой","Рефинансирование / Возвратный лизинг","Иное"];
 const RATES=Object.freeze([18,20,22,24,26]);
 function valid(x){
