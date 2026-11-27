@@ -214,7 +214,7 @@ async function smoke(){
   };
   const ratio=(a,b)=>{const vals=[lum(a),lum(b)].sort((x,y)=>y-x);return (vals[0]+.05)/(vals[1]+.05);};
   const selectedContrast=ratio(selected.color,selected.background);
-  check(selectedContrast>=4.5,'dark selected deal contrast too low: '+selectedContrast.toFixed(2));
+  check(selectedContrast>=4.5,'dark selected deal contrast too low: '+selectedContrast.toFixed(2)+' '+JSON.stringify(selected));
   await shot('lk-v5-broker-dark-cdp.png');
   console.log(JSON.stringify({ok:true,browser:BROWSER,initial,opened,closed,broker,selected,selectedContrast,screenshots:printed},null,2));
 }
