@@ -15,7 +15,8 @@ const os=require('node:os');
 const cp=require('node:child_process');
 const assert=require('node:assert/strict');
 
-const BASE=(process.env.LK_BROWSER_BASE||'https://talysrus90-cmd.github.io/lizingkompas-unified/').replace(/\\/?$/,'/');
+const RAW_BASE=process.env.LK_BROWSER_BASE||'https://talysrus90-cmd.github.io/lizingkompas-unified/';
+const BASE=RAW_BASE.endsWith('/')?RAW_BASE:RAW_BASE+'/';
 const URL_V5=BASE+'variant-5.html?v=508&qa=mobile-headless-20261127';
 const URL_BROKER=BASE+'broker-preview.html?qa=mobile-headless-20261127';
 const candidates=[
