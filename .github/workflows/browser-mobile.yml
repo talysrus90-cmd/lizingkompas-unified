@@ -7,7 +7,11 @@ on:
       - 'broker-preview.html'
       - 'broker-preview.js'
       - 'broker-local-ui.js'
+      - 'broker/local_server.py'
+      - 'broker/sqlite_store.py'
+      - 'broker/offer_comparison.py'
       - 'tests/real-browser-mobile.cjs'
+      - 'tests/browser-local-operator.cjs'
       - '.github/workflows/browser-mobile.yml'
   workflow_dispatch:
 permissions:
@@ -24,8 +28,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Check test syntax
-        run: node --check tests/real-browser-mobile.cjs
+      - name: Check browser tests syntax
+        run: node --check tests/real-browser-mobile.cjs && node --check tests/browser-local-operator.cjs
       - name: Start isolated static preview
         run: |
           python3 -m http.server 58766 --bind 127.0.0.1 > /tmp/lk-v5-static.log 2>&1 &
@@ -38,6 +42,8 @@ jobs:
           exit 1
       - name: Chromium Android viewport, menu Back and broker theme
         run: node tests/real-browser-mobile.cjs
+      - name: Real browser operator login, persistence and quote comparison
+        run: node tests/browser-local-operator.cjs
       - name: Stop isolated preview
         if: always()
         run: |
