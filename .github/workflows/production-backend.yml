@@ -3,6 +3,8 @@ on:
   push:
     paths:
       - "production/**"
+      - "seo/prepare_release.py"
+      - "seo/test_prepare_release_v5.py"
       - ".github/workflows/production-backend.yml"
   pull_request:
     paths:
@@ -15,7 +17,22 @@ jobs:
   backend:
     runs-on: ubuntu-latest
     timeout-minutes: 12
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: compass_test
+          POSTGRES_USER: compass_test
+          POSTGRES_PASSWORD: local-ci-only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U compass_test -d compass_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     env:
+      DATABASE_URL: "postgresql://compass_test:local-ci-only@127.0.0.1:5432/compass_test"
       COMPASS_TEST_MODE: "1"
       DJANGO_ALLOWED_HOSTS: "testserver,127.0.0.1,localhost"
       PYTHONUTF8: "1"
@@ -44,9 +61,14 @@ jobs:
           python manage.py check
           python manage.py makemigrations --dry-run --verbosity 3
           python manage.py makemigrations --check --dry-run
-      - name: Validate encrypted lead intake, security, staff comparison
+      - name: Validate encrypted lead intake and staff CRM on REAL PostgreSQL
         working-directory: production/backend
         run: python manage.py test intake --verbosity 2
+      - name: Check SQLite test-only compatibility
+        working-directory: production/backend
+        run: env -u DATABASE_URL python manage.py test intake --verbosity 1
+      - name: Verify production V5 release is built from current UI, excluding demos
+        run: python -m unittest discover -s seo -p "test_prepare_release_v5.py" -v
       - name: "Fail closed when live-intake launch prerequisites are missing"
         working-directory: production/backend
         run: |
@@ -54,8 +76,8 @@ jobs:
             echo "ERROR: production started with missing secrets and launch gates"
             exit 1
           fi
-      - name: Validate Docker Compose parser without any deployment
+      - name: Validate Docker Compose parser without deploying
         run: |
-          if command -v docker >/dev/null 2>&1; then
-            docker compose --version
-          fi
+          cp production/.env.production.example production/.env.production
+          docker compose --env-file production/.env.production -f production/docker-compose.prod.yml config -q
+          rm -f production/.env.production
