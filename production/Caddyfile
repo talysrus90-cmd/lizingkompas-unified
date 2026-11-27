@@ -21,7 +21,7 @@
     }
     handle / {
         root * /srv/site
-        rewrite * /variant-5.html
+        rewrite * /index.html
         file_server
     }
     handle {
