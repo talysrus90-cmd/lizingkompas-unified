@@ -53,6 +53,49 @@ def canonical(text,url):
         raise RuntimeError("Cannot set canonical: missing head closing tag")
     return text
 
+def replace_legacy_demo_forms(html):
+    """Remove four disabled preview-only PII forms from the public release.
+
+    A single HTTPS Django /apply/ is the only authorized intake. Never transmit
+    unsent form inputs through URL query strings, cookies or localStorage.
+    """
+    pattern=re.compile(
+        r'<form\\b[^>]*onsubmit="submitForm\\(event,[^"]+"[^>]*>'
+        r'[\\s\\S]*?</form>',
+        flags=re.I,
+    )
+    sequence=[
+        ("calc-lead-box","", "Индивидуальный расчёт",
+         "Чтобы получить индивидуальное предложение, откройте защищённую форму."),
+        ("","", "Получить подбор",
+         "Ваш расчёт готов к следующему шагу. Для связи с брокером откройте защищённую форму."),
+        ("card","", "Партнёрская заявка",
+         "Свяжитесь с брокером через единую защищённую форму. Укажите в комментарии, что вы партнёр."),
+        ("card",'id="request"', "Заявка на лизинг",
+         "Данные вводятся и отправляются только через защищённую форму на нашем сервере."),
+    ]
+    number=0
+    def upgrade(match):
+        nonlocal number
+        if number>=len(sequence):
+            raise RuntimeError("Unexpected extra legacy intake form")
+        cls,element_id,heading,description=sequence[number]
+        number+=1
+        css_class=(' class="'+cls+'"' if cls else '')
+        identity=(' '+element_id if element_id else '')
+        return (
+            '<div'+css_class+identity+' data-compass-intake="production">'
+            '<h4>'+heading+'</h4><p>'+description+'</p>'
+            '<a href="/apply/" class="btn btn-primary"'
+            ' style="display:inline-flex;min-height:48px;align-items:center;'
+            'justify-content:center">Открыть защищённую заявку</a></div>'
+        )
+    html=pattern.sub(upgrade,html)
+    if number!=len(sequence) or 'onsubmit="submitForm(' in html:
+        raise RuntimeError("Legacy application forms changed; update secure release converter")
+    return html
+
+
 def transform(text,name):
     text=text.replace(PREVIEW,PROD)
     text=text.replace('href="./variant-5.html"','href="/"')
@@ -65,6 +108,7 @@ def transform(text,name):
     text=canonical(text,target)
     # Explicit application entry on the real domain only.
     if name==MAIN:
+        text=replace_legacy_demo_forms(text)
         cta=('\n<div style="padding:12px 18px;text-align:center;background:#e9f4f1;'
              'border-bottom:1px solid #c1ddd6"><a href="/apply/" '
              'style="display:inline-block;color:#fff;background:#226b65;'
