@@ -29,3 +29,8 @@
         file_server
     }
 }
+
+# Aliases become active only after their DNS records point here.
+lizingkompas.ru, xn--80afldbncngmmz.xn--p1ai {
+    redir https://leasingcompass.ru{uri} 301
+}
