@@ -99,3 +99,30 @@ class AuditEvent(models.Model):
         ordering = ["at"]
         verbose_name = "Событие аудита"
         verbose_name_plural = "События аудита"
+
+class CallbackRequest(models.Model):
+    """Encrypted callback request; no unneeded client asset/financial details."""
+
+    class Stage(models.TextChoices):
+        NEW = "new", "Ожидает звонка"
+        CONTACTED = "contacted", "Связались"
+        CLOSED = "closed", "Завершена"
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    request_key = models.UUIDField(unique=True, editable=False)
+    created_at = models.DateTimeField(default=timezone.now, editable=False, db_index=True)
+    stage = models.CharField(max_length=12, choices=Stage.choices, default=Stage.NEW, db_index=True)
+    name = EncryptedTextField(blank=True, default="")
+    phone = EncryptedTextField()
+    consent_version = models.CharField(max_length=80)
+    consent_text_sha256 = models.CharField(max_length=64)
+    consent_at = models.DateTimeField(default=timezone.now, editable=False)
+    source_ip_digest = models.CharField(max_length=64)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Обратный звонок"
+        verbose_name_plural = "Обратные звонки"
+
+    def __str__(self):
+        return f"Обратный звонок {str(self.pk)[:8]} / {self.stage}"
