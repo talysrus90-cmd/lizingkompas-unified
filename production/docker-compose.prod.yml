@@ -22,6 +22,7 @@ services:
     build:
       context: ..
       dockerfile: production/Dockerfile
+    image: leasing-compass-app:local
     restart: unless-stopped
     env_file: .env.production
     depends_on:
@@ -33,9 +34,28 @@ services:
       timeout: 6s
       retries: 6
       start_period: 25s
+    networks: [private]
+    read_only: true
+    tmpfs:
+      - /tmp:rw,nosuid,size=64m
+      - /srv/compass/backend/collected_static:rw,nosuid,size=64m,uid=10001,gid=10001
+    security_opt: [no-new-privileges:true]
+
+
+  operator:
+    # Separate private process. Never route /admin through public Caddy.
+    image: leasing-compass-app:local
+    restart: unless-stopped
+    env_file: .env.production
+    environment:
+      COMPASS_SSH_OPERATOR: "1"
+    depends_on:
+      db:
+        condition: service_healthy
+      app:
+        condition: service_healthy
     ports:
-      # Administrative interface: SSH tunnel ONLY, never public 0.0.0.0
-      - "127.0.0.1:8001:8000"
+      - "127.0.0.1:8002:8000"
     networks: [private]
     read_only: true
     tmpfs:
