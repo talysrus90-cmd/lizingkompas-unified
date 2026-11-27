@@ -177,15 +177,38 @@ async function smoke(){
     loginVisibility:getComputedStyle(document.getElementById('view-workspace')).display,
     publicApiUsed:document.body.dataset.localActive==='true',
     bodyWidth:document.documentElement.scrollWidth,
-    viewportWidth:innerWidth
+    viewportWidth:innerWidth,
+    shellWidth:document.querySelector('.shell').getBoundingClientRect().width,
+    contentWidth:document.querySelector('.content').getBoundingClientRect().width,
+    metricWidth:document.querySelector('.metric').getBoundingClientRect().width,
+    navClientWidth:document.querySelector('.nav').clientWidth,
+    navScrollWidth:document.querySelector('.nav').scrollWidth
   })`);
+  check(broker.bodyWidth<=broker.viewportWidth+2,
+      'broker has horizontal page overflow: '+broker.bodyWidth+' vs '+broker.viewportWidth);
+  check(broker.contentWidth<=broker.viewportWidth+2,
+      'broker content wider than mobile screen: '+broker.contentWidth);
+  check(broker.metricWidth<=220,
+      'broker KPI cards are oversized on mobile: '+broker.metricWidth);
   check(!broker.publicApiUsed,'public GitHub page incorrectly enabled local backend');
   check(broker.theme==='light','broker not opening in calm light theme');
   await shot('lk-v5-broker-light-cdp.png');
   await evaluate('document.getElementById("themeToggle").click()');
   check(await evaluate('document.documentElement.dataset.theme')==='dark','theme button failed');
+  const selected=await evaluate(`(()=>{
+    const el=document.querySelector('.case[aria-pressed="true"]'), style=getComputedStyle(el);
+    return {color:style.color,background:style.backgroundColor,width:el.getBoundingClientRect().width};
+  })()`);
+  const lum=color=>{
+    const vals=color.match(/\\d+(?:\\.\\d+)?/g)?.slice(0,3).map(Number)||[];
+    const rgb=vals.map(x=>{const v=x/255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4;});
+    return .2126*rgb[0]+.7152*rgb[1]+.0722*rgb[2];
+  };
+  const ratio=(a,b)=>{const vals=[lum(a),lum(b)].sort((x,y)=>y-x);return (vals[0]+.05)/(vals[1]+.05);};
+  const selectedContrast=ratio(selected.color,selected.background);
+  check(selectedContrast>=4.5,'dark selected deal contrast too low: '+selectedContrast.toFixed(2));
   await shot('lk-v5-broker-dark-cdp.png');
-  console.log(JSON.stringify({ok:true,browser:BROWSER,initial,opened,closed,broker,screenshots:printed},null,2));
+  console.log(JSON.stringify({ok:true,browser:BROWSER,initial,opened,closed,broker,selected,selectedContrast,screenshots:printed},null,2));
 }
 (async()=>{
   try{await smoke();}
