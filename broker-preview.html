@@ -90,6 +90,17 @@
     .local-table td,.local-table th{padding:10px;text-align:left}
     .local-intro{color:var(--muted);line-height:1.6;max-width:760px}
     @media(max-width:760px){
+      /* 1fr has a min-content minimum. Explicit minmax(0,1fr) prevents
+         the horizontal navigation from widening the entire mobile page. */
+      html,body{max-width:100%;overflow-x:clip}
+      .shell{grid-template-columns:minmax(0,1fr)!important;max-width:100%;overflow-x:clip}
+      .rail{min-width:0;width:100%}
+      .nav{min-width:0;max-width:100%;width:100%;overscroll-behavior-x:contain}
+      .content{min-width:0;max-width:100%;width:100%}
+      .metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+      .metric{min-width:0;overflow-wrap:anywhere}
+      .top{min-width:0}
+      .top h1,.top .sub{overflow-wrap:anywhere}
       .field-grid{grid-template-columns:1fr}.top-actions{justify-content:flex-start}
       .local-auth,.local-workarea{padding:13px}.nav button.local-only{white-space:nowrap}
     }
