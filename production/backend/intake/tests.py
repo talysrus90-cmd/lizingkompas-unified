@@ -12,7 +12,7 @@ from django.db import connection
 from django.test import TestCase, Client, override_settings
 from django.urls import reverse
 from .forms import ApplicationForm
-from .models import Lead, Quote, SubmissionAttempt, AuditEvent
+from .models import Lead, Quote, SubmissionAttempt, AuditEvent, CallbackRequest
 
 CIPHER_KEY = Fernet.generate_key().decode("ascii")
 APPROVED = {
@@ -113,6 +113,51 @@ class IntakeTests(TestCase):
         data,headers=self.form_payload()
         self.assertEqual(self.client.post("/apply/",data,**headers).status_code,429)
         self.assertEqual(Lead.objects.count(),0)
+
+    def test_callback_phone_encrypted_with_independent_consent(self):
+        response=self.client.get("/callback/")
+        self.assertEqual(response.status_code,200)
+        nonce=str(self.client.session["callback_nonce"])
+        csrf=self.client.cookies["csrftoken"].value
+        record={
+            "request_key":nonce,
+            "name":"Условный посетитель",
+            "phone":"+7 (900) 123-45-67",
+            "consent":"on",
+            "website":"",
+        }
+        self.assertEqual(self.client.post("/callback/",record).status_code,403)
+        response=self.client.post("/callback/",record,HTTP_X_CSRFTOKEN=csrf)
+        self.assertEqual(response.status_code,302)
+        self.assertEqual(response["Location"],"/callback/success/")
+        self.assertEqual(CallbackRequest.objects.count(),1)
+        cb=CallbackRequest.objects.get()
+        self.assertEqual(cb.phone,"+79001234567")
+        self.assertEqual(cb.consent_version,"qa-consent-v1")
+        self.assertEqual(len(cb.consent_text_sha256),64)
+        self.assertEqual(len(cb.source_ip_digest),64)
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT name,phone FROM intake_callbackrequest LIMIT 1")
+            values=cursor.fetchone()
+        self.assertTrue(all(v.startswith("enc:v1:") for v in values))
+        self.assertNotIn("Условный посетитель",str(values))
+        self.assertNotIn("79001234567",str(values))
+        self.assertEqual(self.client.get("/callback/success/").status_code,200)
+        self.assertEqual(self.client.get("/callback/success/").status_code,302)
+
+    def test_callback_consent_required_and_starts_disabled(self):
+        with override_settings(LIVE_INTAKE=False):
+            self.assertEqual(self.client.get("/callback/").status_code,503)
+        self.assertEqual(CallbackRequest.objects.count(),0)
+        self.client.get("/callback/")
+        nonce=str(self.client.session["callback_nonce"])
+        csrf=self.client.cookies["csrftoken"].value
+        invalid={"request_key":nonce,"name":"Тест","phone":"9001234567",
+                 "consent":"","website":""}
+        self.assertEqual(
+            self.client.post("/callback/",invalid,HTTP_X_CSRFTOKEN=csrf).status_code,400
+        )
+        self.assertEqual(CallbackRequest.objects.count(),0)
 
     def test_staff_only_comparison_and_metadata_audit(self):
         payload,headers=self.form_payload()
