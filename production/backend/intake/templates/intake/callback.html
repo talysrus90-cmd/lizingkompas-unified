@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Заказать обратный звонок — Лизинг Компас</title>
+<style>
+:root{font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;color:#1f3c49;background:#f1f5f6}
+*{box-sizing:border-box}main{max-width:600px;margin:6vh auto;background:#fff;
+  padding:28px;border:1px solid #cfdde0;border-radius:17px}
+h1{font-size:clamp(26px,4vw,34px);line-height:1.2}
+a{color:#176b61}label{font-weight:650;display:block;margin:14px 0 6px}
+input[type=text],input[type=tel]{width:100%;padding:13px;min-height:48px;
+  border-radius:9px;border:1px solid #aabfc5;font:inherit}
+.choice{display:flex;gap:12px;margin-top:20px;border:1px solid #d1dce0;padding:13px;border-radius:12px}
+.choice label{margin:0;font-weight:400}
+.choice input{width:22px;height:22px;flex:0 0 22px;margin-top:4px}
+button{cursor:pointer;background:#226b65;color:white;border:0;border-radius:10px;
+  padding:13px 19px;min-height:48px;font:700 16px system-ui;margin-top:18px}
+.error{color:#99221c;font-weight:600}
+a:focus-visible,input:focus-visible,button:focus-visible{outline:3px solid #16867a;outline-offset:3px}
+@media(max-width:620px){main{margin:0;border:0;border-radius:0;padding:22px 16px}}
+</style>
+</head>
+<body>
+<main>
+<a href="/">← На главную</a>
+<h1>Заказать обратный звонок</h1>
+<p>Оставьте телефон. Специалист «Лизинг Компас» свяжется с вами после обработки обращения.</p>
+<form method="post" action="/callback/">
+  {% csrf_token %}
+  {{ form.request_key }}{{ form.website }}
+  {% if form.non_field_errors %}<div class="error" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+  <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>{{ form.name }}
+  {% if form.name.errors %}<div class="error">{{ form.name.errors }}</div>{% endif %}
+  <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>{{ form.phone }}
+  {% if form.phone.errors %}<div class="error">{{ form.phone.errors }}</div>{% endif %}
+  <div class="choice">
+    {{ form.consent }}
+    <label for="{{ form.consent.id_for_label }}">
+      <strong>Отдельное согласие на обработку персональных данных.</strong>
+      {{ consent_text }}
+      <a href="/privacy.html" target="_blank" rel="noopener">Политика обработки данных</a>.
+      <small>Версия: {{ consent_version }}</small>
+    </label>
+  </div>
+  {% if form.consent.errors %}<div class="error">{{ form.consent.errors }}</div>{% endif %}
+  <button type="submit">Заказать звонок</button>
+</form>
+<p><small>Оператор: {{ operator_name }}. Номер используется для ответа на ваш запрос.</small></p>
+</main></body></html>
