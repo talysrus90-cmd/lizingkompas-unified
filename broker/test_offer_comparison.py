@@ -12,7 +12,7 @@ SCENARIO = Scenario(D("4500000.00"), D("900000.00"), 36, "included")
 def offer(oid: str, monthly: str = "120000.00", **changes) -> Offer:
     data = dict(
         offer_id=oid, lessor="Проверенный лизингодатель",
-        source_document_id="doc-original-001", received_on=TODAY - timedelta(days=1),
+        source_document_id="document-" + oid, received_on=TODAY - timedelta(days=1),
         valid_until=TODAY + timedelta(days=30),
         scenario=SCENARIO, verified_by_broker=True,
         monthly_payment=D(monthly), buyout=D("1000.00"), upfront_fee=D("5000.00"),
@@ -75,6 +75,8 @@ class OfferComparisonTests(unittest.TestCase):
     def test_duplicate_identity_rejected_and_twenty_limit(self):
         with self.assertRaisesRegex(ValueError, "duplicate"):
             compare_offers(SCENARIO, [offer("off-x"), offer("off-x")], as_of=TODAY)
+        with self.assertRaisesRegex(ValueError, "duplicate original document"):
+            compare_offers(SCENARIO, [offer("off-x"), offer("off-y", source_document_id="document-off-x")], as_of=TODAY)
         with self.assertRaisesRegex(ValueError, "2..20"):
             compare_offers(SCENARIO, [offer(f"off-{i}") for i in range(21)], as_of=TODAY)
 
