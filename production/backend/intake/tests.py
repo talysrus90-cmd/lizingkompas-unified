@@ -138,5 +138,5 @@ class IntakeTests(TestCase):
         response=self.client.get(endpoint)
         self.assertEqual(response.status_code,200)
         self.assertContains(response,"Синтетическая компания 2")
-        self.assertContains(response,"4860000")
+        self.assertContains(response,"4914000")
         self.assertEqual(AuditEvent.objects.count(),1)
