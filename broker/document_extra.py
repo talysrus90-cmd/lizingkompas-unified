@@ -43,23 +43,29 @@ def odf_root(data,fmt):
 
 def paragraph_text(node):
     parts=[]
+    size=0
+    def append(value):
+        nonlocal size
+        size+=len(value)
+        if size>500000:raise ValueError("ODF text limit")
+        parts.append(value)
     def visit(n,depth):
         if depth>80:
             raise ValueError("ODF text too deeply nested")
-        if n.text:parts.append(n.text)
+        if n.text:append(n.text)
         for child in n:
             if child.tag==q(TEXT,"s"):
                 raw=child.get(q(TEXT,"c"),"1")
                 if len(raw)>4 or not raw.isascii() or not raw.isdigit() or not 1<=int(raw)<=1000:
                     raise ValueError("ODF space repeat out of range")
-                parts.append(" "*int(raw))
+                append(" "*int(raw))
             elif child.tag==q(TEXT,"tab"):
-                parts.append("\t")
+                append("\t")
             elif child.tag==q(TEXT,"line-break"):
-                parts.append("\n")
+                append("\n")
             else:
                 visit(child,depth+1)
-            if child.tail:parts.append(child.tail)
+            if child.tail:append(child.tail)
     visit(node,0)
     return "".join(parts)
 
