@@ -299,3 +299,33 @@ class IntakeTests(TestCase):
             content_type__app_label="intake",codename="view_quote"))
         self.assertEqual(self.client.get(root+"documents/").status_code,404)
         self.assertEqual(self.client.get(reverse("admin:intake_lead_compare",args=[lead.pk])).status_code,403)
+
+
+    def test_financial_case_is_persisted_without_personal_data_or_consent_claim(self):
+        user=User.objects.create_superuser(
+            "financial-test", "financial@example.test", "synthetic-test-password-2026")
+        self.client.force_login(user)
+        url="/admin/workspace/new/"
+        response=self.client.get(url)
+        self.assertEqual(response.status_code,200)
+        csrf=self.client.cookies["csrftoken"].value
+        data={"asset_type":"equipment","asset_price":"1000000","advance":"200000",
+              "term_months":"36","vat_basis":"included","client_name":"must-not-be-saved"}
+        self.assertEqual(self.client.post(url,data).status_code,403)
+        response=self.client.post(url,data,HTTP_X_CSRFTOKEN=csrf)
+        self.assertEqual(response.status_code,302)
+        lead=Lead.objects.get()
+        self.assertEqual(lead.source,"broker_internal")
+        self.assertEqual(lead.assigned_to,user)
+        self.assertEqual(lead.client_name,"")
+        self.assertEqual(lead.phone,"")
+        self.assertEqual(lead.consent_version,"")
+        self.assertEqual(lead.consent_text_sha256,"")
+        self.assertEqual(AuditEvent.objects.get().action,"lead.internal_created")
+        self.assertContains(self.client.get("/admin/workspace/deals/"),"Внутренний расчёт")
+        self.assertEqual(self.client.get(response["Location"]).status_code,200)
+        with override_settings(SSH_OPERATOR=False):
+            self.assertEqual(self.client.get(url).status_code,404)
+        invalid={**data,"advance":"1000000"}
+        self.assertEqual(self.client.post(url,invalid,HTTP_X_CSRFTOKEN=csrf).status_code,200)
+        self.assertEqual(Lead.objects.count(),1)
