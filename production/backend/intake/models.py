@@ -183,3 +183,33 @@ class OriginalDocument(models.Model):
         ordering = ["-created_at"]
         verbose_name = "Оригинал КП"
         verbose_name_plural = "Оригиналы КП"
+
+
+class LenderRequest(models.Model):
+    """Internal tracking of a manually submitted financial request; no transmission."""
+    class State(models.TextChoices):
+        DRAFT = "draft", "Подготовлен"
+        SENT = "sent", "Отправлен вручную"
+        REVIEW = "review", "Рассматривается"
+        OFFER = "offer", "КП получено"
+        DECLINED = "declined", "Отказ"
+        CANCELLED = "cancelled", "Отменён"
+
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    lead = models.ForeignKey(Lead,on_delete=models.PROTECT,related_name="lender_requests")
+    lessor_name = models.CharField(max_length=160)
+    lessor_key = models.CharField(max_length=320,editable=False)
+    state = models.CharField(max_length=12,choices=State.choices,default=State.DRAFT)
+    created_at = models.DateTimeField(default=timezone.now,editable=False)
+    updated_at = models.DateTimeField(auto_now=True)
+    due_on = models.DateField(null=True,blank=True)
+    sent_at = models.DateTimeField(null=True,blank=True,editable=False)
+    responded_at = models.DateTimeField(null=True,blank=True,editable=False)
+    quote = models.OneToOneField(Quote,null=True,blank=True,on_delete=models.PROTECT,related_name="lender_request")
+    version = models.PositiveIntegerField(default=0,editable=False)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["lead","lessor_key"],name="unique_case_lender_request")]
+        ordering = ["-created_at","id"]
+        verbose_name = "Запрос лизингодателю"
+        verbose_name_plural = "Запросы лизингодателям"
