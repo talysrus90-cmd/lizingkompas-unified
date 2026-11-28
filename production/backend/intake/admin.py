@@ -48,11 +48,13 @@ class LeadAdmin(admin.ModelAdmin):
 
     def get_readonly_fields(self,request,obj=None):
         fields=list(super().get_readonly_fields(request,obj))
+        if obj and obj.source == "broker_internal":
+            fields += ["client_name","phone","email","company","inn","message"]
         if not request.user.is_superuser:
             fields += ["assigned_to","asset_type","asset_price","advance",
                        "term_months","vat_basis","client_name","phone","email",
                        "company","inn","message"]
-        return tuple(fields)
+        return tuple(dict.fromkeys(fields))
 
     def short_id(self,obj):
         return str(obj.pk)[:8]
