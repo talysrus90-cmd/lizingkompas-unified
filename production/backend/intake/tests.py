@@ -648,3 +648,57 @@ class IntakeTests(TestCase):
         self.assertEqual(self.client.get(root+"route/tasks/").context["task_page"].paginator.count,0)
         with override_settings(SSH_OPERATOR=False):
             self.assertEqual(self.client.get(root+"route/tasks/").status_code,404)
+
+
+    def test_optional_client_portal_switch_and_isolation(self):
+        from .models import ClientPortalControl, ClientCaseAccess
+        data,headers=self.form_payload()
+        self.assertEqual(self.client.post("/apply/",data,**headers).status_code,302)
+        owned=Lead.objects.get()
+        other=Lead.objects.get(pk=owned.pk)
+        other.pk=uuid.uuid4()
+        other.request_key=uuid.uuid4()
+        other.save(force_insert=True)
+        operator=User.objects.create_superuser("portal-operator","operator@example.test","synthetic-operator-password-2026")
+        customer=User.objects.create_user("portal-customer",password="synthetic-client-password-2026")
+        stranger=User.objects.create_user("portal-stranger",password="synthetic-client-password-2026")
+        ClientCaseAccess.objects.create(user=customer,lead=owned)
+        self.client.force_login(operator)
+        switch=reverse("admin:intake_clientportalcontrol_change",args=[1])
+        self.assertEqual(self.client.get(switch).status_code,200)
+        csrf=self.client.cookies["csrftoken"].value
+        headers={"HTTP_X_CSRFTOKEN":csrf}
+        with override_settings(CLIENT_PORTAL_READY=False):
+            self.assertEqual(self.client.post(switch,{"enabled":"on","_save":"Save"},**headers).status_code,200)
+            self.assertFalse(ClientPortalControl.objects.get(pk=1).enabled)
+        with override_settings(CLIENT_PORTAL_READY=True):
+            self.assertEqual(self.client.post(switch,{"enabled":"on","_save":"Save"},**headers).status_code,302)
+            self.assertTrue(ClientPortalControl.objects.get(pk=1).enabled)
+            public=Client(enforce_csrf_checks=True)
+            with override_settings(SSH_OPERATOR=False):
+                self.assertEqual(public.get("/client/status/").json(),{"enabled":True})
+                self.assertEqual(public.get("/client/").status_code,302)
+                self.assertEqual(public.get("/client/login/").status_code,200)
+                token=public.cookies["csrftoken"].value
+                self.assertEqual(public.post("/client/login/",{"username":customer.username,"password":"synthetic-client-password-2026"}).status_code,403)
+                self.assertEqual(public.post("/client/login/",{"username":customer.username,"password":"synthetic-client-password-2026"},HTTP_X_CSRFTOKEN=token).status_code,302)
+                page=public.get("/client/")
+                self.assertEqual(page.status_code,200)
+                self.assertContains(page,str(owned.pk)[:8])
+                self.assertNotContains(page,str(other.pk)[:8])
+                self.assertNotContains(page,owned.phone)
+                self.assertIn("no-store",page["Cache-Control"])
+                self.assertEqual(page["X-Robots-Tag"],"noindex, nofollow")
+                self.assertEqual(public.get("/admin/").status_code,404)
+                unauthorized=Client()
+                unauthorized.force_login(stranger)
+                self.assertEqual(unauthorized.get("/client/").status_code,302)
+            self.assertEqual(self.client.post(switch,{"_save":"Save"},**headers).status_code,302)
+            with override_settings(SSH_OPERATOR=False):
+                self.assertEqual(public.get("/client/status/").json(),{"enabled":False})
+                self.assertEqual(public.get("/client/").status_code,404)
+                self.assertEqual(public.get("/client/login/").status_code,404)
+            self.assertEqual(self.client.post(switch,{"enabled":"on","_save":"Save"},**headers).status_code,302)
+            with override_settings(SSH_OPERATOR=False):
+                self.assertEqual(public.get("/client/").status_code,302)
+                self.assertEqual(public.get("/client/status/").json(),{"enabled":True})
