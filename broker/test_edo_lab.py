@@ -1,11 +1,11 @@
 import unittest
-from broker.edo_lab import Envelope, synthetic_demo, MAX_BYTES
+from broker.edo_lab import Envelope, synthetic_demo, MAX_BYTES, RECEIPTS
 
 class EDOLabTests(unittest.TestCase):
     def setUp(self):
         self.e=Envelope("QA-LESSOR",b"synthetic")
     def step(self,action,actor,key):
-        return self.e.transition(action,actor,key,self.e.version,self.e.sha256)
+        return self.e.transition(action,actor,key,self.e.version,self.e.sha256,self.e.dispatch_id if action in RECEIPTS else None)
     def test_default_off(self):
         with self.assertRaises(PermissionError):self.step("submit_review","author","1")
         self.assertEqual(self.e.events,())
@@ -68,3 +68,20 @@ class EDOLabTests(unittest.TestCase):
         for n,(action,actor) in enumerate([("submit_review","author"),("approve","reviewer"),("simulate_send","dispatcher"),("receipt_delivery","local_simulator"),("receipt_reject","local_simulator"),("retry_review","author")]):
             self.step(action,actor,str(n))
         self.assertEqual(self.e.state,"review")
+
+
+    def test_old_receipt_cannot_advance_new_attempt(self):
+        self.e.enabled=True
+        for n,(action,actor) in enumerate([("submit_review","author"),("approve","reviewer"),("simulate_send","dispatcher")]):
+            self.step(action,actor,str(n))
+        old=self.e.dispatch_id
+        self.step("receipt_failure","local_simulator","3")
+        self.step("retry_review","author","4")
+        self.step("approve","reviewer","5")
+        self.step("simulate_send","dispatcher","6")
+        self.assertNotEqual(self.e.dispatch_id,old)
+        with self.assertRaises(ValueError):
+            self.e.transition("receipt_delivery","local_simulator","7",self.e.version,self.e.sha256,old)
+        self.assertEqual(self.e.state,"sent")
+        self.step("receipt_delivery","local_simulator","8")
+        self.assertEqual(self.e.state,"delivered")
