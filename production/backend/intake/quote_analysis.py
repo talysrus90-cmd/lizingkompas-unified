@@ -5,6 +5,7 @@ scenarios may show their own undiscounted cash outflow, but never a common rank.
 """
 from dataclasses import dataclass, replace
 from decimal import Decimal
+from broker.payment_schedule import checked_schedule
 from broker.offer_comparison import Scenario, Offer, COST_FIELDS, cash_outflow
 
 
@@ -21,6 +22,7 @@ class QuoteResult:
 def analyse_quotes(lead, quotes, as_of):
     scenario = Scenario(lead.asset_price, lead.advance, lead.term_months, lead.vat_basis)
     rows = []
+    explicit_group = any(bool(q.payment_schedule) for q in quotes)
     for q in quotes:
         terms = None
         issues = []
@@ -46,10 +48,19 @@ def analyse_quotes(lead, quotes, as_of):
                 issues.append("Дата получения в будущем")
             if offer.valid_until < as_of:
                 issues.append("Срок КП истёк")
-            if any(getattr(offer,field) is None for field in COST_FIELDS):
-                issues.append("Не все расходы указаны")
-            if not issues:
-                total = cash_outflow(offer)
+            if q.payment_schedule:
+                if not issues:
+                    try:
+                        total = checked_schedule(q)
+                    except (ValueError, TypeError, KeyError):
+                        issues.append("График требует повторной сверки")
+            else:
+                if any(getattr(offer,field) is None for field in COST_FIELDS):
+                    issues.append("Не все расходы указаны")
+                if not issues:
+                    total = cash_outflow(offer)
+                if explicit_group:
+                    issues.append("Расчёт по равным платежам — без рейтинга с точными графиками")
             if terms != scenario:
                 issues.append("Другие условия — без общего рейтинга")
         rows.append(QuoteResult(q.offer_id,q.lessor_name,total,None,tuple(issues),terms))
