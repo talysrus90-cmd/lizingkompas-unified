@@ -241,3 +241,61 @@ class IntakeTests(TestCase):
         self.assertContains(response,"Синтетическая компания 2")
         self.assertContains(response,"4914000")
         self.assertEqual(AuditEvent.objects.count(),1)
+
+
+    def test_real_workspace_navigation_and_empty_database(self):
+        endpoint="/admin/workspace/"
+        self.assertEqual(self.client.get(endpoint).status_code,302)
+        user=User.objects.create_superuser(
+            "workspace-test", "workspace@example.test", "synthetic-test-password-2026")
+        self.client.force_login(user)
+        for section in ("deals","offers","documents","analytics","security","callbacks"):
+            url=endpoint+section+"/"
+            response=self.client.get(url)
+            self.assertEqual(response.status_code,200,section)
+            self.assertContains(response,'aria-current="page"')
+            self.assertNotContains(response,"DEMO-001")
+            self.assertEqual(response.context["totals"]["leads"],0)
+            with override_settings(SSH_OPERATOR=False):
+                self.assertEqual(self.client.get(url).status_code,404)
+
+    def test_real_workspace_uses_database_and_isolates_other_brokers(self):
+        payload,headers=self.form_payload()
+        self.assertEqual(self.client.post("/apply/",payload,**headers).status_code,302)
+        lead=Lead.objects.get()
+        user=User.objects.create_user("workspace-broker",password="synthetic-test-password-2026",is_staff=True)
+        user.user_permissions.add(*Permission.objects.filter(
+            content_type__app_label="intake",
+            codename__in=("view_lead","view_quote","view_auditevent")))
+        lead.assigned_to=user
+        lead.save(update_fields=["assigned_to"])
+        other=Lead.objects.get(pk=lead.pk)
+        other.pk=uuid.uuid4()
+        other.request_key=uuid.uuid4()
+        other.assigned_to=None
+        other.save(force_insert=True)
+        today=date.today()
+        for case,source in ((lead,"OWN-SOURCE-1"),(other,"OTHER-SOURCE-2")):
+            Quote.objects.create(lead=case,offer_id="offer-1",source_document_id=source,
+                lessor_name="QA company",received_on=today,valid_until=today+timedelta(days=5),
+                verified_by_broker=True,monthly_payment=Decimal(1000),buyout=Decimal(0),
+                upfront_fee=Decimal(0),recurring_monthly_fee=Decimal(0),
+                insurance_total=Decimal(0),other_costs=Decimal(0))
+        AuditEvent.objects.create(lead=other,action="other.hidden",actor="qa")
+        self.client.force_login(user)
+        root="/admin/workspace/"
+        for section in ("deals","offers","documents","analytics","security"):
+            response=self.client.get(root+section+"/")
+            self.assertEqual(response.status_code,200)
+            self.assertEqual(response.context["totals"],{"leads":1,"active":1,"quotes":1,"verified":1})
+        docs=self.client.get(root+"documents/")
+        self.assertContains(docs,"OWN-SOURCE-1")
+        self.assertNotContains(docs,"OTHER-SOURCE-2")
+        audit=self.client.get(root+"security/")
+        self.assertNotContains(audit,"other.hidden")
+        self.assertEqual(self.client.get(root+"callbacks/").status_code,404)
+        self.assertNotContains(self.client.get("/admin/intake/auditevent/"),"other.hidden")
+        user.user_permissions.remove(*Permission.objects.filter(
+            content_type__app_label="intake",codename="view_quote"))
+        self.assertEqual(self.client.get(root+"documents/").status_code,404)
+        self.assertEqual(self.client.get(reverse("admin:intake_lead_compare",args=[lead.pk])).status_code,403)
