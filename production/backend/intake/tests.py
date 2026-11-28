@@ -773,7 +773,7 @@ class IntakeTests(TestCase):
             form=self.client.get(url(q)).context["form"]
             return {**form.initial,"schedule":text,"complete":"on"}
         first="2027-01-01;advance;200000\n2027-12-31;lease;400000\n2028-12-31;lease;500000\n2029-12-31;buyout;1000"
-        second=first.replace("400000","450000")
+        second="Дата\tВид\tСумма\n01.01.2027\tАванс\t200 000,00\n31.12.2027\tЛизинговый платёж\t450 000,00\n31.12.2028\tЛизинговый платёж\t500 000,00\n31.12.2029\tВыкуп\t1000"
         data=payload(a,first)
         self.assertEqual(self.client.post(url(a),{**data,"complete":""},**headers).status_code,200)
         self.assertEqual(self.client.post(url(a),{**data,"schedule":first.replace("advance;200000","advance;199999")},**headers).status_code,200)
@@ -793,6 +793,11 @@ class IntakeTests(TestCase):
         self.assertIsNone(found[c.offer_id].rank)
         for layout in ("classic","focus","route"):
             self.assertEqual(self.client.get(url(a,layout)).context["total"],Decimal("1101000.00"))
+            self.assertEqual(self.client.get(url(a,layout)+"?valuation_date=2027-01-01&discount_rate=0").context["discounted"],Decimal("1101000.00"))
+            discounted=self.client.get(url(a,layout)+"?valuation_date=2027-01-01&discount_rate=10")
+            self.assertLess(discounted.context["discounted"],Decimal("1101000.00"))
+            self.assertEqual(len(discounted.context["payments"]),4)
+            self.assertIsNone(self.client.get(url(a,layout)+"?valuation_date=2027-01-02&discount_rate=10").context["discounted"])
             page=self.client.get(reverse("broker-variant-case",args=[layout,lead.pk]))
             self.assertEqual(page.context["rows"],rows)
         self.assertEqual(self.client.get(reverse("admin:intake_lead_compare",args=[lead.pk])).context["rows"],rows)
