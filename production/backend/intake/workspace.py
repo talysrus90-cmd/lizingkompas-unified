@@ -4,6 +4,7 @@ All routes are under /admin/, independently blocked by the public process and
 Caddy. Existing Django admin implements editing, assignment and quote input.
 """
 from django.contrib import admin
+from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Sum, Q
 from django.core.paginator import Paginator
@@ -333,7 +334,8 @@ def case_workspace(request, layout, case_id):
         "asset_label":dict(ASSET_TYPES).get(lead.asset_type,lead.asset_type),
         "stages":Lead.Stage.choices,"quotes":quotes,"rows":rows,"message":message,
         "can_add":can_add and lead.stage!=Lead.Stage.CLOSED,"can_stage":can_stage,
-        "quote_allowed":quote_allowed,"quote_form":quote_form,"stage_form":stage_form,"events":events},status=status)
+        "quote_allowed":quote_allowed,"quote_form":quote_form,"stage_form":stage_form,"events":events,
+        "vault_enabled":settings.DOCUMENT_VAULT_ENABLED and lead.source!="broker_internal" and allowed(user,"view_originaldocument")},status=status)
 
 
 @admin.site.admin_view
