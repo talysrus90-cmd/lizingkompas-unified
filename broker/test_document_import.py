@@ -14,6 +14,9 @@ class TextImportTests(unittest.TestCase):
         csv=extract_document("Дата;Вид;Сумма\n01.01.2027;Аванс;100".encode(),".csv")
         self.assertEqual(csv["blocks"][-1]["location"],{"record":2,"column":3})
         self.assertEqual(csv["blocks"][-1]["text"],"100")
+    def test_explicit_windows_1251(self):
+        r=extract_document("Аванс".encode("cp1251"),".txt","cp1251")
+        self.assertEqual(r["blocks"][0]["text"],"Аванс")
     def test_refuses_unsupported_and_binary(self):
         for data,fmt in ((b"x",".doc"),(b"x",".zip"),(b"x\0",".txt"),(b"x"*(MAX_FILE+1),".txt")):
             with self.subTest(fmt=fmt),self.assertRaises(ValueError):
@@ -58,6 +61,23 @@ class OfficeImportTests(unittest.TestCase):
         wb.encrypt("synthetic-password")
         b=io.BytesIO();wb.write(b)
         with self.assertRaises(ValueError):extract_document(b.getvalue(),".pdf")
+    def test_pdf_actual_text_source_page(self):
+        from pypdf import PdfWriter
+        from pypdf.generic import DictionaryObject,NameObject,DecodedStreamObject
+        writer=PdfWriter()
+        page=writer.add_blank_page(width=300,height=300)
+        font=DictionaryObject({NameObject("/Type"):NameObject("/Font"),
+                               NameObject("/Subtype"):NameObject("/Type1"),
+                               NameObject("/BaseFont"):NameObject("/Helvetica")})
+        page[NameObject("/Resources")]=DictionaryObject({NameObject("/Font"):DictionaryObject({NameObject("/F1"):writer._add_object(font)})})
+        stream=DecodedStreamObject()
+        stream.set_data(b"BT /F1 12 Tf 20 200 Td (Advance 200000 RUB) Tj ET")
+        page[NameObject("/Contents")]=writer._add_object(stream)
+        b=io.BytesIO();writer.write(b)
+        result=extract_document(b.getvalue(),".pdf")
+        self.assertIn("Advance 200000 RUB",result["blocks"][0]["text"])
+        self.assertFalse(result["blocks"][0]["needs_ocr"])
+        self.assertEqual(result["blocks"][0]["location"],{"page":1})
     def test_office_active_content_and_type_mismatch(self):
         for marker in ("word/vbaProject.bin","word/embeddings/payload.bin","word/../bad"):
             b=io.BytesIO()
