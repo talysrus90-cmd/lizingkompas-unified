@@ -44,6 +44,14 @@ class ReleaseV5(unittest.TestCase):
             self.assertNotIn('content="noindex,nofollow"',home)
             shadow=(target/"variant-5.html").read_text(encoding="utf-8")
             self.assertIn('content="noindex,nofollow"',shadow)
+            # Legacy/shared URLs must not expose disabled preview forms.
+            self.assertEqual(shadow,home.replace(
+                '<meta name="robots" content="index,follow">',
+                '<meta name="robots" content="noindex,nofollow">',1))
+            self.assertEqual(shadow.count('data-compass-intake="production"'),4)
+            self.assertIn('href="/apply/"',shadow)
+            self.assertIn('href="/callback/"',shadow)
+            self.assertNotIn('onsubmit="submitForm(',shadow)
             for name in ("broker-preview.html","broker-preview.js",
                          "broker-local-ui.js","cabinet.html","platform.html",
                          ".env.production","tests","production"):

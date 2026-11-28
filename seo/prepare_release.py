@@ -173,9 +173,12 @@ try:
         target="index.html" if name==MAIN else name
         (out/target).write_text(converted,encoding="utf-8")
 
-    # Legacy preview link remains available but nonindexable to prevent duplicate URLs.
-    main_text=(ROOT/MAIN).read_text(encoding="utf-8").replace(PREVIEW,PROD)
-    main_text=canonical(main_text,PROD)
+    # Keep old/share URLs working on the real domain without serving demo forms.
+    # Reuse the already transformed production page; only indexing differs.
+    main_text=(out/"index.html").read_text(encoding="utf-8")
+    main_text=main_text.replace(
+        '<meta name="robots" content="index,follow">',
+        '<meta name="robots" content="noindex,nofollow">',1)
     (out/MAIN).write_text(main_text,encoding="utf-8")
     # Don't accidentally create public admin, broker or laboratory pages.
     forbidden={"broker-preview.html","cabinet.html","platform.html",
