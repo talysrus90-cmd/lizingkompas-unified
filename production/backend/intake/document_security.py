@@ -21,12 +21,14 @@ class BoundedMemoryUploadHandler(MemoryFileUploadHandler):
     def new_file(self, *args, **kwargs):
         self.files += 1
         if self.files != 1:
+            self.request._compass_upload_rejected = True
             raise StopUpload(connection_reset=True)
         super().new_file(*args, **kwargs)
 
     def receive_data_chunk(self, raw_data, start):
         self.seen += len(raw_data)
         if self.seen > MAX_PDF:
+            self.request._compass_upload_rejected = True
             raise StopUpload(connection_reset=True)
         return super().receive_data_chunk(raw_data, start)
 
