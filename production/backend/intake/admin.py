@@ -5,8 +5,8 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, render
 from django.urls import path, reverse
 from django.utils.html import format_html
-from broker.offer_comparison import Scenario, Offer, compare_offers
-from datetime import date
+from .quote_analysis import analyse_quotes
+from django.utils import timezone
 from .models import Lead, Quote, AuditEvent, CallbackRequest
 
 class QuoteInline(admin.TabularInline):
@@ -15,6 +15,7 @@ class QuoteInline(admin.TabularInline):
     max_num = 20
     fields = (
         "offer_id", "lessor_name", "source_document_id", "received_on", "valid_until",
+        "quoted_asset_price", "quoted_advance", "quoted_term_months", "quoted_vat_basis",
         "verified_by_broker", "monthly_payment", "buyout", "upfront_fee",
         "recurring_monthly_fee", "insurance_total", "other_costs",
     )
@@ -132,30 +133,15 @@ class LeadAdmin(admin.ModelAdmin):
         sources=list(lead.quotes.all())
         rows=[]
         message=None
-        if not 2<=len(sources)<=20:
-            message="Для сравнения необходимо от 2 до 20 исходных КП."
+        if not sources:
+            message="Предложений пока нет."
         else:
             try:
-                scenario=Scenario(
-                    lead.asset_price,lead.advance,lead.term_months,lead.vat_basis
-                )
-                quotes=[
-                    Offer(
-                        offer_id=o.offer_id,lessor=o.lessor_name,
-                        source_document_id=o.source_document_id,
-                        received_on=o.received_on,valid_until=o.valid_until,
-                        scenario=scenario,verified_by_broker=o.verified_by_broker,
-                        monthly_payment=o.monthly_payment,buyout=o.buyout,
-                        upfront_fee=o.upfront_fee,recurring_monthly_fee=o.recurring_monthly_fee,
-                        insurance_total=o.insurance_total,other_costs=o.other_costs,
-                    ) for o in sources
-                ]
-                results=compare_offers(scenario,quotes,as_of=date.today())
-                rows=results.rows
-                if results.comparable_count<2:
-                    message="Недостаточно двух сопоставимых проверенных КП; рейтинг скрыт."
+                rows,count=analyse_quotes(lead,sources,timezone.localdate())
+                if count<2:
+                    message="Недостаточно проверенных сопоставимых КП; общий рейтинг скрыт."
             except ValueError:
-                message="Условия хотя бы одного КП недопустимы. Исправьте источник и суммы."
+                message="Условия сделки требуют проверки."
         return render(request,"intake/compare.html",{
             **self.admin_site.each_context(request),
             "lead":lead,"rows":rows,"message":message,

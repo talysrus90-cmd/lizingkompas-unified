@@ -14,7 +14,7 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.db import IntegrityError
-from broker.offer_comparison import Scenario, Offer, compare_offers
+from .quote_analysis import analyse_quotes
 from django import forms
 from django.db import transaction
 import uuid
@@ -226,10 +226,15 @@ def layout_context(layout):
 
 
 class WorkspaceQuoteForm(forms.ModelForm):
-    scenario_confirmed = forms.BooleanField(label="Стоимость имущества, аванс, срок и НДС совпадают с условиями сделки")
+    scenario_confirmed = forms.BooleanField(label="Условия сверены с оригиналом КП")
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        for key in ("quoted_asset_price","quoted_advance","quoted_term_months","quoted_vat_basis"):
+            self.fields[key].required=True
     class Meta:
         model = Quote
         fields = ("lessor_name","offer_id","source_document_id","received_on","valid_until",
+                  "quoted_asset_price","quoted_advance","quoted_term_months","quoted_vat_basis",
                   "monthly_payment","buyout","upfront_fee","recurring_monthly_fee","insurance_total",
                   "other_costs","verified_by_broker")
         widgets = {"received_on":forms.DateInput(attrs={"type":"date"}),
@@ -315,19 +320,12 @@ def case_workspace(request, layout, case_id):
     rows=[]
     message=""
     if quote_allowed:
-        if len(quotes)<2:
-            message="Для сравнения нужны минимум два КП."
+        if not quotes:
+            message="Предложений пока нет."
         else:
             try:
-                scenario=Scenario(lead.asset_price,lead.advance,lead.term_months,lead.vat_basis)
-                source=[Offer(offer_id=q.offer_id,lessor=q.lessor_name,source_document_id=q.source_document_id,
-                    received_on=q.received_on,valid_until=q.valid_until,scenario=scenario,
-                    verified_by_broker=q.verified_by_broker,monthly_payment=q.monthly_payment,buyout=q.buyout,
-                    upfront_fee=q.upfront_fee,recurring_monthly_fee=q.recurring_monthly_fee,
-                    insurance_total=q.insurance_total,other_costs=q.other_costs) for q in quotes]
-                result=compare_offers(scenario,source,as_of=timezone.localdate())
-                rows=result.rows
-                if result.comparable_count<2: message="Недостаточно проверенных сопоставимых КП."
+                rows, count=analyse_quotes(lead,quotes,timezone.localdate())
+                if count<2: message="Недостаточно проверенных сопоставимых КП для общего рейтинга."
             except ValueError:
                 message="Условия предложений требуют проверки."
     events=lead.audit_events.order_by("-at")[:30] if allowed(user,"view_auditevent") else []

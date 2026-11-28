@@ -6,6 +6,9 @@ No client documents or credit bureau decisions are stored by these models.
 import uuid
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.exceptions import ValidationError
+from broker.offer_comparison import Scenario, ID
+from .forms import VAT_BASES
 from django.utils import timezone
 from .crypto import EncryptedTextField
 
@@ -62,6 +65,12 @@ class Quote(models.Model):
     received_on = models.DateField()
     valid_until = models.DateField()
     verified_by_broker = models.BooleanField(default=False)
+    # Independently recorded source terms. Existing offers intentionally retain
+    # NULLs until a broker verifies the actual original, never backfilled by guess.
+    quoted_asset_price = models.DecimalField("Стоимость имущества по КП",max_digits=14,decimal_places=2,null=True,blank=True)
+    quoted_advance = models.DecimalField("Аванс по КП",max_digits=14,decimal_places=2,null=True,blank=True)
+    quoted_term_months = models.PositiveSmallIntegerField("Срок по КП, мес.",null=True,blank=True,validators=[MinValueValidator(12),MaxValueValidator(84)])
+    quoted_vat_basis = models.CharField("НДС по КП",max_length=20,choices=VAT_BASES,blank=True,default="")
     monthly_payment = models.DecimalField(max_digits=14, decimal_places=2, null=True, blank=True)
     buyout = models.DecimalField(max_digits=14, decimal_places=2, null=True, blank=True)
     upfront_fee = models.DecimalField(max_digits=14, decimal_places=2, null=True, blank=True)
@@ -78,6 +87,33 @@ class Quote(models.Model):
         ordering = ["created_at"]
         verbose_name = "КП лизингодателя"
         verbose_name_plural = "КП лизингодателей"
+
+    def source_scenario(self):
+        values=(self.quoted_asset_price,self.quoted_advance,self.quoted_term_months,self.quoted_vat_basis)
+        if any(x is None or x == "" for x in values):
+            return None
+        return Scenario(*values)
+
+    def clean(self):
+        super().clean()
+        values=(self.quoted_asset_price,self.quoted_advance,self.quoted_term_months,self.quoted_vat_basis)
+        supplied=[x is not None and x != "" for x in values]
+        if any(supplied):
+            if not all(supplied):
+                raise ValidationError("Укажите все четыре условия КП либо оставьте их неизвестными.")
+            try:
+                self.source_scenario()
+            except ValueError as exc:
+                raise ValidationError("Недопустимые финансовые условия КП.") from exc
+        for key in ("offer_id","source_document_id"):
+            if not ID.fullmatch(getattr(self,key) or ""):
+                raise ValidationError({key:"3–64 латинских символа, цифры, дефис или подчёркивание."})
+        if self.received_on and self.valid_until and self.valid_until < self.received_on:
+            raise ValidationError({"valid_until":"Срок действия раньше даты получения."})
+        for key in ("monthly_payment","buyout","upfront_fee","recurring_monthly_fee","insurance_total","other_costs"):
+            value=getattr(self,key)
+            if value is not None and value < 0:
+                raise ValidationError({key:"Сумма не может быть отрицательной."})
 
     def __str__(self):
         return f"{self.lessor_name} / {self.offer_id}"

@@ -109,6 +109,21 @@ class Comparison:
     )
 
 
+def cash_outflow(offer: Offer) -> Decimal:
+    """Explicit total for a complete offer using its own original scenario.
+
+    Caller checks dates, source verification and scenario comparability.
+    Never substitutes missing costs or terms.
+    """
+    if not isinstance(offer, Offer) or any(getattr(offer, name) is None for name in COST_FIELDS):
+        raise ValueError("complete offer required")
+    return (
+        offer.scenario.advance
+        + (offer.monthly_payment + offer.recurring_monthly_fee) * offer.scenario.term_months
+        + offer.buyout + offer.upfront_fee + offer.insurance_total + offer.other_costs
+    ).quantize(CENT)
+
+
 def compare_offers(scenario: Scenario, offers: list[Offer] | tuple[Offer, ...],
                    *, as_of: date) -> Comparison:
     """Compare 2–20 actual manually reviewed offers against ONE explicit scenario.
@@ -146,16 +161,7 @@ def compare_offers(scenario: Scenario, offers: list[Offer] | tuple[Offer, ...],
                 issues.append("unknown_" + name)
         total = None
         if not issues:
-            assert all(getattr(offer, name) is not None for name in COST_FIELDS)
-            total = (
-                scenario.advance
-                + offer.monthly_payment * scenario.term_months
-                + offer.buyout
-                + offer.upfront_fee
-                + offer.recurring_monthly_fee * scenario.term_months
-                + offer.insurance_total
-                + offer.other_costs
-            ).quantize(CENT)
+            total = cash_outflow(offer)
         raw.append((offer, total, tuple(issues)))
     valid_totals = sorted(set(total for _, total, _ in raw if total is not None))
     enough = sum(total is not None for _, total, _ in raw) >= 2
