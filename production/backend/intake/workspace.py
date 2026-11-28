@@ -23,7 +23,7 @@ import csv
 from .forms import ASSET_TYPES, VAT_BASES
 from django.views.decorators.http import require_GET, require_http_methods
 from django.views.decorators.cache import never_cache
-from .models import Lead, Quote, AuditEvent, CallbackRequest, LenderRequest, BrokerTask
+from .models import Lead, Quote, AuditEvent, CallbackRequest, LenderRequest, BrokerTask, DeliveryConfirmation
 
 
 def allowed(user, permission):
@@ -74,7 +74,9 @@ def workspace(request, section="deals", layout=None):
     quotes = Quote.objects.filter(lead__in=leads) if quote_allowed else Quote.objects.none()
     totals = {
         "leads": leads.count(),
-        "active": leads.exclude(stage=Lead.Stage.CLOSED).count(),
+        "active": leads.exclude(stage=Lead.Stage.CLOSED).filter(delivery_confirmation__isnull=True).count(),
+        "delivered": leads.filter(source="site",delivery_confirmation__isnull=False).count(),
+        "delivered_internal": leads.filter(source="broker_internal",delivery_confirmation__isnull=False).count(),
         "quotes": quotes.count(),
         "verified": quotes.filter(verified_by_broker=True).count(),
     }
@@ -83,7 +85,7 @@ def workspace(request, section="deals", layout=None):
         "quote_allowed": quote_allowed, "operator": user.is_superuser,
     }
     # Derived work queue, always scoped to authorized, unfinished cases.
-    active = leads.exclude(stage=Lead.Stage.CLOSED)
+    active = leads.exclude(stage=Lead.Stage.CLOSED).filter(delivery_confirmation__isnull=True)
     active_quotes = quotes.filter(lead__in=active)
     today = timezone.localdate()
     deadline = today + timedelta(days=7)
@@ -286,6 +288,17 @@ class WorkspaceQuoteForm(forms.ModelForm):
         return values
 
 
+class DeliveryForm(forms.Form):
+    delivered_on=forms.DateField(label="Дата фактической выдачи имущества",widget=forms.DateInput(attrs={"type":"date"}))
+    evidence_sha256=forms.RegexField(regex=r"\\A[0-9a-f]{64}\\Z",max_length=64,label="SHA-256 подтверждающего документа")
+    confirmed=forms.BooleanField(label="Подтверждаю фактическую передачу имущества по оригиналу документа")
+    def clean_delivered_on(self):
+        value=self.cleaned_data["delivered_on"]
+        if value>timezone.localdate():
+            raise forms.ValidationError("Дата выдачи не может быть в будущем.")
+        return value
+
+
 class StageForm(forms.Form):
     stage = forms.ChoiceField(label="Этап сделки",choices=Lead.Stage.choices)
     previous_stage = forms.ChoiceField(choices=Lead.Stage.choices,widget=forms.HiddenInput)
@@ -303,10 +316,32 @@ def case_workspace(request, layout, case_id):
     can_stage=allowed(user,"change_lead")
     quote_form=WorkspaceQuoteForm()
     stage_form=StageForm(initial={"stage":lead.stage,"previous_stage":lead.stage})
+    delivery=DeliveryConfirmation.objects.filter(lead=lead).first()
+    can_deliver=can_stage and allowed(user,"add_deliveryconfirmation") and delivery is None
+    delivery_form=DeliveryForm(initial={"delivered_on":timezone.localdate()})
     status=200
     if request.method=="POST":
         action=request.POST.get("action")
-        if action=="stage":
+        if action=="delivery":
+            if not (can_stage and allowed(user,"add_deliveryconfirmation")): raise PermissionDenied
+            delivery_form=DeliveryForm(request.POST)
+            if delivery_form.is_valid():
+                with transaction.atomic():
+                    locked=get_object_or_404(scoped_leads(user).select_for_update(),pk=lead.pk)
+                    if DeliveryConfirmation.objects.filter(lead=locked).exists():
+                        delivery_form.add_error(None,"Выдача уже зарегистрирована. Обновите страницу.")
+                        status=409
+                    else:
+                        data=delivery_form.cleaned_data
+                        record=DeliveryConfirmation.objects.create(lead=locked,delivered_on=data["delivered_on"],evidence_sha256=data["evidence_sha256"],confirmed_by=user)
+                        old=locked.stage
+                        locked.stage=Lead.Stage.CLOSED
+                        locked.save(update_fields=["stage","updated_at"])
+                        AuditEvent.objects.create(lead=locked,action="lead.delivery_confirmed",actor=str(user.pk),details=str(record.pk)+" "+str(record.delivered_on))
+                        if old!=locked.stage:
+                            AuditEvent.objects.create(lead=locked,action="lead.stage_changed",actor=str(user.pk),details=old+" -> "+locked.stage)
+                        return redirect("broker-variant-case",layout=layout,case_id=lead.pk)
+        elif action=="stage":
             if not can_stage: raise PermissionDenied
             stage_form=StageForm(request.POST)
             if stage_form.is_valid():
@@ -314,6 +349,9 @@ def case_workspace(request, layout, case_id):
                     locked=get_object_or_404(scoped_leads(user).select_for_update(),pk=case_id)
                     if locked.stage!=stage_form.cleaned_data["previous_stage"]:
                         stage_form.add_error(None,"Этап уже изменился. Обновите карточку.")
+                        status=409
+                    elif DeliveryConfirmation.objects.filter(lead=locked).exists() and stage_form.cleaned_data["stage"]!=Lead.Stage.CLOSED:
+                        stage_form.add_error(None,"После подтверждения выдачи этап нельзя менять здесь.")
                         status=409
                     elif locked.stage!=stage_form.cleaned_data["stage"]:
                         old=locked.stage
@@ -363,9 +401,9 @@ def case_workspace(request, layout, case_id):
         legal_allowed=allowed(user,"view_contractreview") or allowed(user,"change_contractreview"))
     return render(request,"intake/case_workspace.html",{**design,"lead":lead,
         "asset_label":dict(ASSET_TYPES).get(lead.asset_type,lead.asset_type),
-        "signals":signals,
+        "signals":signals,"delivery":delivery,"can_deliver":can_deliver,"delivery_form":delivery_form,
         "stages":Lead.Stage.choices,"quotes":quotes,"rows":rows,"message":message,
-        "can_add":can_add and lead.stage!=Lead.Stage.CLOSED,"can_stage":can_stage,
+        "can_add":can_add and lead.stage!=Lead.Stage.CLOSED,"can_stage":can_stage and delivery is None,
         "quote_allowed":quote_allowed,"quote_form":quote_form,"stage_form":stage_form,"events":events,
         "legal_allowed":allowed(user,"view_contractreview") or allowed(user,"change_contractreview"),
         "task_allowed":allowed(user,"view_brokertask") or allowed(user,"change_brokertask"),
