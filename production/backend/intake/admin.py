@@ -120,7 +120,10 @@ class LeadAdmin(admin.ModelAdmin):
 
     def compare_view(self,request,object_id):
         lead=get_object_or_404(self.get_queryset(request),pk=object_id)
-        if not self.has_view_permission(request,lead):
+        if not self.has_view_permission(request,lead) or not (
+            request.user.is_superuser or request.user.has_perm("intake.view_quote")
+            or request.user.has_perm("intake.change_quote")
+        ):
             raise PermissionDenied
         sources=list(lead.quotes.all())
         rows=[]
@@ -160,6 +163,13 @@ class LeadAdmin(admin.ModelAdmin):
 class AuditAdmin(admin.ModelAdmin):
     list_display=("at","lead","action","actor","details")
     readonly_fields=("lead","at","action","actor","details")
+    def get_queryset(self,request):
+        qs=super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        if not (request.user.has_perm("intake.view_lead") or request.user.has_perm("intake.change_lead")):
+            return qs.none()
+        return qs.filter(lead__assigned_to=request.user)
     list_filter=("action",)
     def has_add_permission(self,request):
         return False
