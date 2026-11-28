@@ -4,7 +4,6 @@ All routes are under /admin/, independently blocked by the public process and
 Caddy. Existing Django admin implements editing, assignment and quote input.
 """
 from django.contrib import admin
-from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count
 from django.http import Http404
