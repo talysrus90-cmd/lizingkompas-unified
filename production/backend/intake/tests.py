@@ -748,3 +748,62 @@ class IntakeTests(TestCase):
         self.assertEqual(self.client.get(url("route")).status_code,404)
         with override_settings(SSH_OPERATOR=False):
             self.assertEqual(self.client.get(url("route")).status_code,404)
+
+
+    def test_explicit_schedule_ranking_and_stale_confirmation(self):
+        from .quote_analysis import analyse_quotes
+        from django.utils import timezone
+        user=User.objects.create_superuser("schedule-qa","qa@example.test","synthetic-test-password-2026")
+        self.client.force_login(user)
+        root="/admin/workspace/v/"
+        self.client.get(root+"classic/new/")
+        csrf=self.client.cookies["csrftoken"].value
+        headers={"HTTP_X_CSRFTOKEN":csrf}
+        self.assertEqual(self.client.post(root+"classic/new/",{"asset_type":"equipment","asset_price":"1000000","advance":"200000","term_months":"36","vat_basis":"included"},**headers).status_code,302)
+        lead=Lead.objects.get()
+        today=timezone.localdate()
+        for i in range(1,4):
+            Quote.objects.create(lead=lead,offer_id=f"QA-SCH-{i}",source_document_id=f"QA-DOC-{i}",lessor_name=f"QA Finance {i}",received_on=today,valid_until=today+timedelta(days=7),
+                quoted_asset_price=Decimal("1000000"),quoted_advance=Decimal("200000"),quoted_term_months=36,quoted_vat_basis="included",verified_by_broker=True,
+                monthly_payment=Decimal("30000"),buyout=Decimal("1000"),upfront_fee=0,recurring_monthly_fee=0,insurance_total=0,other_costs=0)
+        a,b,c=list(lead.quotes.all())
+        def url(q,layout="route"):
+            return reverse("broker-quote-schedule",args=[layout,lead.pk,q.pk])
+        def payload(q,text):
+            form=self.client.get(url(q)).context["form"]
+            return {**form.initial,"schedule":text,"complete":"on"}
+        first="2027-01-01;advance;200000\n2027-12-31;lease;400000\n2028-12-31;lease;500000\n2029-12-31;buyout;1000"
+        second=first.replace("400000","450000")
+        data=payload(a,first)
+        self.assertEqual(self.client.post(url(a),{**data,"complete":""},**headers).status_code,200)
+        self.assertEqual(self.client.post(url(a),{**data,"schedule":first.replace("advance;200000","advance;199999")},**headers).status_code,200)
+        self.assertEqual(self.client.post(url(a),data,**headers).status_code,302)
+        self.assertEqual(self.client.post(url(a),data,**headers).status_code,409)
+        rows,count=analyse_quotes(lead,lead.quotes.all(),today)
+        self.assertEqual(count,1)
+        self.assertTrue(all(r.rank is None for r in rows))
+        self.assertEqual(self.client.post(url(b),payload(b,second),**headers).status_code,302)
+        rows,count=analyse_quotes(lead,lead.quotes.all(),today)
+        found={r.offer_id:r for r in rows}
+        self.assertEqual(count,2)
+        self.assertEqual(found[a.offer_id].total_cash_outflow,Decimal("1101000.00"))
+        self.assertEqual(found[b.offer_id].total_cash_outflow,Decimal("1151000.00"))
+        self.assertEqual(found[a.offer_id].rank,1)
+        self.assertEqual(found[b.offer_id].rank,2)
+        self.assertIsNone(found[c.offer_id].rank)
+        for layout in ("classic","focus","route"):
+            self.assertEqual(self.client.get(url(a,layout)).context["total"],Decimal("1101000.00"))
+            page=self.client.get(reverse("broker-variant-case",args=[layout,lead.pk]))
+            self.assertEqual(page.context["rows"],rows)
+        self.assertEqual(self.client.get(reverse("admin:intake_lead_compare",args=[lead.pk])).context["rows"],rows)
+        Quote.objects.filter(pk=a.pk).update(monthly_payment=Decimal("31000"))
+        rows,count=analyse_quotes(lead,lead.quotes.all(),today)
+        self.assertEqual(count,1)
+        self.assertIsNone(rows[0].total_cash_outflow)
+        self.assertTrue(all(r.rank is None for r in rows))
+        stranger=User.objects.create_user("schedule-stranger",password="synthetic-test-password-2026",is_staff=True)
+        stranger.user_permissions.add(*Permission.objects.filter(content_type__app_label="intake",codename__in=("view_lead","view_quote")))
+        self.client.force_login(stranger)
+        self.assertEqual(self.client.get(url(a)).status_code,404)
+        with override_settings(SSH_OPERATOR=False):
+            self.assertEqual(self.client.get(url(a)).status_code,404)
