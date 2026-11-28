@@ -86,3 +86,62 @@ class OfficeImportTests(unittest.TestCase):
                 z.writestr("[Content_Types].xml","<types/>")
                 z.writestr(marker,b"synthetic")
             with self.assertRaises(ValueError):extract_document(b.getvalue(),".docx")
+
+
+class EmailImportTests(unittest.TestCase):
+    def test_plain_text_and_attachment_inventory(self):
+        from email.message import EmailMessage
+        msg=EmailMessage()
+        msg["Subject"]="Synthetic offer"
+        msg.set_content("Advance 200000 RUB")
+        msg.add_attachment(b"DO NOT OPEN THIS",maintype="application",subtype="octet-stream",filename="example.bin")
+        r=extract_document(msg.as_bytes(),".eml")
+        self.assertTrue(any("Advance 200000 RUB" in x["text"] for x in r["blocks"]))
+        self.assertTrue(any(x.get("attachment_not_opened") and x["text"]=="example.bin" for x in r["blocks"]))
+        self.assertFalse(any("DO NOT OPEN THIS" in x["text"] for x in r["blocks"]))
+
+@unittest.skipUnless(importlib.util.find_spec("defusedxml"),"Document parser dependencies not installed")
+class OpenDocumentTests(unittest.TestCase):
+    def package(self,fmt,body,extra=None):
+        from broker.document_extra import OFFICE,TEXT,TABLE
+        mime="application/vnd.oasis.opendocument."+("text" if fmt==".odt" else "spreadsheet")
+        b=io.BytesIO()
+        with zipfile.ZipFile(b,"w") as z:
+            z.writestr("mimetype",mime)
+            z.writestr("META-INF/manifest.xml","<manifest/>")
+            z.writestr("content.xml",f'<office:document-content xmlns:office="{OFFICE}" xmlns:text="{TEXT}" xmlns:table="{TABLE}"><office:body>{body}</office:body></office:document-content>')
+            if extra:z.writestr(extra,b"synthetic")
+        return b.getvalue()
+    def test_odt_paragraph_and_spacing(self):
+        doc=self.package(".odt","<office:text><text:p>Аванс<text:s text:c='2'/>200000</text:p><text:p>36 месяцев</text:p></office:text>")
+        r=extract_document(doc,".odt")
+        self.assertEqual(r["blocks"][0]["text"],"Аванс  200000")
+        self.assertIn("paragraph_element",r["blocks"][0]["location"])
+    def test_ods_coordinates_and_formula_refusal(self):
+        doc=self.package(".ods","<office:spreadsheet><table:table table:name='График'><table:table-row><table:table-cell office:value-type='float' office:value='200000'/><table:table-cell table:formula='of:=1+1' office:value='2'/></table:table-row></table:table></office:spreadsheet>")
+        r=extract_document(doc,".ods")
+        self.assertEqual(r["blocks"][0]["text"],"200000")
+        self.assertEqual(r["blocks"][1]["location"],{"sheet":"График","row":1,"column":2})
+        self.assertTrue(r["blocks"][1]["formula_unresolved"])
+        self.assertEqual(r["blocks"][1]["text"],"")
+    def test_refuses_active_and_oversized_repetition(self):
+        doc=self.package(".odt","<office:text><text:p>Test</text:p></office:text>","Scripts/test.js")
+        with self.assertRaises(ValueError):extract_document(doc,".odt")
+        doc=self.package(".ods","<office:spreadsheet><table:table table:name='x'><table:table-row table:number-rows-repeated='999999'/></table:table></office:spreadsheet>")
+        with self.assertRaises(ValueError):extract_document(doc,".ods")
+
+@unittest.skipUnless(importlib.util.find_spec("tkinter"),"Tk not installed")
+class WorkbenchTests(unittest.TestCase):
+    def test_csv_handoff_without_auto_save(self):
+        from broker.document_workbench import schedule_draft
+        doc=extract_document("Дата;Вид;Сумма\n01.01.2027;Аванс;200000\n01.02.2027;Лизинговый платёж;30000".encode(),".csv")
+        self.assertEqual(schedule_draft(doc,""),"2027-01-01;advance;200000.00\n2027-02-01;lease;30000.00")
+    def test_subprocess_import_utf8(self):
+        from broker.document_workbench import run_import
+        from tempfile import TemporaryDirectory
+        from pathlib import Path
+        with TemporaryDirectory() as folder:
+            path=Path(folder)/"test.txt"
+            path.write_text("Аванс 200000",encoding="utf-8")
+            result=run_import(path,"utf-8")
+            self.assertEqual(result["blocks"][0]["text"],"Аванс 200000")

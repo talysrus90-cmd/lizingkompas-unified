@@ -20,7 +20,7 @@ MAX_EXPANDED=32*1024*1024
 MAX_PARTS=512
 MAX_BLOCKS=12000
 MAX_TEXT=500000
-FORMATS=(".pdf",".docx",".xlsx",".txt",".csv",".tsv")
+FORMATS=(".pdf",".docx",".xlsx",".txt",".csv",".tsv",".odt",".ods",".eml")
 
 def read_file(path):
     if path.suffix.lower() not in FORMATS or not path.is_file():
@@ -127,6 +127,12 @@ def extract_document(data,fmt,text_encoding="utf-8"):
         finally:
             wb.close()
         warnings.append("Formulas are never executed or interpreted as values. Hidden sheets are labelled. Cell display formatting is not preserved.")
+    elif fmt in (".odt",".ods"):
+        from broker.document_extra import extract_odf
+        extract_odf(data,fmt,add,warnings)
+    elif fmt==".eml":
+        from broker.document_extra import extract_eml
+        extract_eml(data,add,warnings)
     else:
         if text_encoding not in ("utf-8","cp1251"):
             raise ValueError("Unsupported text encoding")
