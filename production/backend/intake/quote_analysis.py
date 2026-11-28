@@ -5,9 +5,7 @@ scenarios may show their own undiscounted cash outflow, but never a common rank.
 """
 from dataclasses import dataclass, replace
 from decimal import Decimal
-from broker.offer_comparison import Scenario, Offer, COST_FIELDS
-
-CENT = Decimal("0.01")
+from broker.offer_comparison import Scenario, Offer, COST_FIELDS, cash_outflow
 
 
 @dataclass(frozen=True)
@@ -51,9 +49,7 @@ def analyse_quotes(lead, quotes, as_of):
             if any(getattr(offer,field) is None for field in COST_FIELDS):
                 issues.append("Не все расходы указаны")
             if not issues:
-                total = (terms.advance + (offer.monthly_payment + offer.recurring_monthly_fee)
-                         * terms.term_months + offer.buyout + offer.upfront_fee
-                         + offer.insurance_total + offer.other_costs).quantize(CENT)
+                total = cash_outflow(offer)
             if terms != scenario:
                 issues.append("Другие условия — без общего рейтинга")
         rows.append(QuoteResult(q.offer_id,q.lessor_name,total,None,tuple(issues),terms))
