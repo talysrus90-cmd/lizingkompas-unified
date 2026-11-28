@@ -100,8 +100,7 @@ def workspace(request, section="deals"):
             raise Http404
         if asset and asset not in dict(ASSET_TYPES):
             raise Http404
-        if number and not re.fullmatch(r"[0-9a-fA-F]{8}|[0-9a-fA-F-]{36}", number):
-            number = ""
+        invalid_number = bool(number and not re.fullmatch(r"[0-9a-fA-F]{8}|[0-9a-fA-F-]{36}", number))
         if work not in ("", "no_quotes") or (work and not quote_allowed):
             raise Http404
         visible = no_quotes if work == "no_quotes" else leads
@@ -109,7 +108,9 @@ def workspace(request, section="deals"):
             visible = visible.filter(stage=stage)
         if asset:
             visible = visible.filter(asset_type=asset)
-        if number:
+        if invalid_number:
+            visible = visible.none()
+        elif number:
             if len(number) == 8:
                 visible = visible.filter(id__istartswith=number)
             else:
@@ -120,7 +121,7 @@ def workspace(request, section="deals"):
         page = Paginator(visible.select_related("assigned_to").order_by("-created_at","pk"), 40).get_page(request.GET.get("page"))
         context.update(
             stages=Lead.Stage.choices, selected_stage=stage, asset_types=ASSET_TYPES,
-            selected_asset=asset, selected_number=number, selected_work=work,
+            selected_asset=asset, selected_number=number[:36], selected_work=work,
             leads=page.object_list, page=page,
         )
     elif section == "offers":
