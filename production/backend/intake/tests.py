@@ -39,7 +39,7 @@ F = {
     "website":"",
 }
 
-@override_settings(**APPROVED)
+@override_settings(SSH_OPERATOR=True, **APPROVED)
 class IntakeTests(TestCase):
     def setUp(self):
         self.client=Client(enforce_csrf_checks=True)
@@ -52,6 +52,26 @@ class IntakeTests(TestCase):
         payload={**F,"request_key":str(self.client.session["apply_nonce"])}
         csrf=self.client.cookies["csrftoken"].value
         return payload, {"HTTP_X_CSRFTOKEN":csrf}
+
+    def test_public_process_blocks_admin_even_for_authenticated_staff(self):
+        operator = User.objects.create_superuser(
+            "public-test-operator", "operator@example.test", "synthetic-test-secret-2026"
+        )
+        self.client.force_login(operator)
+        with override_settings(SSH_OPERATOR=False):
+            for url in ("/admin", "/admin/", "/admin/login/",
+                        "/admin/intake/lead/", "/admin/intake/callbackrequest/"):
+                with self.subTest(url=url):
+                    response = self.client.get(url, HTTP_X_FORWARDED_FOR="127.0.0.1",
+                                               HTTP_X_COMPASS_SSH_OPERATOR="1")
+                    self.assertEqual(response.status_code, 404)
+                    self.assertIn("no-store", response["Cache-Control"])
+                    self.assertEqual(self.client.post(url, {}).status_code, 404)
+            self.assertEqual(self.client.get("/apply/").status_code, 200)
+            response = self.client.get("/callback/")
+            self.assertEqual(response.status_code, 200)
+            self.assertIn("no-store", response["Cache-Control"])
+        self.assertEqual(self.client.get("/admin/").status_code, 200)
 
     def test_disabled_intake_returns_503_without_form(self):
         with override_settings(LIVE_INTAKE=False):
