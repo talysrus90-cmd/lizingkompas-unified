@@ -170,6 +170,10 @@ if SSH_OPERATOR and os.getenv("COMPASS_DOCUMENT_VAULT_ENABLED") == "yes":
         raise ImproperlyConfigured("Document vault launch gates not met")
     DOCUMENT_VAULT_ENABLED = True
 
+# Hard deployment gate, independent of the operator's runtime switch.
+CLIENT_PORTAL_READY = (PRODUCTION and LIVE_INTAKE and os.getenv("COMPASS_CLIENT_PORTAL_READY") == "yes"
+    and os.getenv("COMPASS_CLIENT_ACCESS_APPROVED") == "yes")
+
 LOGGING = {
     "version": 1, "disable_existing_loggers": False,
     "handlers": {"console": {"class": "logging.StreamHandler"}},
