@@ -23,7 +23,7 @@ import csv
 from .forms import ASSET_TYPES, VAT_BASES
 from django.views.decorators.http import require_GET, require_http_methods
 from django.views.decorators.cache import never_cache
-from .models import Lead, Quote, AuditEvent, CallbackRequest
+from .models import Lead, Quote, AuditEvent, CallbackRequest, LenderRequest
 
 
 def allowed(user, permission):
@@ -58,6 +58,9 @@ def workspace(request, section="deals", layout=None):
         tabs[2:2] = [("offers", "Сравнение КП"), ("documents", "Реестр документов КП")]
     if design["layout"] == "route" and quote_allowed:
         tabs.insert(4, ("partners", "Лизингодатели"))
+    connect_allowed=allowed(user,"view_lenderrequest") or allowed(user,"change_lenderrequest")
+    if connect_allowed and design["explicit_layout"]:
+        tabs.append(("connect","Запросы лизингодателям"))
     if audit_allowed:
         tabs.append(("security", "Журнал безопасности"))
     if user.is_superuser:
@@ -96,7 +99,17 @@ def workspace(request, section="deals", layout=None):
         unverified_count=quote_filters["unverified"].count(),
         callback_count=CallbackRequest.objects.filter(stage=CallbackRequest.Stage.NEW).count() if user.is_superuser else 0,
     )
-    if section == "actions":
+    pending_requests=LenderRequest.objects.filter(lead__in=active,state__in=["sent","review"]) if connect_allowed else LenderRequest.objects.none()
+    overdue_requests=pending_requests.filter(due_on__lt=today)
+    context.update(connect_allowed=connect_allowed and design["explicit_layout"],overdue_request_count=overdue_requests.count())
+    if section == "connect":
+        selected=request.GET.get("state","")
+        if selected not in ("","overdue",*LenderRequest.State.values): raise Http404
+        items=LenderRequest.objects.filter(lead__in=leads)
+        if selected=="overdue": items=overdue_requests
+        elif selected: items=items.filter(state=selected)
+        context.update(request_states=LenderRequest.State.choices,selected_request_state=selected,request_page=Paginator(items.select_related("lead").order_by("-created_at","pk"),40).get_page(request.GET.get("page")))
+    elif section == "actions":
         context.update(
             new_cases=new.order_by("-created_at")[:20],
             urgent_quotes=active_quotes.filter(valid_until__lte=deadline).select_related("lead").order_by("valid_until","pk")[:30],
@@ -335,6 +348,7 @@ def case_workspace(request, layout, case_id):
         "stages":Lead.Stage.choices,"quotes":quotes,"rows":rows,"message":message,
         "can_add":can_add and lead.stage!=Lead.Stage.CLOSED,"can_stage":can_stage,
         "quote_allowed":quote_allowed,"quote_form":quote_form,"stage_form":stage_form,"events":events,
+        "connect_allowed":allowed(user,"view_lenderrequest") or allowed(user,"change_lenderrequest"),
         "vault_enabled":settings.DOCUMENT_VAULT_ENABLED and lead.source!="broker_internal" and allowed(user,"view_originaldocument")},status=status)
 
 

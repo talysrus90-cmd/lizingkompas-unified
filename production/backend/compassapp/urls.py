@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.db import connection
 from django.urls import path, include
 from intake.document_views import original_document
+from intake.connect_views import connect_case
 from intake.workspace import workspace, create_financial_case, case_workspace, export_financial_cases
 
 def health(request):
@@ -28,6 +29,7 @@ urlpatterns = [
     path("admin/workspace/v/<str:layout>/export/", export_financial_cases, name="broker-variant-export"),
     path("admin/workspace/v/<str:layout>/new/", create_financial_case, name="broker-variant-new"),
     path("admin/workspace/v/<str:layout>/case/<uuid:case_id>/quote/<uuid:quote_id>/original/", original_document, name="broker-original-document"),
+    path("admin/workspace/v/<str:layout>/case/<uuid:case_id>/connect/", connect_case, name="broker-connect-case"),
     path("admin/workspace/v/<str:layout>/case/<uuid:case_id>/", case_workspace, name="broker-variant-case"),
     path("admin/workspace/v/<str:layout>/<str:section>/", workspace, name="broker-variant-section"),
     path("admin/workspace/<str:section>/", workspace, name="broker-workspace-section"),
