@@ -329,3 +329,56 @@ class IntakeTests(TestCase):
         invalid={**data,"advance":"1000000"}
         self.assertEqual(self.client.post(url,invalid,HTTP_X_CSRFTOKEN=csrf).status_code,200)
         self.assertEqual(Lead.objects.count(),1)
+
+
+    def test_action_center_deadlines_scope_filters_and_pagination(self):
+        from django.utils import timezone
+        user=User.objects.create_superuser("daily-test","daily@example.test","synthetic-test-password-2026")
+        self.client.force_login(user)
+        url="/admin/workspace/new/"
+        self.client.get(url)
+        csrf=self.client.cookies["csrftoken"].value
+        data={"asset_type":"equipment","asset_price":"1000000","advance":"200000","term_months":"36","vat_basis":"included"}
+        for _ in range(3):
+            self.assertEqual(self.client.post(url,data,HTTP_X_CSRFTOKEN=csrf).status_code,302)
+        a,b,closed=list(Lead.objects.order_by("created_at"))
+        closed.stage=Lead.Stage.CLOSED
+        closed.save(update_fields=["stage"])
+        today=timezone.localdate()
+        for case,key,offset,verified in ((a,"expired",-1,True),(a,"soon",7,False),(a,"later",8,True),(closed,"closed-expired",-3,False)):
+            Quote.objects.create(lead=case,offer_id=key,source_document_id=key,
+                lessor_name="QA company",received_on=today-timedelta(days=10),
+                valid_until=today+timedelta(days=offset),verified_by_broker=verified)
+        root="/admin/workspace/"
+        r=self.client.get(root+"actions/")
+        self.assertEqual(r.status_code,200)
+        for key,value in (("new_count",2),("no_quotes_count",1),("expired_count",1),("expiring_count",1),("unverified_count",1)):
+            self.assertEqual(r.context[key],value,key)
+        self.assertNotContains(r,"closed-expired")
+        self.assertContains(r,"soon")
+        r=self.client.get(root+"deals/",{"work":"no_quotes"})
+        self.assertEqual(list(r.context["leads"]),[b])
+        r=self.client.get(root+"deals/",{"number":str(a.pk)[:8],"asset":"equipment"})
+        self.assertEqual(list(r.context["leads"]),[a])
+        self.assertEqual(self.client.get(root+"deals/",{"number":"bad"}).context["page"].paginator.count,0)
+        Lead.objects.bulk_create([Lead(request_key=uuid.uuid4(),source="broker_internal",assigned_to=user,client_name="",phone="",email="",company="",inn="",message="",consent_version="",consent_text_sha256="",source_ip_digest="",asset_type="equipment",asset_price=1000000,advance=200000,term_months=36,vat_basis="included") for _ in range(41)])
+        r=self.client.get(root+"deals/",{"page":2,"asset":"equipment"})
+        self.assertEqual(r.context["page"].number,2)
+        self.assertEqual(r.context["page"].paginator.count,44)
+        self.assertEqual(len(r.context["leads"]),4)
+        r=self.client.get(root+"documents/",{"state":"expired"})
+        self.assertEqual([q.offer_id for q in r.context["quotes"]],["expired"])
+        self.assertEqual(self.client.get(root+"documents/",{"state":"unknown"}).status_code,404)
+        broker=User.objects.create_user("daily-broker",password="synthetic-test-password-2026",is_staff=True)
+        broker.user_permissions.add(*Permission.objects.filter(content_type__app_label="intake",codename__in=("view_lead","view_quote")))
+        b.assigned_to=broker
+        b.save(update_fields=["assigned_to"])
+        self.client.force_login(broker)
+        r=self.client.get(root+"actions/")
+        self.assertEqual(r.context["new_count"],1)
+        self.assertEqual(r.context["expired_count"],0)
+        self.assertEqual(r.context["no_quotes_count"],1)
+        self.assertNotContains(r,"QA company")
+        self.assertEqual(self.client.get(root+"callbacks/").status_code,404)
+        with override_settings(SSH_OPERATOR=False):
+            self.assertEqual(self.client.get(root+"actions/").status_code,404)
