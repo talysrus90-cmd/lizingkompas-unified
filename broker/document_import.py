@@ -66,7 +66,7 @@ def cell_text(value):
         return format(Decimal(str(value)),"f")
     return str(value)
 
-def extract_document(data,fmt):
+def extract_document(data,fmt,text_encoding="utf-8"):
     fmt=fmt.lower()
     if fmt not in FORMATS or not isinstance(data,bytes) or not 0<len(data)<=MAX_FILE:
         raise ValueError("Unsupported or oversized input")
@@ -128,7 +128,9 @@ def extract_document(data,fmt):
             wb.close()
         warnings.append("Formulas are never executed or interpreted as values. Hidden sheets are labelled. Cell display formatting is not preserved.")
     else:
-        text=data.decode("utf-8-sig",errors="strict")
+        if text_encoding not in ("utf-8","cp1251"):
+            raise ValueError("Unsupported text encoding")
+        text=data.decode("utf-8-sig" if text_encoding=="utf-8" else "cp1251",errors="strict")
         if "\x00" in text:
             raise ValueError("Binary data in text file")
         if fmt==".txt":
@@ -168,11 +170,11 @@ def main():
     p.add_argument("file",type=Path)
     p.add_argument("--confirm-trusted-anonymised",action="store_true",required=True)
     p.add_argument("--schedule-sheet",help="Exact visible XLSX worksheet name; produce canonical schedule draft")
-    p.add_argument("--text-encoding",choices=["utf-8"],default="utf-8")
+    p.add_argument("--text-encoding",choices=["utf-8","cp1251"],default="utf-8")
     args=p.parse_args()
     try:
         data=read_file(args.file)
-        doc=extract_document(data,args.file.suffix)
+        doc=extract_document(data,args.file.suffix,args.text_encoding)
         if args.schedule_sheet is not None:
             doc["schedule_draft"]=xlsx_schedule(doc,args.schedule_sheet)
         print(json.dumps(doc,ensure_ascii=False,allow_nan=False))
