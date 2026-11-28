@@ -1,0 +1,79 @@
+name: Isolated backup restore drill
+on:
+  push:
+    paths:
+      - "production/ops/restore_drill.sh"
+      - ".github/workflows/restore-drill.yml"
+  pull_request:
+    paths:
+      - "production/ops/restore_drill.sh"
+      - ".github/workflows/restore-drill.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install test-only tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y restic
+          docker pull postgres:16-bookworm
+          bash -n production/ops/restore_drill.sh
+      - name: Real encrypted restic backup and disposable PostgreSQL restore
+        shell: bash
+        run: |
+          set -euo pipefail
+          export RESTIC_REPOSITORY="$RUNNER_TEMP/compass-synthetic-restic"
+          export RESTIC_PASSWORD_FILE="$RUNNER_TEMP/compass-synthetic-restic.key"
+          printf '%s' 'synthetic-ci-only-not-a-production-secret' > "$RESTIC_PASSWORD_FILE"
+          chmod 600 "$RESTIC_PASSWORD_FILE"
+          restic init
+          docker run -d --rm --name compass-ci-source --network none \
+            --tmpfs /var/lib/postgresql/data:rw,size=256m \
+            -e POSTGRES_HOST_AUTH_METHOD=trust postgres:16-bookworm -c listen_addresses=''
+          trap 'docker rm -f compass-ci-source >/dev/null 2>&1 || true' EXIT
+          for i in $(seq 1 60); do
+            if docker exec compass-ci-source sh -c 'test "$(cat /proc/1/comm)" = postgres && pg_isready -q -U postgres'; then break; fi
+            sleep 1
+          done
+          docker exec -i compass-ci-source psql -X -v ON_ERROR_STOP=1 -U postgres <<'SQL'
+          CREATE TABLE django_migrations(id integer);
+          CREATE TABLE auth_user(id integer);
+          CREATE TABLE intake_quote(id integer);
+          CREATE TABLE intake_auditevent(id integer);
+          CREATE TABLE intake_lead(client_name text NOT NULL,phone text NOT NULL,email text NOT NULL,company text NOT NULL,inn text NOT NULL,message text NOT NULL);
+          CREATE TABLE intake_callbackrequest(name text NOT NULL,phone text NOT NULL);
+          INSERT INTO intake_lead VALUES ('enc:v1:synthetic','enc:v1:synthetic','','','','');
+          INSERT INTO intake_callbackrequest VALUES ('','enc:v1:synthetic');
+          SQL
+          docker exec compass-ci-source pg_dump -U postgres -Fc --no-owner --no-acl |
+            restic backup --stdin --stdin-filename leasingcompass-20261128T000001Z.dump --tag leasingcompass-db
+          sleep 1
+          printf unrelated | restic backup --stdin --stdin-filename unrelated.txt
+          export COMPASS_RESTORE_TMPFS_SIZE=256m
+          bash production/ops/restore_drill.sh
+          test -z "$(docker ps -aq --filter name=compass-restore-)"
+          # External destination is rejected without connecting.
+          if TEST_RESTORE_DATABASE_URL=postgresql://invalid/restore_test bash production/ops/restore_drill.sh; then
+            echo "ERROR: external restore URL accepted"; exit 1
+          fi
+          # Newest tagged snapshot is corrupt: never silently fall back.
+          sleep 1
+          printf corrupt | restic backup --stdin --stdin-filename leasingcompass-20261128T000002Z.dump --tag leasingcompass-db
+          if bash production/ops/restore_drill.sh; then
+            echo "ERROR: corrupt backup passed"; exit 1
+          fi
+          test -z "$(docker ps -aq --filter name=compass-restore-)"
+          # Valid PostgreSQL dump with a plaintext marker must also fail.
+          docker exec compass-ci-source psql -X -v ON_ERROR_STOP=1 -U postgres -c "UPDATE intake_lead SET phone='synthetic-plaintext'"
+          sleep 1
+          docker exec compass-ci-source pg_dump -U postgres -Fc --no-owner --no-acl |
+            restic backup --stdin --stdin-filename leasingcompass-20261128T000003Z.dump --tag leasingcompass-db
+          if bash production/ops/restore_drill.sh; then
+            echo "ERROR: plaintext backup passed"; exit 1
+          fi
+          test -z "$(docker ps -aq --filter name=compass-restore-)"
