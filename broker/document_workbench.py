@@ -10,6 +10,7 @@ import threading
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from broker.document_import import FORMATS, xlsx_schedule
+from broker.quote_extract import extract_quote, LABELS
 from broker.payment_schedule import import_schedule, format_schedule
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -59,9 +60,10 @@ def main():
     status=tk.StringVar(value="Выберите документ")
     doc=None; draft=""
     tabs=ttk.Notebook(shell);tabs.pack(fill="both",expand=True)
-    preview_frame=ttk.Frame(tabs);schedule_frame=ttk.Frame(tabs)
+    preview_frame=ttk.Frame(tabs);schedule_frame=ttk.Frame(tabs);quote_frame=ttk.Frame(tabs)
     tabs.add(preview_frame,text="Извлечённые данные")
     tabs.add(schedule_frame,text="Черновик графика")
+    tabs.add(quote_frame,text="Условия КП")
     def text_area(parent):
         area=ttk.Frame(parent);area.pack(fill="both",expand=True)
         view=tk.Text(area,wrap="word",font=("Segoe UI",11),state="disabled")
@@ -70,6 +72,7 @@ def main():
         scroll.pack(side="right",fill="y");view.pack(side="left",fill="both",expand=True)
         return view
     preview=text_area(preview_frame)
+    quote_view=text_area(quote_frame)
     ttk.Label(schedule_frame,text="Лист Excel (явный выбор). Для CSV/TSV лист не нужен.").pack(anchor="w")
     sheet=tk.StringVar()
     sheets=ttk.Combobox(schedule_frame,textvariable=sheet,state="readonly");sheets.pack(fill="x",pady=4)
@@ -79,7 +82,7 @@ def main():
     def clear():
         nonlocal doc,draft
         doc=None;draft="";sheets.configure(values=());sheet.set("")
-        show(preview,"");show(draft_view,"");make.configure(state="disabled");copy.configure(state="disabled")
+        show(preview,"");show(draft_view,"");show(quote_view,"");make.configure(state="disabled");copy.configure(state="disabled")
     def done(result,error):
         nonlocal doc
         choose.configure(state="normal")
@@ -92,6 +95,14 @@ def main():
             flags=" | ".join(k for k in ("needs_ocr","formula_unresolved","sheet_hidden") if b.get(k))
             lines.append(f"[{loc}] {flags}\n{b['text']}")
         show(preview,"\n\n".join(lines))
+        terms=extract_quote(doc)
+        report=["Черновик условий. Проверить каждое значение по оригиналу; неизвестное не означает ноль.",""]
+        for c in terms["candidates"]:
+            location=" / ".join(f"{k}: {v}" for k,v in c["location"].items())
+            report.append(f"{LABELS[c['field']][0]}: {c['value']}\nИсточник: {location}\n{c['evidence']}\n")
+        report.append("Противоречия: "+(", ".join(LABELS[x][0] for x in terms["conflicting_fields"]) or "нет среди найденных"))
+        report.append("Не извлечено: "+(", ".join(LABELS[x][0] for x in terms["missing_fields"]) or "нет"))
+        show(quote_view,"\n".join(report))
         names=sorted({b["location"]["sheet"] for b in doc["blocks"] if "sheet" in b["location"] and not b.get("sheet_hidden")})
         sheets.configure(values=names)
         if doc["format"] in (".xlsx",".csv",".tsv"):
