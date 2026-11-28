@@ -48,6 +48,8 @@ class LeadAdmin(admin.ModelAdmin):
 
     def get_readonly_fields(self,request,obj=None):
         fields=list(super().get_readonly_fields(request,obj))
+        if obj and obj.quotes.exists():
+            fields += ["asset_type","asset_price","advance","term_months","vat_basis"]
         if obj and obj.source == "broker_internal":
             fields += ["client_name","phone","email","company","inn","message"]
         if not request.user.is_superuser:

@@ -382,3 +382,54 @@ class IntakeTests(TestCase):
         self.assertEqual(self.client.get(root+"callbacks/").status_code,404)
         with override_settings(SSH_OPERATOR=False):
             self.assertEqual(self.client.get(root+"actions/").status_code,404)
+
+
+    def test_three_variants_share_real_case_and_quote_operations(self):
+        from django.utils import timezone
+        user=User.objects.create_superuser("variant-test","variant@example.test","synthetic-test-password-2026")
+        self.client.force_login(user)
+        root="/admin/workspace/v/"
+        for layout in ("classic","focus","route"):
+            for section in ("","deals/","actions/","offers/","documents/","analytics/","security/","callbacks/"):
+                response=self.client.get(root+layout+"/"+section)
+                self.assertEqual(response.status_code,200,(layout,section))
+                self.assertContains(response,"design-"+layout)
+            self.assertEqual(self.client.get(root+layout+"/new/").status_code,200)
+        self.assertEqual(self.client.get(root+"bad/").status_code,404)
+        self.client.get(root+"classic/new/")
+        csrf=self.client.cookies["csrftoken"].value
+        data={"asset_type":"equipment","asset_price":"1000000","advance":"200000","term_months":"36","vat_basis":"included"}
+        r=self.client.post(root+"classic/new/",data,HTTP_X_CSRFTOKEN=csrf)
+        self.assertEqual(r.status_code,302)
+        lead=Lead.objects.get()
+        today=timezone.localdate()
+        quote={"action":"quote","lessor_name":"QA company","offer_id":"QA-1","source_document_id":"source-1","received_on":str(today),"valid_until":str(today+timedelta(days=7)),"monthly_payment":"30000","buyout":"1000","upfront_fee":"0","recurring_monthly_fee":"0","insurance_total":"0","other_costs":"0","verified_by_broker":"on","scenario_confirmed":"on"}
+        def case(layout):
+            return root+layout+"/case/"+str(lead.pk)+"/"
+        self.assertEqual(self.client.post(case("focus"),quote,HTTP_X_CSRFTOKEN=csrf).status_code,302)
+        self.assertEqual(self.client.post(case("route"),{**quote,"offer_id":"QA-2","source_document_id":"source-2","monthly_payment":"31000"},HTTP_X_CSRFTOKEN=csrf).status_code,302)
+        self.assertEqual(Quote.objects.count(),2)
+        for layout in ("classic","focus","route"):
+            response=self.client.get(case(layout))
+            self.assertEqual(response.status_code,200)
+            self.assertEqual(len(response.context["rows"]),2)
+            self.assertContains(response,"QA company")
+        self.assertEqual(self.client.post(case("route"),{"action":"stage","stage":"quotes","previous_stage":"new"},HTTP_X_CSRFTOKEN=csrf).status_code,302)
+        lead.refresh_from_db()
+        self.assertEqual(lead.stage,"quotes")
+        self.assertEqual(self.client.post(case("classic"),{"action":"stage","stage":"review","previous_stage":"new"},HTTP_X_CSRFTOKEN=csrf).status_code,409)
+        self.assertEqual(self.client.get(root+"route/partners/").context["partners"][0]["offer_count"],2)
+        self.assertContains(self.client.get(root+"route/export/"),str(lead.pk))
+        self.assertEqual(self.client.get(root+"focus/export/").status_code,404)
+        self.assertEqual(self.client.post(case("focus"),quote,HTTP_X_CSRFTOKEN=csrf).status_code,200)
+        self.assertEqual(Quote.objects.count(),2)
+        self.assertEqual(self.client.post(case("focus"),{**quote,"offer_id":"QA-3","source_document_id":"source-3","scenario_confirmed":""},HTTP_X_CSRFTOKEN=csrf).status_code,200)
+        self.assertEqual(Quote.objects.count(),2)
+        stranger=User.objects.create_user("variant-stranger",password="synthetic-test-password-2026",is_staff=True)
+        stranger.user_permissions.add(*Permission.objects.filter(content_type__app_label="intake",codename__in=("view_lead","view_quote")))
+        self.client.force_login(stranger)
+        self.assertEqual(self.client.get(case("route")).status_code,404)
+        self.assertNotContains(self.client.get(root+"route/export/"),str(lead.pk))
+        self.assertEqual(len(self.client.get(root+"route/partners/").context["partners"]),0)
+        with override_settings(SSH_OPERATOR=False):
+            self.assertEqual(self.client.get(root+"route/").status_code,404)

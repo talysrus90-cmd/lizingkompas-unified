@@ -5,16 +5,20 @@ Caddy. Existing Django admin implements editing, assignment and quote input.
 """
 from django.contrib import admin
 from django.core.exceptions import PermissionDenied
-from django.db.models import Count
+from django.db.models import Count, Sum, Q
 from django.core.paginator import Paginator
 from django.utils import timezone
 from datetime import timedelta
 import re
-from django.http import Http404
-from django.shortcuts import render, redirect
+from django.http import Http404, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+from django.db import IntegrityError
+from broker.offer_comparison import Scenario, Offer, compare_offers
 from django import forms
 from django.db import transaction
 import uuid
+import csv
 from .forms import ASSET_TYPES, VAT_BASES
 from django.views.decorators.http import require_GET, require_http_methods
 from django.views.decorators.cache import never_cache
@@ -35,7 +39,10 @@ def scoped_leads(user):
 @admin.site.admin_view
 @never_cache
 @require_GET
-def workspace(request, section="deals"):
+def workspace(request, section="deals", layout=None):
+    design = layout_context(layout)
+    if section == "home":
+        section = {"classic":"deals", "focus":"actions", "route":"deals"}[design["layout"]]
     user = request.user
     if not (allowed(user, "view_lead") or allowed(user, "change_lead")):
         raise PermissionDenied
@@ -48,6 +55,8 @@ def workspace(request, section="deals"):
     ]
     if quote_allowed:
         tabs[2:2] = [("offers", "Сравнение КП"), ("documents", "Реестр документов КП")]
+    if design["layout"] == "route" and quote_allowed:
+        tabs.insert(4, ("partners", "Лизингодатели"))
     if audit_allowed:
         tabs.append(("security", "Журнал безопасности"))
     if user.is_superuser:
@@ -63,7 +72,7 @@ def workspace(request, section="deals"):
         "verified": quotes.filter(verified_by_broker=True).count(),
     }
     context = {
-        "tabs": tabs, "section": section, "totals": totals,
+        **design, "tabs": tabs, "section": section, "totals": totals,
         "quote_allowed": quote_allowed, "operator": user.is_superuser,
     }
     # Derived work queue, always scoped to authorized, unfinished cases.
@@ -119,6 +128,9 @@ def workspace(request, section="deals"):
                 except ValueError:
                     visible = visible.none()
         page = Paginator(visible.select_related("assigned_to").order_by("-created_at","pk"), 40).get_page(request.GET.get("page"))
+        if design["layout"] == "route":
+            page_items = list(page.object_list)
+            context["lanes"] = [(key,label,[item for item in page_items if item.stage == key]) for key,label in Lead.Stage.choices]
         context.update(
             stages=Lead.Stage.choices, selected_stage=stage, asset_types=ASSET_TYPES,
             selected_asset=asset, selected_number=number[:36], selected_work=work,
@@ -133,7 +145,14 @@ def workspace(request, section="deals"):
             raise Http404
         context["quote_state"] = state
         context["quotes"] = (quote_filters[state] if state else quotes).select_related("lead").order_by("valid_until","pk")[:100]
+    elif section == "partners":
+        context["partners"] = quotes.values("lessor_name").annotate(
+            offer_count=Count("id"), deal_count=Count("lead",distinct=True),
+            verified_count=Count("id",filter=Q(verified_by_broker=True)),
+            expired_count=Count("id",filter=Q(valid_until__lt=today)),
+        ).order_by("-offer_count","lessor_name")[:100]
     elif section == "analytics":
+        context["stage_amounts"] = [(label, leads.filter(stage=key).aggregate(total=Sum("asset_price"))["total"] or 0) for key,label in Lead.Stage.choices]
         counts = {x["stage"]: x["n"] for x in leads.values("stage").annotate(n=Count("id"))}
         context["stage_counts"] = [(label, counts.get(key, 0)) for key, label in Lead.Stage.choices]
     elif section == "security":
@@ -147,6 +166,10 @@ def workspace(request, section="deals"):
             callbacks = callbacks.filter(stage=callback_state)
         context["callback_state"] = callback_state
         context["callbacks"] = callbacks.order_by("-created_at","pk")[:100]
+    if section == "deals" and design["layout"] == "route":
+        context["portfolio_amount"] = visible.aggregate(total=Sum("asset_price"))["total"] or 0
+        context["stage_totals"] = {row["stage"]:row["n"] for row in visible.values("stage").annotate(n=Count("id"))}
+        context["lanes"] = [(key,label,items,context["stage_totals"].get(key,0)) for key,label,items in context["lanes"]]
     return render(request, "intake/workspace.html", context)
 
 
@@ -168,7 +191,8 @@ class FinancialCaseForm(forms.Form):
 @admin.site.admin_view
 @never_cache
 @require_http_methods(["GET", "POST"])
-def create_financial_case(request):
+def create_financial_case(request, layout=None):
+    design = layout_context(layout)
     # Internal calculations never assert consent or accept customer contacts.
     if not (allowed(request.user, "add_lead") and
             (allowed(request.user, "view_lead") or allowed(request.user, "change_lead"))):
@@ -183,5 +207,155 @@ def create_financial_case(request):
                 consent_text_sha256="", source_ip_digest="", **form.cleaned_data)
             AuditEvent.objects.create(lead=lead,action="lead.internal_created",
                 actor=str(request.user.pk),details="financial_only")
+        if layout is not None:
+            return redirect("broker-variant-case", layout=layout, case_id=lead.pk)
         return redirect("admin:intake_lead_change", lead.pk)
-    return render(request,"intake/financial_case.html",{"form":form})
+    return render(request,"intake/financial_case.html",{"form":form, **design})
+
+
+LAYOUTS = (("classic", "A · Классика"), ("focus", "B · Рабочий центр"), ("route", "C · Максимум"))
+
+
+def layout_context(layout):
+    if layout is not None and layout not in dict(LAYOUTS):
+        raise Http404
+    selected = layout or "classic"
+    prefix = reverse("broker-variant-home", kwargs={"layout":selected}) if layout else reverse("broker-workspace")
+    return {"layout":selected,"layouts":LAYOUTS,"layout_name":dict(LAYOUTS)[selected],
+            "workspace_prefix":prefix,"explicit_layout":layout is not None}
+
+
+class WorkspaceQuoteForm(forms.ModelForm):
+    scenario_confirmed = forms.BooleanField(label="Стоимость имущества, аванс, срок и НДС совпадают с условиями сделки")
+    class Meta:
+        model = Quote
+        fields = ("lessor_name","offer_id","source_document_id","received_on","valid_until",
+                  "monthly_payment","buyout","upfront_fee","recurring_monthly_fee","insurance_total",
+                  "other_costs","verified_by_broker")
+        widgets = {"received_on":forms.DateInput(attrs={"type":"date"}),
+                   "valid_until":forms.DateInput(attrs={"type":"date"})}
+        labels = {"lessor_name":"Лизингодатель","offer_id":"Номер КП","source_document_id":"Идентификатор источника",
+                  "received_on":"Получено","valid_until":"Действует до","monthly_payment":"Платёж в месяц, ₽",
+                  "buyout":"Выкуп, ₽","upfront_fee":"Разовая комиссия, ₽","recurring_monthly_fee":"Комиссия в месяц, ₽",
+                  "insurance_total":"Страхование за срок, ₽","other_costs":"Прочие расходы, ₽",
+                  "verified_by_broker":"Оригинал проверен брокером"}
+
+    def clean(self):
+        values=super().clean()
+        start,end=values.get("received_on"),values.get("valid_until")
+        if start and end and end < start:
+            self.add_error("valid_until","Срок действия не может быть раньше даты получения.")
+        if start and start > timezone.localdate():
+            self.add_error("received_on","Дата получения не может быть в будущем.")
+        for key in ("monthly_payment","buyout","upfront_fee","recurring_monthly_fee","insurance_total","other_costs"):
+            value=values.get(key)
+            if value is not None and value < 0:
+                self.add_error(key,"Сумма не может быть отрицательной.")
+        return values
+
+
+class StageForm(forms.Form):
+    stage = forms.ChoiceField(label="Этап сделки",choices=Lead.Stage.choices)
+    previous_stage = forms.ChoiceField(choices=Lead.Stage.choices,widget=forms.HiddenInput)
+
+
+@admin.site.admin_view
+@never_cache
+@require_http_methods(["GET","POST"])
+def case_workspace(request, layout, case_id):
+    design=layout_context(layout)
+    user=request.user
+    lead=get_object_or_404(scoped_leads(user),pk=case_id)
+    quote_allowed=allowed(user,"view_quote") or allowed(user,"change_quote")
+    can_add=quote_allowed and allowed(user,"add_quote")
+    can_stage=allowed(user,"change_lead")
+    quote_form=WorkspaceQuoteForm()
+    stage_form=StageForm(initial={"stage":lead.stage,"previous_stage":lead.stage})
+    status=200
+    if request.method=="POST":
+        action=request.POST.get("action")
+        if action=="stage":
+            if not can_stage: raise PermissionDenied
+            stage_form=StageForm(request.POST)
+            if stage_form.is_valid():
+                with transaction.atomic():
+                    locked=get_object_or_404(scoped_leads(user).select_for_update(),pk=case_id)
+                    if locked.stage!=stage_form.cleaned_data["previous_stage"]:
+                        stage_form.add_error(None,"Этап уже изменился. Обновите карточку.")
+                        status=409
+                    elif locked.stage!=stage_form.cleaned_data["stage"]:
+                        old=locked.stage
+                        locked.stage=stage_form.cleaned_data["stage"]
+                        locked.save(update_fields=["stage","updated_at"])
+                        AuditEvent.objects.create(lead=locked,action="lead.stage_changed",actor=str(user.pk),details=old+" -> "+locked.stage)
+                if status==200:
+                    return redirect("broker-variant-case",layout=layout,case_id=case_id)
+        elif action=="quote":
+            if not can_add: raise PermissionDenied
+            quote_form=WorkspaceQuoteForm(request.POST)
+            if quote_form.is_valid():
+                try:
+                    with transaction.atomic():
+                        locked=get_object_or_404(scoped_leads(user).select_for_update(),pk=case_id)
+                        if locked.stage==Lead.Stage.CLOSED or locked.quotes.count()>=20:
+                            quote_form.add_error(None,"Сделка закрыта или достигнут лимит 20 КП.")
+                        elif locked.quotes.filter(offer_id=quote_form.cleaned_data["offer_id"]).exists() or locked.quotes.filter(source_document_id=quote_form.cleaned_data["source_document_id"]).exists():
+                            quote_form.add_error(None,"Номер или источник КП уже зарегистрирован.")
+                        else:
+                            q=quote_form.save(commit=False)
+                            q.lead=locked
+                            q.save()
+                            AuditEvent.objects.create(lead=locked,action="offer.added",actor=str(user.pk),details=q.offer_id[:64])
+                            return redirect("broker-variant-case",layout=layout,case_id=case_id)
+                except IntegrityError:
+                    quote_form.add_error(None,"Не удалось сохранить: проверьте уникальность номера и источника.")
+        else:
+            raise Http404
+    quotes=list(lead.quotes.all()) if quote_allowed else []
+    rows=[]
+    message=""
+    if quote_allowed:
+        if len(quotes)<2:
+            message="Для сравнения нужны минимум два КП."
+        else:
+            try:
+                scenario=Scenario(lead.asset_price,lead.advance,lead.term_months,lead.vat_basis)
+                source=[Offer(offer_id=q.offer_id,lessor=q.lessor_name,source_document_id=q.source_document_id,
+                    received_on=q.received_on,valid_until=q.valid_until,scenario=scenario,
+                    verified_by_broker=q.verified_by_broker,monthly_payment=q.monthly_payment,buyout=q.buyout,
+                    upfront_fee=q.upfront_fee,recurring_monthly_fee=q.recurring_monthly_fee,
+                    insurance_total=q.insurance_total,other_costs=q.other_costs) for q in quotes]
+                result=compare_offers(scenario,source,as_of=timezone.localdate())
+                rows=result.rows
+                if result.comparable_count<2: message="Недостаточно проверенных сопоставимых КП."
+            except ValueError:
+                message="Условия предложений требуют проверки."
+    events=lead.audit_events.order_by("-at")[:30] if allowed(user,"view_auditevent") else []
+    return render(request,"intake/case_workspace.html",{**design,"lead":lead,
+        "asset_label":dict(ASSET_TYPES).get(lead.asset_type,lead.asset_type),
+        "stages":Lead.Stage.choices,"quotes":quotes,"rows":rows,"message":message,
+        "can_add":can_add and lead.stage!=Lead.Stage.CLOSED,"can_stage":can_stage,
+        "quote_allowed":quote_allowed,"quote_form":quote_form,"stage_form":stage_form,"events":events},status=status)
+
+
+@admin.site.admin_view
+@never_cache
+@require_GET
+def export_financial_cases(request, layout):
+    if layout != "route":
+        raise Http404
+    if not (allowed(request.user,"view_lead") or allowed(request.user,"change_lead")):
+        raise PermissionDenied
+    # Deliberately omit contact fields, usernames and free text. Only financial
+    # cases created internally, never public client applications.
+    qs=scoped_leads(request.user).filter(source="broker_internal").order_by("created_at","pk")
+    response=HttpResponse(content_type="text/csv; charset=utf-8")
+    response["Content-Disposition"]='attachment; filename="compass-financial-cases.csv"'
+    response.write("\ufeff")
+    writer=csv.writer(response,delimiter=";")
+    writer.writerow(["Номер","Имущество","Стоимость, руб.","Аванс, руб.","Срок, мес.","НДС","Этап"])
+    for lead in qs.iterator():
+        writer.writerow([str(lead.pk),dict(ASSET_TYPES).get(lead.asset_type,"Другое имущество"),
+            lead.asset_price,lead.advance,lead.term_months,dict(VAT_BASES).get(lead.vat_basis,"Не указан"),
+            lead.get_stage_display()])
+    return response

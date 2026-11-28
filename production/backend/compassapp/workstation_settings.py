@@ -15,3 +15,7 @@ DATABASES = {"default":{"ENGINE":"django.db.backends.sqlite3","NAME":location}}
 STATIC_ROOT = location.parent / "collected_static"
 LIVE_INTAKE = False
 DATA_ENCRYPTION_KEYS = []
+
+WORKSTATION_MODE = os.environ.get("COMPASS_WORKSTATION_MODE","classic")
+if WORKSTATION_MODE not in ("classic","variants"):
+    raise ImproperlyConfigured("Unknown local workspace mode")
