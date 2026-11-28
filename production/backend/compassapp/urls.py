@@ -1,5 +1,6 @@
 """Strict public routes. Internal admin is blocked at the public reverse proxy."""
 from django.contrib import admin
+from django.conf import settings
 from django.http import JsonResponse
 from django.db import connection
 from django.urls import path, include
@@ -12,7 +13,10 @@ def health(request):
             cursor.fetchone()
     except Exception:
         return JsonResponse({"ok":False},status=503)
-    return JsonResponse({"ok": True, "service": "compass-backend-v1"})
+    payload = {"ok": True, "service": "compass-backend-v1"}
+    if getattr(settings,"WORKSTATION_MODE",None):
+        payload["workspace_mode"] = settings.WORKSTATION_MODE
+    return JsonResponse(payload)
 
 urlpatterns = [
     path("healthz", health, name="health"),
