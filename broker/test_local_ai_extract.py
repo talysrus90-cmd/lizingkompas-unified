@@ -23,6 +23,17 @@ class LocalExtractionTests(unittest.TestCase):
         out=validate_candidates(text,{"candidates":rows},1)
         self.assertEqual(out["candidates"],[])
         self.assertEqual(out["rejected_candidates"],4)
+    def test_grouped_percent_and_signed_amounts_not_reinterpreted(self):
+        text="Скидка 10 000 %. Корректировка -200 000. Итог + 300 000."
+        rows=[
+            {"field":"advance","value":"10000","evidence":"Скидка 10 000 %."},
+            {"field":"advance","value":"10","evidence":"Скидка 10 000 %."},
+            {"field":"advance","value":"200000","evidence":"Корректировка -200 000."},
+            {"field":"advance","value":"0","evidence":"Корректировка -200 000."},
+            {"field":"advance","value":"300000","evidence":"Итог + 300 000."},
+        ]
+        self.assertEqual(validate_candidates(text,{"candidates":rows},1)["candidates"],[])
+
     def test_conflicting_candidates_removed(self):
         out=validate_candidates("Аванс 200000. Аванс 300000.",{"candidates":[
             {"field":"advance","value":"200000","evidence":"Аванс 200000"},
