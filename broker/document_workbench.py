@@ -16,9 +16,9 @@ ROOT=Path(__file__).resolve().parents[1]
 
 def run_import(path,encoding):
     """No temporary output files; no shell or external network requests."""
-    proc=subprocess.run([sys.executable,"-m","broker.document_import",str(path),
+    proc=subprocess.run([sys.executable,"-X","utf8","-m","broker.document_import",str(path),
         "--confirm-trusted-anonymised","--text-encoding",encoding],
-        cwd=ROOT,capture_output=True,timeout=45,check=True)
+        cwd=ROOT,stdin=subprocess.DEVNULL,capture_output=True,timeout=45,check=True)
     if len(proc.stdout)>16*1024*1024:
         raise ValueError("Response exceeds limit")
     return json.loads(proc.stdout.decode("utf-8"))
