@@ -812,3 +812,45 @@ class IntakeTests(TestCase):
         self.assertEqual(self.client.get(url(a)).status_code,404)
         with override_settings(SSH_OPERATOR=False):
             self.assertEqual(self.client.get(url(a)).status_code,404)
+
+
+    def test_case_control_signals_follow_permissions_and_live_records(self):
+        from .models import BrokerTask,LenderRequest,ContractReview,ContractReviewItem
+        from django.utils import timezone
+        today=timezone.localdate()
+        operator=User.objects.create_superuser("control-qa","qa@example.test","synthetic-test-secret-2026")
+        limited=User.objects.create_user("control-limited",password="synthetic-test-secret-2026",is_staff=True)
+        limited.user_permissions.add(Permission.objects.get(content_type__app_label="intake",codename="view_lead"))
+        self.client.force_login(operator)
+        root="/admin/workspace/v/"
+        self.client.get(root+"classic/new/")
+        csrf=self.client.cookies["csrftoken"].value
+        self.assertEqual(self.client.post(root+"classic/new/",{"asset_type":"equipment","asset_price":"1000000","advance":"200000","term_months":"36","vat_basis":"included"},HTTP_X_CSRFTOKEN=csrf).status_code,302)
+        lead=Lead.objects.get()
+        for layout in ("classic","focus","route"):
+            url=reverse("broker-variant-case",args=[layout,lead.pk])
+            page=self.client.get(url)
+            self.assertEqual(len(page.context["signals"]),4)
+            self.assertContains(page,"Контроль сделки")
+            self.assertContains(page,"Нет зарегистрированных КП.")
+        BrokerTask.objects.create(lead=lead,kind="collect",due_on=today-timedelta(days=1))
+        LenderRequest.objects.create(lead=lead,lessor_name="QA",lessor_key="qa",state="sent",due_on=today-timedelta(days=1))
+        r=ContractReview.objects.create(lead=lead,source_sha256="a"*64)
+        ContractReviewItem.objects.create(review=r,topic="insurance",state="risk",page=3,reviewed_by=operator,reviewed_at=timezone.now())
+        url=reverse("broker-variant-case",args=["route",lead.pk])
+        page=self.client.get(url)
+        signals={s["label"]:s for s in page.context["signals"]}
+        self.assertIn("просрочено: 1",signals["Задачи"]["detail"])
+        self.assertIn("просрочено: 1",signals["Запросы лизингодателям"]["detail"])
+        self.assertIn("риски: 1",signals["Проверка договора"]["detail"])
+        self.assertEqual(signals["Проверка договора"]["status"],"attention")
+        BrokerTask.objects.filter(lead=lead).update(state="done")
+        self.assertIn("просрочено: 0",self.client.get(url).context["signals"][1]["detail"])
+        Lead.objects.filter(pk=lead.pk).update(assigned_to=limited)
+        self.client.force_login(limited)
+        page=self.client.get(url)
+        self.assertEqual(page.status_code,200)
+        self.assertEqual(page.context["signals"],[])
+        self.assertNotContains(page,"Контроль сделки")
+        with override_settings(SSH_OPERATOR=False):
+            self.assertEqual(self.client.get(url).status_code,404)
