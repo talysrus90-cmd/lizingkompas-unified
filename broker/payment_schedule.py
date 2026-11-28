@@ -77,3 +77,63 @@ def checked_schedule(quote):
         raise ValueError("Условия КП изменились — повторно сверьте график.")
     payments=parse_schedule(record["text"])
     return schedule_total(payments,quote.quoted_advance)
+
+
+def import_schedule(text):
+    """Strict spreadsheet clipboard/CSV import. Never guess dates or currency."""
+    import csv
+    import io
+    if not isinstance(text,str) or not 0<len(text)<=32000:
+        raise ValueError("Вставьте до 32 000 символов.")
+    text=text.lstrip("\ufeff")
+    first=next((line for line in text.splitlines() if line.strip()),"")
+    delimiter="\t" if "\t" in first else ";"
+    aliases={"аванс":"advance","лизинговый платёж":"lease","лизинговый платеж":"lease",
+             "выкуп":"buyout","комиссия":"fee","страхование":"insurance","прочее":"other"}
+    headers={("дата","вид","сумма"),("date","kind","amount")}
+    rows=[]
+    try:
+        for row in csv.reader(io.StringIO(text),delimiter=delimiter,strict=True):
+            if not row or all(not cell.strip() for cell in row):
+                continue
+            row=[cell.strip() for cell in row]
+            if not rows and tuple(cell.casefold() for cell in row) in headers:
+                continue
+            if len(row)!=3 or any("\n" in cell or "\r" in cell for cell in row):
+                raise ValueError("Нужны три колонки: дата, вид, сумма.")
+            on,kind,amount=row
+            if re.fullmatch(r"[0-9]{2}\.[0-9]{2}\.[0-9]{4}",on):
+                day,month,year=on.split(".")
+                on=f"{year}-{month}-{day}"
+            kind=aliases.get(kind.casefold(),kind.casefold())
+            # Only remove spaces if the grouping is unambiguous.
+            if re.fullmatch(r"[0-9]{1,3}(?:[ \u00a0\u202f][0-9]{3})+(?:[.,][0-9]{1,2})?",amount):
+                amount=re.sub(r"[ \u00a0\u202f]","",amount)
+            rows.append(f"{on};{kind};{amount}")
+            if len(rows)>MAX_ROWS:
+                raise ValueError("Допустимо не более 500 платежей.")
+    except csv.Error as exc:
+        raise ValueError("Неверная структура CSV.") from exc
+    return parse_schedule("\n".join(rows))
+
+
+def present_value(payments, valuation_date, annual_rate_percent):
+    """Actual/365 fixed; effective annual discount rate, explicit common date.
+
+    This is a scenario-dependent present value of outflows, NOT an APR.
+    No assumption about loan principal, asset delivery date, tax deduction or
+    residual value. Historical payments before valuation date are rejected.
+    """
+    if type(valuation_date) is not date or not isinstance(annual_rate_percent,Decimal):
+        raise ValueError("Укажите дату и годовую ставку дисконтирования.")
+    if not annual_rate_percent.is_finite() or not Decimal("0")<=annual_rate_percent<=Decimal("100"):
+        raise ValueError("Ставка дисконтирования: от 0 до 100% годовых.")
+    if not payments or len(payments)>MAX_ROWS:
+        raise ValueError("Нет допустимого графика.")
+    if any(p.on<valuation_date for p in payments):
+        raise ValueError("Дата оценки не может быть позже первого платежа.")
+    with localcontext() as ctx:
+        ctx.prec=40
+        base=Decimal(1)+annual_rate_percent/100
+        value=sum((p.amount/(base**(Decimal((p.on-valuation_date).days)/365)) for p in payments),Decimal(0))
+        return value.quantize(Decimal("0.01"))
