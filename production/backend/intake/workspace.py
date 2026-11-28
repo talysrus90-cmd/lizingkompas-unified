@@ -356,8 +356,14 @@ def case_workspace(request, layout, case_id):
             except ValueError:
                 message="Условия предложений требуют проверки."
     events=lead.audit_events.order_by("-at")[:30] if allowed(user,"view_auditevent") else []
+    from .case_control import case_signals
+    signals=case_signals(lead,layout,timezone.localdate(),quotes=quotes,rows=rows,quote_allowed=quote_allowed,
+        tasks_allowed=allowed(user,"view_brokertask") or allowed(user,"change_brokertask"),
+        connect_allowed=allowed(user,"view_lenderrequest") or allowed(user,"change_lenderrequest"),
+        legal_allowed=allowed(user,"view_contractreview") or allowed(user,"change_contractreview"))
     return render(request,"intake/case_workspace.html",{**design,"lead":lead,
         "asset_label":dict(ASSET_TYPES).get(lead.asset_type,lead.asset_type),
+        "signals":signals,
         "stages":Lead.Stage.choices,"quotes":quotes,"rows":rows,"message":message,
         "can_add":can_add and lead.stage!=Lead.Stage.CLOSED,"can_stage":can_stage,
         "quote_allowed":quote_allowed,"quote_form":quote_form,"stage_form":stage_form,"events":events,
