@@ -103,6 +103,8 @@ jobs:
           curl --fail-with-body -sS http://127.0.0.1:18765/healthz | grep -F '"ok": true'
           code=$(curl -sS -o /tmp/intake-disabled.txt -w '%{http_code}' -H 'X-Forwarded-Proto: https' http://127.0.0.1:18765/apply/)
           test "$code" = "503"
+          admin_code=$(curl -sS -o /tmp/admin-blocked.txt -w '%{http_code}' -H 'X-Forwarded-Proto: https' http://127.0.0.1:18765/admin/login/)
+          test "$admin_code" = "404"
       - name: Stop QA application container
         if: always()
         run: docker rm -f compass-ci-smoke || true
