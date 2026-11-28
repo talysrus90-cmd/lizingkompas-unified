@@ -226,6 +226,8 @@ class IntakeTests(TestCase):
                 lessor_name=f"Синтетическая компания {i}",
                 received_on=today,valid_until=today+timedelta(days=20),
                 verified_by_broker=True,
+                quoted_asset_price=lead.asset_price,quoted_advance=lead.advance,
+                quoted_term_months=lead.term_months,quoted_vat_basis=lead.vat_basis,
                 monthly_payment=Decimal(monthly),buyout=Decimal(1000),
                 upfront_fee=Decimal(5000),recurring_monthly_fee=Decimal(500),
                 insurance_total=Decimal(30000),other_costs=Decimal(0),
@@ -403,7 +405,7 @@ class IntakeTests(TestCase):
         self.assertEqual(r.status_code,302)
         lead=Lead.objects.get()
         today=timezone.localdate()
-        quote={"action":"quote","lessor_name":"QA company","offer_id":"QA-1","source_document_id":"source-1","received_on":str(today),"valid_until":str(today+timedelta(days=7)),"monthly_payment":"30000","buyout":"1000","upfront_fee":"0","recurring_monthly_fee":"0","insurance_total":"0","other_costs":"0","verified_by_broker":"on","scenario_confirmed":"on"}
+        quote={"action":"quote","lessor_name":"QA company","offer_id":"QA-1","source_document_id":"source-1","received_on":str(today),"valid_until":str(today+timedelta(days=7)),"monthly_payment":"30000","buyout":"1000","upfront_fee":"0","recurring_monthly_fee":"0","insurance_total":"0","other_costs":"0","verified_by_broker":"on","scenario_confirmed":"on","quoted_asset_price":"1000000","quoted_advance":"200000","quoted_term_months":"36","quoted_vat_basis":"included"}
         def case(layout):
             return root+layout+"/case/"+str(lead.pk)+"/"
         self.assertEqual(self.client.post(case("focus"),quote,HTTP_X_CSRFTOKEN=csrf).status_code,302)
@@ -433,3 +435,44 @@ class IntakeTests(TestCase):
         self.assertEqual(len(self.client.get(root+"route/partners/").context["partners"]),0)
         with override_settings(SSH_OPERATOR=False):
             self.assertEqual(self.client.get(root+"route/").status_code,404)
+
+
+    def test_original_quote_terms_and_different_scenarios_never_share_rank(self):
+        from django.utils import timezone
+        from .quote_analysis import analyse_quotes
+        user=User.objects.create_superuser("quote-terms-test","terms@example.test","synthetic-test-password-2026")
+        self.client.force_login(user)
+        root="/admin/workspace/v/"
+        self.client.get(root+"route/new/")
+        csrf=self.client.cookies["csrftoken"].value
+        self.assertEqual(self.client.post(root+"route/new/",{"asset_type":"equipment","asset_price":"1000000","advance":"200000","term_months":"36","vat_basis":"included"},HTTP_X_CSRFTOKEN=csrf).status_code,302)
+        lead=Lead.objects.get()
+        today=timezone.localdate()
+        url=root+"route/case/"+str(lead.pk)+"/"
+        base={"action":"quote","lessor_name":"QA Finance","offer_id":"QA-001","source_document_id":"DOC-001","received_on":str(today),"valid_until":str(today+timedelta(days=7)),"monthly_payment":"30000","buyout":"1000","upfront_fee":"0","recurring_monthly_fee":"0","insurance_total":"0","other_costs":"0","verified_by_broker":"on","scenario_confirmed":"on","quoted_asset_price":"1000000","quoted_advance":"200000","quoted_term_months":"36","quoted_vat_basis":"included"}
+        for changes in ({},{"offer_id":"QA-002","source_document_id":"DOC-002","monthly_payment":"31000"},{"offer_id":"QA-003","source_document_id":"DOC-003","quoted_advance":"100000","quoted_term_months":"24"}):
+            self.assertEqual(self.client.post(url,{**base,**changes},HTTP_X_CSRFTOKEN=csrf).status_code,302)
+        Quote.objects.create(lead=lead,offer_id="LEGACY-004",source_document_id="DOC-004",lessor_name="QA Legacy",received_on=today,valid_until=today+timedelta(days=7),verified_by_broker=True,monthly_payment=1,buyout=0,upfront_fee=0,recurring_monthly_fee=0,insurance_total=0,other_costs=0)
+        rows,count=analyse_quotes(lead,lead.quotes.all(),today)
+        by_id={r.offer_id:r for r in rows}
+        self.assertEqual(count,2)
+        self.assertEqual(by_id["QA-001"].rank,1)
+        self.assertEqual(by_id["QA-001"].total_cash_outflow,Decimal("1281000.00"))
+        self.assertEqual(by_id["QA-002"].rank,2)
+        self.assertEqual(by_id["QA-003"].total_cash_outflow,Decimal("821000.00"))
+        self.assertIsNone(by_id["QA-003"].rank)
+        self.assertIsNone(by_id["LEGACY-004"].total_cash_outflow)
+        self.assertIsNone(by_id["LEGACY-004"].rank)
+        for layout in ("classic","focus","route"):
+            r=self.client.get(root+layout+"/case/"+str(lead.pk)+"/")
+            self.assertEqual(r.status_code,200)
+            self.assertContains(r,"Другие условия")
+            self.assertContains(r,"Условия оригинала не подтверждены")
+            self.assertEqual(r.context["rows"],rows)
+        r=self.client.get(reverse("admin:intake_lead_compare",args=[lead.pk]))
+        self.assertEqual(r.context["rows"],rows)
+        invalid={**base,"offer_id":"QA-005","source_document_id":"DOC-005","quoted_term_months":""}
+        self.assertEqual(self.client.post(url,invalid,HTTP_X_CSRFTOKEN=csrf).status_code,200)
+        self.assertEqual(Quote.objects.count(),4)
+        self.assertEqual(self.client.post(url,{**invalid,"quoted_term_months":"36","quoted_advance":"1000000"},HTTP_X_CSRFTOKEN=csrf).status_code,200)
+        self.assertEqual(Quote.objects.count(),4)
