@@ -138,7 +138,14 @@ def workspace(request, section="deals"):
     elif section == "security":
         context["events"] = AuditEvent.objects.filter(lead__in=leads).select_related("lead").order_by("-at")[:100]
     elif section == "callbacks":
-        context["callbacks"] = CallbackRequest.objects.order_by("-created_at")[:100]
+        callback_state = request.GET.get("state", "")
+        if callback_state and callback_state not in CallbackRequest.Stage.values:
+            raise Http404
+        callbacks = CallbackRequest.objects.all()
+        if callback_state:
+            callbacks = callbacks.filter(stage=callback_state)
+        context["callback_state"] = callback_state
+        context["callbacks"] = callbacks.order_by("-created_at","pk")[:100]
     return render(request, "intake/workspace.html", context)
 
 
