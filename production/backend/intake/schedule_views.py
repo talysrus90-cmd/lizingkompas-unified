@@ -9,7 +9,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_http_methods
-from broker.payment_schedule import parse_schedule, schedule_total, format_schedule, quote_fingerprint, checked_schedule
+from broker.payment_schedule import parse_schedule, schedule_total, format_schedule, quote_fingerprint, checked_schedule, import_schedule, present_value
 from .models import Lead, Quote, AuditEvent
 from .workspace import allowed, scoped_leads, layout_context
 
@@ -21,6 +21,10 @@ class ScheduleForm(forms.Form):
     complete=forms.BooleanField(label="Сверено с оригиналом: перечислены все выплаты, без повторного учёта аванса, выкупа, комиссий и иных расходов")
     fingerprint=forms.CharField(widget=forms.HiddenInput,max_length=64)
     revision=forms.CharField(widget=forms.HiddenInput,max_length=64)
+
+class DiscountForm(forms.Form):
+    valuation_date=forms.DateField(label="Единая дата оценки",widget=forms.DateInput(attrs={"type":"date"}))
+    discount_rate=forms.DecimalField(label="Годовая ставка дисконтирования, %",min_value=0,max_value=100,max_digits=5,decimal_places=2)
 
 @admin.site.admin_view
 @never_cache
@@ -52,7 +56,7 @@ def quote_schedule(request,layout,case_id,quote_id):
                     try:
                         if q.source_scenario() is None or not q.verified_by_broker:
                             raise ValueError("Сначала подтвердите исходные условия и оригинал КП.")
-                        entries=parse_schedule(form.cleaned_data["schedule"])
+                        entries=import_schedule(form.cleaned_data["schedule"])
                         schedule_total(entries,q.quoted_advance)
                     except ValueError as exc:
                         form.add_error("schedule",str(exc))
@@ -62,10 +66,19 @@ def quote_schedule(request,layout,case_id,quote_id):
                         AuditEvent.objects.create(lead=locked,action="quote.schedule_confirmed",actor=str(user.pk),details=str(q.pk))
                         return redirect("broker-quote-schedule",layout=layout,case_id=lead.pk,quote_id=q.pk)
     total=None
+    payments=()
+    discounted=None
+    discount_form=DiscountForm(request.GET if "discount_rate" in request.GET or "valuation_date" in request.GET else None)
     warning=""
     if quote.payment_schedule:
         try:
             total=checked_schedule(quote)
+            payments=parse_schedule(quote.payment_schedule["text"])
+            if discount_form.is_bound and discount_form.is_valid():
+                try:
+                    discounted=present_value(payments,discount_form.cleaned_data["valuation_date"],discount_form.cleaned_data["discount_rate"])
+                except ValueError as exc:
+                    discount_form.add_error(None,str(exc))
         except (ValueError,TypeError,KeyError):
             warning="График требует повторной сверки."
-    return render(request,"intake/quote_schedule.html",{**design,"lead":lead,"quote":quote,"form":form,"can_edit":can_edit,"total":total,"warning":warning},status=status)
+    return render(request,"intake/quote_schedule.html",{**design,"lead":lead,"quote":quote,"form":form,"can_edit":can_edit,"total":total,"warning":warning,"payments":payments,"discount_form":discount_form,"discounted":discounted},status=status)
