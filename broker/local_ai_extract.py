@@ -18,7 +18,7 @@ FIELDS = ("asset_price", "advance", "term_months", "monthly_payment", "buyout",
           "upfront_fee", "recurring_monthly_fee", "insurance_total", "other_costs")
 MAX_TEXT = 12000
 MAX_RESPONSE = 131072
-AMOUNTS = re.compile(r"(?<![\d.,+\-−])(?:\d{1,3}(?:[ \u00a0\u202f]\d{3})+|\d+)(?:[.,]\d{1,2})?(?![\d.,]|\s*%)")
+AMOUNTS = re.compile(r"(?<![\w.,])[-+−]?\s*(?:\d{1,3}(?:[ \u00a0\u202f]\d{3})+|\d+)(?:[.,]\d+)?(?!\w)")
 MONEY = re.compile(r"(?:\d{1,3}(?:[ \u00a0\u202f]\d{3})+|\d+)(?:[.,]\d{1,2})?(?:\s*(?:RUB|руб\.?|₽))?", re.I)
 
 
@@ -67,6 +67,10 @@ def validate_candidates(text, payload, page):
             val=number(item["value"],field)
             supported=False
             for match in AMOUNTS.finditer(evidence):
+                # Consume the whole grouped token before testing sign/percent.
+                # A rejected signed or percent amount must not expose a suffix.
+                if re.match(r"\s*%",evidence[match.end():]):
+                    continue
                 try:
                     if number(match.group(),field)==val:
                         supported=True
