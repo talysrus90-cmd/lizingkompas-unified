@@ -48,11 +48,13 @@ class LeadAdmin(admin.ModelAdmin):
 
     def get_readonly_fields(self,request,obj=None):
         fields=list(super().get_readonly_fields(request,obj))
+        if obj and obj.source == "broker_internal":
+            fields += ["client_name","phone","email","company","inn","message"]
         if not request.user.is_superuser:
             fields += ["assigned_to","asset_type","asset_price","advance",
                        "term_months","vat_basis","client_name","phone","email",
                        "company","inn","message"]
-        return tuple(fields)
+        return tuple(dict.fromkeys(fields))
 
     def short_id(self,obj):
         return str(obj.pk)[:8]
@@ -120,7 +122,10 @@ class LeadAdmin(admin.ModelAdmin):
 
     def compare_view(self,request,object_id):
         lead=get_object_or_404(self.get_queryset(request),pk=object_id)
-        if not self.has_view_permission(request,lead):
+        if not self.has_view_permission(request,lead) or not (
+            request.user.is_superuser or request.user.has_perm("intake.view_quote")
+            or request.user.has_perm("intake.change_quote")
+        ):
             raise PermissionDenied
         sources=list(lead.quotes.all())
         rows=[]
@@ -160,6 +165,13 @@ class LeadAdmin(admin.ModelAdmin):
 class AuditAdmin(admin.ModelAdmin):
     list_display=("at","lead","action","actor","details")
     readonly_fields=("lead","at","action","actor","details")
+    def get_queryset(self,request):
+        qs=super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        if not (request.user.has_perm("intake.view_lead") or request.user.has_perm("intake.change_lead")):
+            return qs.none()
+        return qs.filter(lead__assigned_to=request.user)
     list_filter=("action",)
     def has_add_permission(self,request):
         return False
