@@ -71,6 +71,7 @@ class Quote(models.Model):
     quoted_advance = models.DecimalField("Аванс по КП",max_digits=14,decimal_places=2,null=True,blank=True)
     quoted_term_months = models.PositiveSmallIntegerField("Срок по КП, мес.",null=True,blank=True,validators=[MinValueValidator(12),MaxValueValidator(84)])
     quoted_vat_basis = models.CharField("НДС по КП",max_length=20,choices=VAT_BASES,blank=True,default="")
+    payment_schedule = models.JSONField(default=dict,blank=True,editable=False)
     monthly_payment = models.DecimalField(max_digits=14, decimal_places=2, null=True, blank=True)
     buyout = models.DecimalField(max_digits=14, decimal_places=2, null=True, blank=True)
     upfront_fee = models.DecimalField(max_digits=14, decimal_places=2, null=True, blank=True)
