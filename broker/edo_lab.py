@@ -45,6 +45,7 @@ class Event:
     version: int
     sha256: str
     at: str
+    dispatch_id: str | None
     environment: str = "LOCAL_SIMULATOR"
 
 @dataclass
@@ -59,6 +60,7 @@ class Envelope:
     _events: list = field(default_factory=list, init=False, repr=False)
     _keys: dict = field(default_factory=dict, init=False, repr=False)
     _sha256: str = field(init=False, repr=False)
+    dispatch_id: str | None = field(default=None, init=False)
 
     def __post_init__(self):
         if self.recipient not in PARTIES:
@@ -84,12 +86,12 @@ class Envelope:
     def _record(self, key, action, actor, target):
         event = Event(len(self._events)+1, key, action, actor, self.state,
                       target, self.version, self._sha256,
-                      datetime.now(timezone.utc).isoformat())
+                      datetime.now(timezone.utc).isoformat(), self.dispatch_id)
         self.state = target
         self._events.append(event)
         return event
 
-    def transition(self, action, actor, key, version, expected_hash):
+    def transition(self, action, actor, key, version, expected_hash, dispatch_id=None):
         self._check(version, expected_hash)
         if not isinstance(key, str) or not ID.fullmatch(key):
             raise ValueError("Invalid idempotency key")
@@ -98,16 +100,24 @@ class Envelope:
         required = "local_simulator" if action in RECEIPTS else OPERATORS[action]
         if actor != required:
             raise PermissionError("Wrong simulator role")
-        request = (action, actor, version, expected_hash)
+        request = (action, actor, version, expected_hash, dispatch_id)
         if key in self._keys:
             previous, event = self._keys[key]
             if previous != request:
                 raise ValueError("Idempotency key reused for different request")
             return event
+        if action in RECEIPTS and (self.dispatch_id is None or dispatch_id != self.dispatch_id):
+            raise ValueError("Receipt belongs to another dispatch attempt")
+        if action not in RECEIPTS and dispatch_id is not None:
+            raise ValueError("Only receipts carry a dispatch identifier")
         target = TRANSITIONS[self.state].get(action)
         if target is None:
             raise ValueError("Invalid state transition")
+        if action == "simulate_send":
+            self.dispatch_id = secrets.token_hex(16)
         event = self._record(key, action, actor, target)
+        if action == "retry_review":
+            self.dispatch_id = None
         self._keys[key] = (request, event)
         return event
 
@@ -130,7 +140,8 @@ def synthetic_demo():
         ("simulate_send","dispatcher"),("receipt_delivery","local_simulator"),
         ("receipt_accept","local_simulator"),
     ],1):
-        env.transition(action,actor,f"qa-{n}",env.version,env.sha256)
+        env.transition(action,actor,f"qa-{n}",env.version,env.sha256,
+                       env.dispatch_id if action in RECEIPTS else None)
     return env
 
 if __name__ == "__main__":
