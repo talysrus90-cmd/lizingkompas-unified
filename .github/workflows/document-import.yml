@@ -1,0 +1,26 @@
+name: Compass Document import (isolated)
+on:
+  pull_request:
+    paths:
+      - 'broker/document_import.py'
+      - 'broker/test_document_import.py'
+      - 'broker/requirements-document-import.txt'
+      - '.github/workflows/document-import.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  document:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r broker/requirements-document-import.txt
+      - run: python -c "import pypdf,docx,openpyxl,defusedxml"
+      - run: python -m unittest broker.test_document_import -v
