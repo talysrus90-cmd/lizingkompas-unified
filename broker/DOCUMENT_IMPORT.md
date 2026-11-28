@@ -25,3 +25,11 @@ Pilot only for trusted synthetic/anonymised documents. No production upload endp
 - JSON/XML/HTML: strict schemas, no scripts, external entities, remote fetching.
 - ZIP/7Z/RAR: separate quarantine and bounded extraction policy; archives are not trusted documents.
 - Unified file-picker UI for Office/PDF after isolated worker and QA. Source file fingerprint, evidence location, manual approval, no automatic transfer to client or lender.
+
+
+## Local workbench and additional adapters
+Run `python -m broker.document_workbench` using the isolated document environment. The Tk window requires explicit trusted/anonymised confirmation, opens the file in a child process with a 45-second timeout, displays source coordinates, and copies an explicitly generated XLSX/CSV/TSV schedule draft to the clipboard. It does not write CRM records; paste into Finance Pro and confirm the original. Child-process timeout is not a sandbox. No automatic OCR.
+- ODT: paragraph element order only, not page numbers.
+- ODS: literal cells and row/column coordinates, no formula evaluation or reliable layout/visibility. Not supported for direct schedule conversion.
+- EML: unverified header fields, plain text body and attachment filenames/content types. No attachment extraction, HTML rendering or network fetching.
+- Still pending: legacy DOC/XLS/XLSB, RTF, image OCR, MSG, PPT/PPTX, archives and structured HTML/XML/JSON adapters. Untrusted files need separately isolated production processing.
