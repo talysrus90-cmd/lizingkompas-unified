@@ -8,6 +8,7 @@ from intake.document_views import original_document
 from intake.connect_views import connect_case
 from intake.task_views import task_case
 from intake.legal_views import legal_case
+from intake.schedule_views import quote_schedule
 from intake.client_portal import client_status, client_login, client_home, client_logout
 from intake.workspace import workspace, create_financial_case, case_workspace, export_financial_cases
 
@@ -39,6 +40,7 @@ urlpatterns = [
     path("admin/workspace/v/<str:layout>/case/<uuid:case_id>/connect/", connect_case, name="broker-connect-case"),
     path("admin/workspace/v/<str:layout>/case/<uuid:case_id>/tasks/", task_case, name="broker-task-case"),
     path("admin/workspace/v/<str:layout>/case/<uuid:case_id>/legal/", legal_case, name="broker-legal-case"),
+    path("admin/workspace/v/<str:layout>/case/<uuid:case_id>/quote/<uuid:quote_id>/schedule/", quote_schedule, name="broker-quote-schedule"),
     path("admin/workspace/v/<str:layout>/case/<uuid:case_id>/", case_workspace, name="broker-variant-case"),
     path("admin/workspace/v/<str:layout>/<str:section>/", workspace, name="broker-variant-section"),
     path("admin/workspace/<str:section>/", workspace, name="broker-workspace-section"),
