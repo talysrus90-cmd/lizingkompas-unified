@@ -73,12 +73,21 @@ BEGIN
   PERFORM count(*) FROM intake_quote;
   PERFORM count(*) FROM intake_auditevent;
   PERFORM count(*) FROM auth_user;
+  -- Internal financial cases must have no customer contacts at all.
+  -- Public/application cases must still carry encrypted required contacts.
   IF EXISTS (SELECT 1 FROM intake_lead WHERE
-    client_name NOT LIKE 'enc:v1:%' OR phone NOT LIKE 'enc:v1:%' OR
-    (email <> '' AND email NOT LIKE 'enc:v1:%') OR
-    (company <> '' AND company NOT LIKE 'enc:v1:%') OR
-    (inn <> '' AND inn NOT LIKE 'enc:v1:%') OR
-    (message <> '' AND message NOT LIKE 'enc:v1:%')) OR
+    (source = 'broker_internal' AND (
+      client_name IS DISTINCT FROM '' OR phone IS DISTINCT FROM '' OR
+      email IS DISTINCT FROM '' OR company IS DISTINCT FROM '' OR
+      inn IS DISTINCT FROM '' OR message IS DISTINCT FROM '' OR
+      consent_version IS DISTINCT FROM '' OR consent_text_sha256 IS DISTINCT FROM '' OR
+      source_ip_digest IS DISTINCT FROM ''))
+    OR (source IS DISTINCT FROM 'broker_internal' AND (
+      client_name NOT LIKE 'enc:v1:%' OR phone NOT LIKE 'enc:v1:%' OR
+      (email <> '' AND email NOT LIKE 'enc:v1:%') OR
+      (company <> '' AND company NOT LIKE 'enc:v1:%') OR
+      (inn <> '' AND inn NOT LIKE 'enc:v1:%') OR
+      (message <> '' AND message NOT LIKE 'enc:v1:%')))) OR
     EXISTS (SELECT 1 FROM intake_callbackrequest WHERE phone NOT LIKE 'enc:v1:%'
       OR (name <> '' AND name NOT LIKE 'enc:v1:%')) THEN
     RAISE EXCEPTION 'Unexpected plaintext';
