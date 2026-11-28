@@ -604,3 +604,47 @@ class IntakeTests(TestCase):
         self.assertNotContains(self.client.get(base+"route/connect/"),"QA Finance")
         with override_settings(SSH_OPERATOR=False):
             self.assertEqual(self.client.get(base+"route/connect/").status_code,404)
+
+
+    def test_task_center_shared_queue_and_version_control(self):
+        from .models import BrokerTask
+        from django.utils import timezone
+        user=User.objects.create_superuser("tasks-qa","qa@example.test","synthetic-test-password-2026")
+        self.client.force_login(user)
+        root="/admin/workspace/v/"
+        self.client.get(root+"classic/new/")
+        csrf=self.client.cookies["csrftoken"].value
+        headers={"HTTP_X_CSRFTOKEN":csrf}
+        self.assertEqual(self.client.post(root+"classic/new/",{"asset_type":"equipment","asset_price":"1000000","advance":"200000","term_months":"36","vat_basis":"included"},**headers).status_code,302)
+        lead=Lead.objects.get()
+        today=timezone.localdate()
+        def url(layout):
+            return reverse("broker-task-case",args=[layout,lead.pk])
+        data={"action":"create","kind":"collect","priority":"1","due_on":str(today-timedelta(days=1))}
+        self.assertEqual(self.client.post(url("classic"),data,**headers).status_code,302)
+        self.assertEqual(self.client.post(url("focus"),data,**headers).status_code,200)
+        self.assertEqual(BrokerTask.objects.count(),1)
+        task=BrokerTask.objects.get()
+        self.assertEqual(self.client.get(root+"focus/actions/").context["task_overdue"],1)
+        self.assertEqual(self.client.get(root+"route/tasks/?state=overdue").context["task_page"].paginator.count,1)
+        for layout in ("classic","focus","route"):
+            self.assertContains(self.client.get(url(layout)),"Собрать КП")
+        def change(state,version,**extra):
+            return self.client.post(url("route"),{"action":"update","task_id":str(task.pk),"state":state,"version":str(version),**extra},**headers)
+        self.assertEqual(change("open",0).status_code,200)
+        self.assertEqual(change("open",0,due_on=str(today)).status_code,302)
+        self.assertEqual(change("done",0).status_code,409)
+        self.assertEqual(self.client.get(root+"focus/actions/").context["task_today"],1)
+        self.assertEqual(change("done",1).status_code,302)
+        task.refresh_from_db()
+        self.assertEqual(task.state,"done")
+        self.assertIsNotNone(task.completed_at)
+        self.assertEqual(self.client.get(root+"focus/actions/").context["task_today"],0)
+        self.assertEqual(self.client.post(url("classic"),data,**headers).status_code,302)
+        stranger=User.objects.create_user("tasks-other",password="synthetic-test-password-2026",is_staff=True)
+        stranger.user_permissions.add(*Permission.objects.filter(content_type__app_label="intake",codename__in=("view_lead","view_brokertask")))
+        self.client.force_login(stranger)
+        self.assertEqual(self.client.get(url("route")).status_code,404)
+        self.assertEqual(self.client.get(root+"route/tasks/").context["task_page"].paginator.count,0)
+        with override_settings(SSH_OPERATOR=False):
+            self.assertEqual(self.client.get(root+"route/tasks/").status_code,404)
