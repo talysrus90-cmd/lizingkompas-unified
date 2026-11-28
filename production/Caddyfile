@@ -13,7 +13,7 @@
         respond "Not found" 404
     }
 
-    @application path /apply /apply/* /callback /callback/* /healthz /static/*
+    @application path /apply /apply/* /callback /callback/* /client /client/* /healthz /static/*
     handle @application {
         reverse_proxy app:8000 {
             header_up X-Real-IP {remote_host}

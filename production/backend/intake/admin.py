@@ -1,13 +1,16 @@
 """Back-office workflow, reachable via SSH tunnel ONLY (public /admin is 404)."""
 import uuid
-from django.contrib import admin
+from django.contrib import admin, messages
+from django import forms
+from django.conf import settings
+from django.db import transaction
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, render
 from django.urls import path, reverse
 from django.utils.html import format_html
 from .quote_analysis import analyse_quotes
 from django.utils import timezone
-from .models import Lead, Quote, AuditEvent, CallbackRequest
+from .models import Lead, Quote, AuditEvent, CallbackRequest, ClientPortalControl, ClientCaseAccess
 
 class QuoteInline(admin.TabularInline):
     model = Quote
@@ -203,3 +206,58 @@ class CallbackRequestAdmin(admin.ModelAdmin):
         return False
     def has_delete_permission(self,request,obj=None):
         return False
+
+
+class OperatorOnlyAdmin(admin.ModelAdmin):
+    def has_module_permission(self,request):
+        return bool(request.user.is_superuser)
+    def has_view_permission(self,request,obj=None):
+        return bool(request.user.is_superuser)
+    def has_change_permission(self,request,obj=None):
+        return bool(request.user.is_superuser)
+    def has_add_permission(self,request):
+        return bool(request.user.is_superuser)
+    def has_delete_permission(self,request,obj=None):
+        return False
+    def get_queryset(self,request):
+        qs=super().get_queryset(request)
+        return qs if request.user.is_superuser else qs.none()
+
+
+class PortalSwitchForm(forms.ModelForm):
+    def clean_enabled(self):
+        enabled=self.cleaned_data["enabled"]
+        if enabled and not (settings.CLIENT_PORTAL_READY and settings.LIVE_INTAKE and settings.SSH_OPERATOR):
+            raise forms.ValidationError("Включение заблокировано: не подтверждена готовность защищённого клиентского кабинета.")
+        return enabled
+
+
+@admin.register(ClientPortalControl)
+class ClientPortalControlAdmin(OperatorOnlyAdmin):
+    form=PortalSwitchForm
+    list_display=("enabled","updated_at")
+    fields=("enabled","updated_at")
+    readonly_fields=("updated_at",)
+    def has_add_permission(self,request):
+        return super().has_add_permission(request) and not ClientPortalControl.objects.exists()
+    def save_model(self,request,obj,form,change):
+        if obj.enabled and not (settings.CLIENT_PORTAL_READY and settings.LIVE_INTAKE and settings.SSH_OPERATOR):
+            raise PermissionDenied
+        with transaction.atomic():
+            previous=ClientPortalControl.objects.select_for_update().filter(pk=1).first()
+            if previous is None or previous.enabled!=obj.enabled:
+                obj.revision=uuid.uuid4()
+            else:
+                obj.revision=previous.revision
+            obj.pk=1
+            super().save_model(request,obj,form,change)
+
+
+@admin.register(ClientCaseAccess)
+class ClientCaseAccessAdmin(OperatorOnlyAdmin):
+    fields=("user","lead","active","created_at")
+    readonly_fields=("created_at",)
+    list_display=("id","user","lead","active","created_at")
+    list_filter=("active",)
+    def get_readonly_fields(self,request,obj=None):
+        return ("created_at","user","lead") if obj else ("created_at",)

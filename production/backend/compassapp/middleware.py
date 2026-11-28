@@ -41,6 +41,8 @@ class SecurityHeadersMiddleware:
             "base-uri 'none'; frame-ancestors 'none'; object-src 'none'"
         )
         response["Permissions-Policy"]="camera=(), microphone=(), geolocation=()"
-        if path in ("/apply", "/callback", "/admin") or path.startswith(("/apply/", "/callback/", "/admin/")):
+        if path in ("/apply", "/callback", "/admin", "/client") or path.startswith(("/apply/", "/callback/", "/admin/", "/client/")):
             response["Cache-Control"]="no-store, private"
+        if path == "/client" or path.startswith("/client/"):
+            response["X-Robots-Tag"]="noindex, nofollow"
         return response

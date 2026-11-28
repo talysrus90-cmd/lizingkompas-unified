@@ -251,3 +251,33 @@ class BrokerTask(models.Model):
         constraints = [models.UniqueConstraint(fields=["lead","kind"],condition=models.Q(state="open"),name="unique_open_case_task_kind")]
         verbose_name = "Задача брокера"
         verbose_name_plural = "Задачи брокера"
+
+
+class ClientPortalControl(models.Model):
+    """Single server-side switch, OFF unless explicitly activated by operator."""
+    id = models.PositiveSmallIntegerField(primary_key=True,default=1,editable=False)
+    enabled = models.BooleanField("Клиентский кабинет включён",default=False)
+    revision = models.UUIDField(default=uuid.uuid4,editable=False)
+    updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        constraints=[models.CheckConstraint(condition=models.Q(id=1),name="singleton_client_portal")]
+        verbose_name="Выключатель клиентского кабинета"
+        verbose_name_plural="Выключатель клиентского кабинета"
+
+
+class ClientCaseAccess(models.Model):
+    """Explicit operator grant; never infer identity from a phone or email."""
+    user = models.ForeignKey("auth.User",on_delete=models.PROTECT,limit_choices_to={"is_staff":False,"is_superuser":False,"is_active":True})
+    lead = models.ForeignKey(Lead,on_delete=models.PROTECT,limit_choices_to=~models.Q(source="broker_internal"))
+    active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(default=timezone.now,editable=False)
+    class Meta:
+        constraints=[models.UniqueConstraint(fields=["user","lead"],name="unique_client_case_access")]
+        verbose_name="Доступ клиента к сделке"
+        verbose_name_plural="Доступы клиентов к сделкам"
+    def clean(self):
+        super().clean()
+        if self.user_id and (self.user.is_staff or self.user.is_superuser or not self.user.is_active):
+            raise ValidationError({"user":"Нужна активная клиентская учётная запись без прав сотрудников."})
+        if self.lead_id and (self.lead.source=="broker_internal" or not self.lead.consent_version):
+            raise ValidationError({"lead":"Внутренние расчёты или заявки без согласия недоступны клиентам."})

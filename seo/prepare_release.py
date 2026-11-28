@@ -22,7 +22,7 @@ INDEXABLE=[MAIN]+SERVICES+COMPARISONS+ARTICLES
 LEGAL=["privacy.html","consent.html"]
 OTHER=["leasing-checklist.html","partner-calculator.html"]
 ASSETS={
-    "lk-ui-v504.js","lk-ui-v505.js","lk-share-v3.js","lk-growth-v2.js",
+    "lk-ui-v504.js","lk-ui-v505.js","lk-share-v3.js","lk-growth-v2.js","client-entry.js",
     "lk-widget-v1.js","lk-public-tools.css","service-theme.css",
     "lk-app.webmanifest","leasing-compass.vcf","max.svg","telegram.svg",
     "vk.svg","whatsapp.svg","youtube.svg",
@@ -140,6 +140,7 @@ def transform(text,name):
         if "</header>" not in text:raise RuntimeError("Missing site header")
         text=text.replace("</header>","</header>"+cta,1)
         text=text.replace('href="#request"','href="/apply/"')
+        text=text.replace('</body>','<script src="/client-entry.js" defer></script>\n</body>',1)
     return text
 
 out.mkdir(parents=True)
@@ -193,7 +194,7 @@ try:
         loc.text=PROD if name==MAIN else PROD+name
     ElementTree(urlset).write(out/"sitemap.xml",encoding="utf-8",xml_declaration=True)
     (out/"robots.txt").write_text(
-        "User-agent: *\nAllow: /\nDisallow: /apply/\n"
+        "User-agent: *\nAllow: /\nDisallow: /apply/\nDisallow: /client/\n"
         "Sitemap: "+PROD+"sitemap.xml\n",encoding="utf-8")
     (out/(key+".txt")).write_text(key,encoding="utf-8")
 except Exception:
