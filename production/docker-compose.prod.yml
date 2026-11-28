@@ -25,6 +25,8 @@ services:
     image: leasing-compass-app:local
     restart: unless-stopped
     env_file: .env.production
+    environment:
+      COMPASS_SSH_OPERATOR: "0"
     depends_on:
       db:
         condition: service_healthy
