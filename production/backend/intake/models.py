@@ -281,3 +281,33 @@ class ClientCaseAccess(models.Model):
             raise ValidationError({"user":"Нужна активная клиентская учётная запись без прав сотрудников."})
         if self.lead_id and (self.lead.source=="broker_internal" or not self.lead.consent_version):
             raise ValidationError({"lead":"Внутренние расчёты или заявки без согласия недоступны клиентам."})
+
+
+class ContractReview(models.Model):
+    """Human review of one identified contract revision, not a legal opinion."""
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    lead = models.ForeignKey(Lead,on_delete=models.PROTECT,related_name="contract_reviews")
+    source_sha256 = models.CharField(max_length=64)
+    checklist_version = models.PositiveSmallIntegerField(default=1,editable=False)
+    created_at = models.DateTimeField(default=timezone.now,editable=False)
+    class Meta:
+        constraints=[models.UniqueConstraint(fields=["lead","source_sha256"],name="unique_case_contract_revision")]
+        ordering=["-created_at","id"]
+
+
+class ContractReviewItem(models.Model):
+    class State(models.TextChoices):
+        UNKNOWN = "unknown", "Не проверено"
+        OK = "ok", "Проверено, замечаний нет"
+        RISK = "risk", "Требует внимания"
+        MISSING = "missing", "Условие не найдено"
+
+    review = models.ForeignKey(ContractReview,on_delete=models.PROTECT,related_name="items")
+    topic = models.CharField(max_length=32)
+    state = models.CharField(max_length=12,choices=State.choices,default=State.UNKNOWN)
+    page = models.PositiveIntegerField(null=True,blank=True)
+    reviewed_by = models.ForeignKey("auth.User",null=True,on_delete=models.PROTECT)
+    reviewed_at = models.DateTimeField(null=True)
+    version = models.PositiveIntegerField(default=0,editable=False)
+    class Meta:
+        constraints=[models.UniqueConstraint(fields=["review","topic"],name="unique_contract_review_topic")]

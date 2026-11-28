@@ -702,3 +702,49 @@ class IntakeTests(TestCase):
             with override_settings(SSH_OPERATOR=False):
                 self.assertEqual(public.get("/client/").status_code,302)
                 self.assertEqual(public.get("/client/status/").json(),{"enabled":True})
+
+
+    def test_legal_review_revision_evidence_and_access(self):
+        from .models import ContractReview, ContractReviewItem
+        from .legal_views import TOPICS
+        user=User.objects.create_superuser("legal-qa","qa@example.test","synthetic-test-password-2026")
+        self.client.force_login(user)
+        root="/admin/workspace/v/"
+        self.client.get(root+"classic/new/")
+        csrf=self.client.cookies["csrftoken"].value
+        headers={"HTTP_X_CSRFTOKEN":csrf}
+        self.assertEqual(self.client.post(root+"classic/new/",{"asset_type":"equipment","asset_price":"1000000","advance":"200000","term_months":"36","vat_basis":"included"},**headers).status_code,302)
+        lead=Lead.objects.get()
+        def url(layout):
+            return reverse("broker-legal-case",args=[layout,lead.pk])
+        self.assertEqual(self.client.post(url("classic"),{"action":"create","source_sha256":"not-a-hash"},**headers).status_code,200)
+        self.assertEqual(self.client.post(url("classic"),{"action":"create","source_sha256":"a"*64},**headers).status_code,302)
+        review=ContractReview.objects.get()
+        self.assertEqual(review.items.count(),len(TOPICS))
+        self.assertEqual(self.client.post(url("focus"),{"action":"create","source_sha256":"A"*64},**headers).status_code,200)
+        item=review.items.get(topic="insurance")
+        def update(state,version,page=""):
+            return self.client.post(url("route")+"?review="+str(review.pk),{"action":"update","item_id":item.pk,"state":state,"version":version,"page":page},**headers)
+        self.assertEqual(update("risk",0).status_code,200)
+        self.assertEqual(update("missing",0,"3").status_code,200)
+        self.assertEqual(update("risk",0,"3").status_code,302)
+        item.refresh_from_db()
+        self.assertEqual(item.state,"risk")
+        self.assertEqual(item.page,3)
+        self.assertEqual(item.reviewed_by,user)
+        self.assertEqual(update("ok",0,"4").status_code,409)
+        for layout in ("classic","focus","route"):
+            page=self.client.get(url(layout)+"?review="+str(review.pk))
+            self.assertContains(page,"Страница: 3")
+            self.assertEqual(page.context["counts"]["risk"],1)
+        self.assertEqual(self.client.post(url("route"),{"action":"create","source_sha256":"b"*64},**headers).status_code,302)
+        new=ContractReview.objects.get(source_sha256="b"*64)
+        self.assertEqual(new.items.filter(state="unknown").count(),len(TOPICS))
+        self.assertEqual(self.client.get(url("route")+"?review="+str(new.pk)).context["counts"]["risk"],0)
+        self.assertEqual(self.client.post(url("route")+"?review="+str(new.pk),{"action":"update","item_id":item.pk,"state":"ok","version":1,"page":2},**headers).status_code,404)
+        stranger=User.objects.create_user("legal-stranger",password="synthetic-test-password-2026",is_staff=True)
+        stranger.user_permissions.add(*Permission.objects.filter(content_type__app_label="intake",codename__in=("view_lead","view_contractreview")))
+        self.client.force_login(stranger)
+        self.assertEqual(self.client.get(url("route")).status_code,404)
+        with override_settings(SSH_OPERATOR=False):
+            self.assertEqual(self.client.get(url("route")).status_code,404)
