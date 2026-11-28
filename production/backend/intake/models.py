@@ -18,7 +18,7 @@ class Lead(models.Model):
         REVIEW = "review", "В работе"
         QUOTES = "quotes", "Сбор предложений"
         COMPARE = "compare", "Сравнение"
-        CLOSED = "closed", "Завершена"
+        CLOSED = "closed", "Закрыта (выдача отдельно)"
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     request_key = models.UUIDField(unique=True, editable=False)
@@ -312,3 +312,15 @@ class ContractReviewItem(models.Model):
     version = models.PositiveIntegerField(default=0,editable=False)
     class Meta:
         constraints=[models.UniqueConstraint(fields=["review","topic"],name="unique_contract_review_topic")]
+
+
+class DeliveryConfirmation(models.Model):
+    """Manual attestation of actual handover, not inferred from a closed lead."""
+    lead=models.OneToOneField(Lead,on_delete=models.PROTECT,related_name="delivery_confirmation")
+    delivered_on=models.DateField(db_index=True)
+    evidence_sha256=models.CharField(max_length=64)
+    confirmed_by=models.ForeignKey("auth.User",on_delete=models.PROTECT)
+    confirmed_at=models.DateTimeField(default=timezone.now,editable=False)
+    class Meta:
+        verbose_name="Подтверждение выдачи имущества"
+        verbose_name_plural="Подтверждения выдачи имущества"
