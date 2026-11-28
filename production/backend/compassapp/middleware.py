@@ -4,7 +4,8 @@ Public V5 static pages are served separately by Caddy and must pass their own
 Content-Security-Policy regression tests before CSP can be tightened there.
 """
 from django.conf import settings
-from django.http import HttpResponseNotFound
+from django.http import HttpResponseNotFound, HttpResponse
+from intake.document_security import BoundedMemoryUploadHandler, MAX_REQUEST
 
 
 class SecurityHeadersMiddleware:
@@ -16,6 +17,21 @@ class SecurityHeadersMiddleware:
         path = request.path_info
         if not settings.SSH_OPERATOR and (path == "/admin" or path.startswith("/admin/")):
             response = HttpResponseNotFound("Not found")
+        elif path.startswith("/admin/workspace/v/") and path.endswith("/original/"):
+            if not settings.DOCUMENT_VAULT_ENABLED:
+                response = HttpResponseNotFound("Not found")
+            elif request.method == "POST" and request.content_type == "multipart/form-data":
+                try:
+                    size = int(request.META.get("CONTENT_LENGTH", ""))
+                except (ValueError, TypeError):
+                    size = -1
+                if not 0 < size <= MAX_REQUEST:
+                    response = HttpResponse("Request too large or missing length",status=413)
+                else:
+                    request.upload_handlers = [BoundedMemoryUploadHandler(request)]
+                    response = self.get_response(request)
+            else:
+                response = self.get_response(request)
         else:
             response = self.get_response(request)
         response["Content-Security-Policy"] = (

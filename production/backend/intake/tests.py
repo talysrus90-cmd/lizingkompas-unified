@@ -476,3 +476,77 @@ class IntakeTests(TestCase):
         self.assertEqual(Quote.objects.count(),4)
         self.assertEqual(self.client.post(url,{**invalid,"quoted_term_months":"36","quoted_advance":"1000000"},HTTP_X_CSRFTOKEN=csrf).status_code,200)
         self.assertEqual(Quote.objects.count(),4)
+
+
+    @override_settings(DOCUMENT_VAULT_ENABLED=True)
+    def test_document_vault_encrypted_roundtrip_and_access_denial(self):
+        from unittest.mock import patch
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        from .models import OriginalDocument
+        data,headers=self.form_payload()
+        self.assertEqual(self.client.post("/apply/",data,**headers).status_code,302)
+        lead=Lead.objects.get()
+        today=date.today()
+        quote=Quote.objects.create(lead=lead,offer_id="PDF-001",source_document_id="PDF-SOURCE-1",
+            lessor_name="Synthetic finance",received_on=today,valid_until=today+timedelta(days=7))
+        user=User.objects.create_superuser("document-qa","qa@example.test","synthetic-test-password-2026")
+        url=reverse("broker-original-document",args=["route",lead.pk,quote.pk])
+        self.assertEqual(self.client.get(url).status_code,302)
+        self.client.force_login(user)
+        self.assertEqual(self.client.get(url).status_code,200)
+        csrf=self.client.cookies["csrftoken"].value
+        payload=b"%PDF-1.4\nsynthetic-only-original\n%%EOF\n"
+        def file(data=payload,name="synthetic.pdf"):
+            return SimpleUploadedFile(name,data,content_type="application/pdf")
+        def upload(data=payload):
+            return self.client.post(url,{"action":"upload","original":file(data)},HTTP_X_CSRFTOKEN=csrf)
+        def download():
+            return self.client.post(url,{"action":"download"},HTTP_X_CSRFTOKEN=csrf)
+        with override_settings(DOCUMENT_VAULT_ENABLED=False):
+            self.assertEqual(self.client.get(url).status_code,404)
+        with override_settings(SSH_OPERATOR=False):
+            self.assertEqual(self.client.get(url).status_code,404)
+        self.assertEqual(self.client.post(url,{"action":"upload","original":file()}).status_code,403)
+        with patch("intake.document_views.scan_pdf",return_value=False):
+            self.assertEqual(upload().status_code,503)
+        self.assertEqual(OriginalDocument.objects.count(),0)
+        with patch("intake.document_views.scan_pdf",return_value=True) as scanner:
+            self.assertEqual(upload(b"not a PDF").status_code,400)
+            scanner.assert_not_called()
+            self.assertEqual(self.client.post(url,{"action":"upload","original":[file(),file()]},HTTP_X_CSRFTOKEN=csrf).status_code,400)
+            self.assertEqual(OriginalDocument.objects.count(),0)
+            self.assertEqual(upload().status_code,302)
+            doc=OriginalDocument.objects.get()
+            self.assertNotIn(payload,bytes(doc.ciphertext))
+            self.assertEqual(doc.byte_count,len(payload))
+            self.assertEqual(upload().status_code,409)
+            r=download()
+            self.assertEqual(r.status_code,200)
+            self.assertEqual(r.content,payload)
+            self.assertIn("attachment;",r["Content-Disposition"])
+            self.assertIn("no-store",r["Cache-Control"])
+            self.assertNotIn("synthetic.pdf",r["Content-Disposition"])
+            self.assertTrue(AuditEvent.objects.filter(action="document.downloaded",lead=lead).exists())
+            # No access for an unassigned broker even with both model permissions.
+            other=User.objects.create_user("document-other",password="synthetic-test-password-2026",is_staff=True)
+            other.user_permissions.add(*Permission.objects.filter(content_type__app_label="intake",
+                codename__in=("view_lead","view_quote","view_originaldocument")))
+            self.client.force_login(other)
+            self.assertEqual(self.client.get(url).status_code,404)
+            self.client.force_login(user)
+            self.client.get(url)
+            csrf=self.client.cookies["csrftoken"].value
+            OriginalDocument.objects.filter(pk=doc.pk).update(ciphertext=b"damaged")
+            self.assertEqual(download().status_code,503)
+            OriginalDocument.objects.filter(pk=doc.pk).update(ciphertext=doc.ciphertext)
+        with patch("intake.document_views.scan_pdf",return_value=False):
+            self.assertEqual(download().status_code,503)
+        self.assertEqual(AuditEvent.objects.filter(action="document.downloaded").count(),1)
+
+    def test_scanner_fails_closed_without_socket(self):
+        from .document_security import scan_pdf,looks_like_pdf
+        payload=b"%PDF-1.4\nsynthetic\n%%EOF"
+        self.assertTrue(looks_like_pdf(payload))
+        self.assertFalse(looks_like_pdf(b"not a PDF"))
+        with override_settings(DOCUMENT_SCANNER_SOCKET=""):
+            self.assertFalse(scan_pdf(payload))

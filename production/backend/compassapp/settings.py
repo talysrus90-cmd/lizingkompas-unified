@@ -96,8 +96,8 @@ STORAGES = {
     )},
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
 }
-# Document uploads are NOT enabled. Any future private document storage must
-# be placed outside this static folder and behind authorization and AV checks.
+# Originals are never published under static URLs. The separate feature gate
+# below is disabled unless the production and document-specific checks pass.
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SECURE = PRODUCTION and not SSH_OPERATOR
 SESSION_COOKIE_SAMESITE = "Strict"
@@ -158,6 +158,17 @@ if LIVE_INTAKE:
     missing = [name for name, is_ok in required.items() if not is_ok]
     if missing:
         raise ImproperlyConfigured("Intake launch gates not met: " + ", ".join(missing))
+
+# Separate document scope approval; public and local processes never enable this.
+DOCUMENT_SCANNER_SOCKET = os.getenv("COMPASS_DOCUMENT_SCANNER_SOCKET", "")
+DOCUMENT_VAULT_ENABLED = False
+if SSH_OPERATOR and os.getenv("COMPASS_DOCUMENT_VAULT_ENABLED") == "yes":
+    if not (PRODUCTION and LIVE_INTAKE and DATA_ENCRYPTION_KEYS
+            and os.getenv("COMPASS_DOCUMENT_SCOPE_APPROVED") == "yes"
+            and os.getenv("COMPASS_DOCUMENT_RESTORE_PASSED") == "yes"
+            and DOCUMENT_SCANNER_SOCKET.startswith("/")):
+        raise ImproperlyConfigured("Document vault launch gates not met")
+    DOCUMENT_VAULT_ENABLED = True
 
 LOGGING = {
     "version": 1, "disable_existing_loggers": False,
