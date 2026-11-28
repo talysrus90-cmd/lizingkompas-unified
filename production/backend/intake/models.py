@@ -312,3 +312,34 @@ class ContractReviewItem(models.Model):
     version = models.PositiveIntegerField(default=0,editable=False)
     class Meta:
         constraints=[models.UniqueConstraint(fields=["review","topic"],name="unique_contract_review_topic")]
+
+
+class ServiceItem(models.Model):
+    """Manual post-deal follow-up, independent of lead closure. No payments or external communication."""
+    class Kind(models.TextChoices):
+        DELIVERY="delivery","Передача имущества"
+        INSURANCE="insurance","Продление страхования"
+        CLAIM="claim","Страховой случай"
+        RESTRUCTURE="restructure","Изменение графика"
+        BUYOUT="buyout","Досрочный или плановый выкуп"
+        MATURITY="maturity","Окончание договора"
+        COMPLAINT="complaint","Претензионная работа"
+        RENEWAL="renewal","Повторная сделка"
+        DISPOSAL="disposal","Реализация имущества"
+    class State(models.TextChoices):
+        OPEN="open","К выполнению"
+        DONE="done","Выполнено"
+        CANCELLED="cancelled","Отменено"
+    id=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    lead=models.ForeignKey(Lead,on_delete=models.PROTECT,related_name="service_items")
+    kind=models.CharField(max_length=16,choices=Kind.choices)
+    state=models.CharField(max_length=12,choices=State.choices,default=State.OPEN)
+    due_on=models.DateField(db_index=True)
+    created_at=models.DateTimeField(default=timezone.now,editable=False)
+    completed_at=models.DateTimeField(null=True,blank=True,editable=False)
+    version=models.PositiveIntegerField(default=0,editable=False)
+    class Meta:
+        ordering=["due_on","id"]
+        constraints=[models.UniqueConstraint(fields=["lead","kind"],condition=models.Q(state="open"),name="unique_open_case_service_kind")]
+        verbose_name="Сопровождение сделки"
+        verbose_name_plural="Сопровождение сделок"
