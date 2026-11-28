@@ -5,12 +5,12 @@ Caddy. Existing Django admin implements editing, assignment and quote input.
 """
 from django.contrib import admin
 from django.core.exceptions import PermissionDenied
-from django.db.models import Count
+from django.db.models import Count, Sum, Q
 from django.core.paginator import Paginator
 from django.utils import timezone
 from datetime import timedelta
 import re
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.db import IntegrityError
@@ -18,6 +18,7 @@ from broker.offer_comparison import Scenario, Offer, compare_offers
 from django import forms
 from django.db import transaction
 import uuid
+import csv
 from .forms import ASSET_TYPES, VAT_BASES
 from django.views.decorators.http import require_GET, require_http_methods
 from django.views.decorators.cache import never_cache
@@ -54,6 +55,8 @@ def workspace(request, section="deals", layout=None):
     ]
     if quote_allowed:
         tabs[2:2] = [("offers", "Сравнение КП"), ("documents", "Реестр документов КП")]
+    if design["layout"] == "route" and quote_allowed:
+        tabs.insert(4, ("partners", "Лизингодатели"))
     if audit_allowed:
         tabs.append(("security", "Журнал безопасности"))
     if user.is_superuser:
@@ -142,7 +145,14 @@ def workspace(request, section="deals", layout=None):
             raise Http404
         context["quote_state"] = state
         context["quotes"] = (quote_filters[state] if state else quotes).select_related("lead").order_by("valid_until","pk")[:100]
+    elif section == "partners":
+        context["partners"] = quotes.values("lessor_name").annotate(
+            offer_count=Count("id"), deal_count=Count("lead",distinct=True),
+            verified_count=Count("id",filter=Q(verified_by_broker=True)),
+            expired_count=Count("id",filter=Q(valid_until__lt=today)),
+        ).order_by("-offer_count","lessor_name")[:100]
     elif section == "analytics":
+        context["stage_amounts"] = [(label, leads.filter(stage=key).aggregate(total=Sum("asset_price"))["total"] or 0) for key,label in Lead.Stage.choices]
         counts = {x["stage"]: x["n"] for x in leads.values("stage").annotate(n=Count("id"))}
         context["stage_counts"] = [(label, counts.get(key, 0)) for key, label in Lead.Stage.choices]
     elif section == "security":
@@ -156,6 +166,10 @@ def workspace(request, section="deals", layout=None):
             callbacks = callbacks.filter(stage=callback_state)
         context["callback_state"] = callback_state
         context["callbacks"] = callbacks.order_by("-created_at","pk")[:100]
+    if section == "deals" and design["layout"] == "route":
+        context["portfolio_amount"] = visible.aggregate(total=Sum("asset_price"))["total"] or 0
+        context["stage_totals"] = {row["stage"]:row["n"] for row in visible.values("stage").annotate(n=Count("id"))}
+        context["lanes"] = [(key,label,items,context["stage_totals"].get(key,0)) for key,label,items in context["lanes"]]
     return render(request, "intake/workspace.html", context)
 
 
@@ -199,7 +213,7 @@ def create_financial_case(request, layout=None):
     return render(request,"intake/financial_case.html",{"form":form, **design})
 
 
-LAYOUTS = (("classic", "A · Классика"), ("focus", "B · Рабочий центр"), ("route", "C · Маршрут"))
+LAYOUTS = (("classic", "A · Классика"), ("focus", "B · Рабочий центр"), ("route", "C · Максимум"))
 
 
 def layout_context(layout):
@@ -322,3 +336,26 @@ def case_workspace(request, layout, case_id):
         "stages":Lead.Stage.choices,"quotes":quotes,"rows":rows,"message":message,
         "can_add":can_add and lead.stage!=Lead.Stage.CLOSED,"can_stage":can_stage,
         "quote_allowed":quote_allowed,"quote_form":quote_form,"stage_form":stage_form,"events":events},status=status)
+
+
+@admin.site.admin_view
+@never_cache
+@require_GET
+def export_financial_cases(request, layout):
+    if layout != "route":
+        raise Http404
+    if not (allowed(request.user,"view_lead") or allowed(request.user,"change_lead")):
+        raise PermissionDenied
+    # Deliberately omit contact fields, usernames and free text. Only financial
+    # cases created internally, never public client applications.
+    qs=scoped_leads(request.user).filter(source="broker_internal").order_by("created_at","pk")
+    response=HttpResponse(content_type="text/csv; charset=utf-8")
+    response["Content-Disposition"]='attachment; filename="compass-financial-cases.csv"'
+    response.write("\ufeff")
+    writer=csv.writer(response,delimiter=";")
+    writer.writerow(["Номер","Имущество","Стоимость, руб.","Аванс, руб.","Срок, мес.","НДС","Этап"])
+    for lead in qs.iterator():
+        writer.writerow([str(lead.pk),dict(ASSET_TYPES).get(lead.asset_type,"Другое имущество"),
+            lead.asset_price,lead.advance,lead.term_months,dict(VAT_BASES).get(lead.vat_basis,"Не указан"),
+            lead.get_stage_display()])
+    return response
