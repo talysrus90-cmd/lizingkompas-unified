@@ -46,10 +46,13 @@ class UpdateRequestForm(forms.Form):
     version = forms.IntegerField(min_value=0,widget=forms.HiddenInput)
     quote = forms.ModelChoiceField(label="Полученное КП",queryset=Quote.objects.none(),required=False)
     sent_confirmed = forms.BooleanField(label="Подтверждаю фактическую отправку вне Компаса",required=False)
-    def __init__(self,*args,item,**kwargs):
+    def __init__(self,*args,item,quote_allowed,**kwargs):
         super().__init__(*args,**kwargs)
         self.fields["state"].choices=[(x,x.label) for x in TRANSITIONS[S(item.state)]]
-        self.fields["quote"].queryset=Quote.objects.filter(lead=item.lead,lender_request__isnull=True)
+        self.fields["quote"].queryset=Quote.objects.filter(lead=item.lead,lender_request__isnull=True) if quote_allowed else Quote.objects.none()
+        if not quote_allowed:
+            self.fields["state"].choices=[(v,l) for v,l in self.fields["state"].choices if v!=S.OFFER]
+            self.fields["quote"].widget=forms.HiddenInput()
     def clean(self):
         data=super().clean()
         state=data.get("state")
@@ -76,6 +79,7 @@ def connect_case(request,layout,case_id):
     if not can_read(user):
         raise PermissionDenied
     lead=get_object_or_404(scoped_leads(user),pk=case_id)
+    quote_allowed=allowed(user,"view_quote") or allowed(user,"change_quote")
     can_create=allowed(user,"add_lenderrequest") and allowed(user,"change_lead") and lead.stage!=Lead.Stage.CLOSED
     can_update=allowed(user,"change_lenderrequest") and allowed(user,"change_lead") and lead.stage!=Lead.Stage.CLOSED
     create=CreateRequestForm()
@@ -109,7 +113,7 @@ def connect_case(request,layout,case_id):
                 locked=get_object_or_404(scoped_leads(user).select_for_update(),pk=lead.pk)
                 if locked.stage==Lead.Stage.CLOSED: raise PermissionDenied
                 item=get_object_or_404(LenderRequest.objects.select_for_update(),pk=bound_id,lead=locked)
-                bound=UpdateRequestForm(request.POST,item=item)
+                bound=UpdateRequestForm(request.POST,item=item,quote_allowed=quote_allowed)
                 if request.POST.get("version")!=str(item.version):
                     bound.is_valid()
                     bound.add_error(None,"Запись изменилась. Обновите страницу.")
@@ -138,10 +142,7 @@ def connect_case(request,layout,case_id):
     for item in items:
         form=None
         if can_update and TRANSITIONS[S(item.state)]:
-            form=bound if item.pk==bound_id else UpdateRequestForm(item=item,initial={"version":item.version})
-            if not (allowed(user,"view_quote") or allowed(user,"change_quote")):
-                form.fields["quote"].queryset=Quote.objects.none()
-                form.fields["state"].choices=[(v,l) for v,l in form.fields["state"].choices if v!=S.OFFER]
+            form=bound if item.pk==bound_id else UpdateRequestForm(item=item,quote_allowed=quote_allowed,initial={"version":item.version})
         rows.append((item,form))
     return render(request,"intake/connect_case.html",{**design,"lead":lead,"rows":rows,"create":create,
-        "can_create":can_create,"today":timezone.localdate()},status=status)
+        "can_create":can_create,"quote_allowed":quote_allowed,"today":timezone.localdate()},status=status)
