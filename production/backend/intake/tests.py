@@ -550,3 +550,57 @@ class IntakeTests(TestCase):
         self.assertFalse(looks_like_pdf(b"not a PDF"))
         with override_settings(DOCUMENT_SCANNER_SOCKET=""):
             self.assertFalse(scan_pdf(payload))
+
+
+    def test_connect_tracks_real_manual_requests_across_layouts(self):
+        from .models import LenderRequest
+        from django.utils import timezone
+        u=User.objects.create_superuser("connect-qa","qa@example.test","synthetic-test-password-2026")
+        self.client.force_login(u)
+        base="/admin/workspace/v/"
+        self.client.get(base+"classic/new/")
+        csrf=self.client.cookies["csrftoken"].value
+        headers={"HTTP_X_CSRFTOKEN":csrf}
+        self.assertEqual(self.client.post(base+"classic/new/",{"asset_type":"equipment","asset_price":"1000000","advance":"200000","term_months":"36","vat_basis":"included"},**headers).status_code,302)
+        lead=Lead.objects.get()
+        def url(layout):
+            return reverse("broker-connect-case",args=[layout,lead.pk])
+        today=timezone.localdate()
+        create={"action":"create","lessor_name":"QA Finance","due_on":str(today)}
+        self.assertEqual(self.client.post(url("classic"),create,**headers).status_code,302)
+        self.assertEqual(self.client.post(url("focus"),{**create,"lessor_name":"qa   FINANCE"},**headers).status_code,200)
+        self.assertEqual(LenderRequest.objects.count(),1)
+        item=LenderRequest.objects.get()
+        self.assertIsNone(item.sent_at)
+        def change(state,version,**extra):
+            return self.client.post(url("route"),{"action":"update","request_id":str(item.pk),"state":state,"version":str(version),**extra},**headers)
+        self.assertEqual(change("sent",0).status_code,200)
+        self.assertEqual(change("offer",0).status_code,200)
+        self.assertEqual(change("sent",0,sent_confirmed="on").status_code,302)
+        item.refresh_from_db()
+        self.assertEqual(item.state,"sent")
+        self.assertIsNotNone(item.sent_at)
+        self.assertEqual(change("review",0).status_code,409)
+        self.assertEqual(change("review",1).status_code,302)
+        LenderRequest.objects.filter(pk=item.pk).update(due_on=today-timedelta(days=1))
+        self.assertEqual(self.client.get(base+"focus/actions/").context["overdue_request_count"],1)
+        self.assertEqual(self.client.get(base+"route/connect/?state=overdue").context["request_page"].paginator.count,1)
+        self.assertEqual(change("offer",2).status_code,200)
+        wrong=Quote.objects.create(lead=lead,offer_id="WRONG-01",source_document_id="WRONG-DOC",lessor_name="Different lender",received_on=today,valid_until=today+timedelta(days=3))
+        right=Quote.objects.create(lead=lead,offer_id="RIGHT-01",source_document_id="RIGHT-DOC",lessor_name="qa finance",received_on=today,valid_until=today+timedelta(days=3))
+        self.assertEqual(change("offer",2,quote=str(wrong.pk)).status_code,200)
+        self.assertEqual(change("offer",2,quote=str(right.pk)).status_code,302)
+        item.refresh_from_db()
+        self.assertEqual(item.quote_id,right.pk)
+        self.assertIsNotNone(item.responded_at)
+        self.assertEqual(self.client.get(base+"focus/actions/").context["overdue_request_count"],0)
+        for layout in ("classic","focus","route"):
+            self.assertContains(self.client.get(url(layout)),"RIGHT-01")
+            self.assertContains(self.client.get(base+layout+"/connect/"),"QA Finance")
+        stranger=User.objects.create_user("connect-stranger",password="synthetic-test-password-2026",is_staff=True)
+        stranger.user_permissions.add(*Permission.objects.filter(content_type__app_label="intake",codename__in=("view_lead","view_lenderrequest")))
+        self.client.force_login(stranger)
+        self.assertEqual(self.client.get(url("route")).status_code,404)
+        self.assertNotContains(self.client.get(base+"route/connect/"),"QA Finance")
+        with override_settings(SSH_OPERATOR=False):
+            self.assertEqual(self.client.get(base+"route/connect/").status_code,404)
