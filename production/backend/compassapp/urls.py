@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.http import JsonResponse
 from django.db import connection
 from django.urls import path, include
-from intake.workspace import workspace
+from intake.workspace import workspace, create_financial_case
 
 def health(request):
     try:
@@ -18,6 +18,7 @@ urlpatterns = [
     path("healthz", health, name="health"),
     path("", include("intake.urls")),
     path("admin/workspace/", workspace, name="broker-workspace"),
+    path("admin/workspace/new/", create_financial_case, name="broker-workspace-new"),
     path("admin/workspace/<str:section>/", workspace, name="broker-workspace-section"),
     path("admin/", admin.site.urls),  # SSH tunnel / private ingress ONLY
 ]
