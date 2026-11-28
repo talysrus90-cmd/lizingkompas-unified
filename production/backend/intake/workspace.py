@@ -23,7 +23,7 @@ import csv
 from .forms import ASSET_TYPES, VAT_BASES
 from django.views.decorators.http import require_GET, require_http_methods
 from django.views.decorators.cache import never_cache
-from .models import Lead, Quote, AuditEvent, CallbackRequest, LenderRequest
+from .models import Lead, Quote, AuditEvent, CallbackRequest, LenderRequest, BrokerTask
 
 
 def allowed(user, permission):
@@ -61,6 +61,9 @@ def workspace(request, section="deals", layout=None):
     connect_allowed=allowed(user,"view_lenderrequest") or allowed(user,"change_lenderrequest")
     if connect_allowed and design["explicit_layout"]:
         tabs.append(("connect","Запросы лизингодателям"))
+    task_allowed=(allowed(user,"view_brokertask") or allowed(user,"change_brokertask")) and design["explicit_layout"]
+    if task_allowed:
+        tabs.append(("tasks","Задачи"))
     if audit_allowed:
         tabs.append(("security", "Журнал безопасности"))
     if user.is_superuser:
@@ -102,7 +105,17 @@ def workspace(request, section="deals", layout=None):
     pending_requests=LenderRequest.objects.filter(lead__in=active,state__in=["sent","review"]) if connect_allowed else LenderRequest.objects.none()
     overdue_requests=pending_requests.filter(due_on__lt=today)
     context.update(connect_allowed=connect_allowed and design["explicit_layout"],overdue_request_count=overdue_requests.count())
-    if section == "connect":
+    open_tasks=BrokerTask.objects.filter(lead__in=leads,state="open") if task_allowed else BrokerTask.objects.none()
+    context.update(task_allowed=task_allowed,task_overdue=open_tasks.filter(due_on__lt=today).count(),task_today=open_tasks.filter(due_on=today).count())
+    if section == "tasks":
+        selected=request.GET.get("state","")
+        if selected not in ("","overdue","today",*BrokerTask.State.values): raise Http404
+        items=BrokerTask.objects.filter(lead__in=leads)
+        if selected=="overdue": items=open_tasks.filter(due_on__lt=today)
+        elif selected=="today": items=open_tasks.filter(due_on=today)
+        elif selected: items=items.filter(state=selected)
+        context.update(task_page=Paginator(items.select_related("lead__assigned_to").order_by("due_on","priority","pk"),40).get_page(request.GET.get("page")),task_state=selected)
+    elif section == "connect":
         selected=request.GET.get("state","")
         if selected not in ("","overdue",*LenderRequest.State.values): raise Http404
         items=LenderRequest.objects.filter(lead__in=leads)
@@ -348,6 +361,7 @@ def case_workspace(request, layout, case_id):
         "stages":Lead.Stage.choices,"quotes":quotes,"rows":rows,"message":message,
         "can_add":can_add and lead.stage!=Lead.Stage.CLOSED,"can_stage":can_stage,
         "quote_allowed":quote_allowed,"quote_form":quote_form,"stage_form":stage_form,"events":events,
+        "task_allowed":allowed(user,"view_brokertask") or allowed(user,"change_brokertask"),
         "connect_allowed":allowed(user,"view_lenderrequest") or allowed(user,"change_lenderrequest"),
         "vault_enabled":settings.DOCUMENT_VAULT_ENABLED and lead.source!="broker_internal" and allowed(user,"view_originaldocument")},status=status)
 

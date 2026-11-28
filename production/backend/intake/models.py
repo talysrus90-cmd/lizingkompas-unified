@@ -213,3 +213,41 @@ class LenderRequest(models.Model):
         ordering = ["-created_at","id"]
         verbose_name = "Запрос лизингодателю"
         verbose_name_plural = "Запросы лизингодателям"
+
+
+class BrokerTask(models.Model):
+    """Structured, case-scoped work item; no free text or external side effects."""
+    class Kind(models.TextChoices):
+        CALL = "call", "Связаться с клиентом"
+        COLLECT = "collect", "Собрать КП"
+        FOLLOWUP = "followup", "Уточнить ответ лизингодателя"
+        VERIFY = "verify", "Сверить условия КП"
+        DOCUMENT = "document", "Проверить документы"
+        CONTRACT = "contract", "Проверить договор"
+        REVIEW = "review", "Проверить сделку"
+
+    class State(models.TextChoices):
+        OPEN = "open", "К выполнению"
+        DONE = "done", "Выполнено"
+        CANCELLED = "cancelled", "Отменено"
+
+    class Priority(models.IntegerChoices):
+        HIGH = 1, "Высокий"
+        NORMAL = 2, "Обычный"
+        LOW = 3, "Низкий"
+
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    lead = models.ForeignKey(Lead,on_delete=models.PROTECT,related_name="broker_tasks")
+    kind = models.CharField(max_length=12,choices=Kind.choices)
+    state = models.CharField(max_length=12,choices=State.choices,default=State.OPEN)
+    priority = models.PositiveSmallIntegerField(choices=Priority.choices,default=Priority.NORMAL)
+    due_on = models.DateField(db_index=True)
+    created_at = models.DateTimeField(default=timezone.now,editable=False)
+    completed_at = models.DateTimeField(null=True,blank=True,editable=False)
+    version = models.PositiveIntegerField(default=0,editable=False)
+
+    class Meta:
+        ordering = ["due_on","priority","id"]
+        constraints = [models.UniqueConstraint(fields=["lead","kind"],condition=models.Q(state="open"),name="unique_open_case_task_kind")]
+        verbose_name = "Задача брокера"
+        verbose_name_plural = "Задачи брокера"
