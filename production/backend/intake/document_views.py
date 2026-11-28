@@ -88,7 +88,7 @@ def original_document(request,layout,case_id,quote_id):
             error,status="Оригинал уже зарегистрирован. Замена запрещена.",409
         else:
             files=request.FILES.getlist("original")
-            if len(files)!=1 or len(request.FILES)!=1 or not 0<files[0].size<=MAX_PDF:
+            if getattr(request,"_compass_upload_rejected",False) or len(files)!=1 or len(request.FILES)!=1 or not 0<files[0].size<=MAX_PDF:
                 error,status="Выберите один PDF не более 5 МиБ.",400
             else:
                 data=files[0].read(MAX_PDF+1)
