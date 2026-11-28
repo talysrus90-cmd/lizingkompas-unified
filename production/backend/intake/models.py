@@ -1,7 +1,7 @@
 """Production contact-intake and broker quote models.
 
 Only staff may read leads. Never expose row IDs or sensitive text over public API.
-No client documents or credit bureau decisions are stored by these models.
+Private original documents are stored separately as authenticated ciphertext. No credit bureau decisions.
 """
 import uuid
 from django.db import models
@@ -166,3 +166,20 @@ class CallbackRequest(models.Model):
 
     def __str__(self):
         return f"Обратный звонок {str(self.pk)[:8]} / {self.stage}"
+
+
+class OriginalDocument(models.Model):
+    """Bounded, encrypted PDF original. No user filename or public storage URL."""
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    lead = models.ForeignKey(Lead,on_delete=models.PROTECT,related_name="original_documents")
+    quote = models.OneToOneField(Quote,on_delete=models.PROTECT,related_name="original_document")
+    uploaded_by = models.ForeignKey("auth.User",on_delete=models.PROTECT)
+    created_at = models.DateTimeField(default=timezone.now,editable=False)
+    sha256 = models.CharField(max_length=64,editable=False)
+    byte_count = models.PositiveIntegerField(editable=False)
+    ciphertext = models.BinaryField(editable=False)
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["lead","sha256"],name="unique_case_original_hash")]
+        ordering = ["-created_at"]
+        verbose_name = "Оригинал КП"
+        verbose_name_plural = "Оригиналы КП"
