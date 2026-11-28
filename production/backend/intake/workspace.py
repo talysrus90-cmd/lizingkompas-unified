@@ -7,8 +7,12 @@ from django.contrib import admin
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count
 from django.http import Http404
-from django.shortcuts import render
-from django.views.decorators.http import require_GET
+from django.shortcuts import render, redirect
+from django import forms
+from django.db import transaction
+import uuid
+from .forms import ASSET_TYPES, VAT_BASES
+from django.views.decorators.http import require_GET, require_http_methods
 from django.views.decorators.cache import never_cache
 from .models import Lead, Quote, AuditEvent, CallbackRequest
 
@@ -79,3 +83,40 @@ def workspace(request, section="deals"):
     elif section == "callbacks":
         context["callbacks"] = CallbackRequest.objects.order_by("-created_at")[:100]
     return render(request, "intake/workspace.html", context)
+
+
+class FinancialCaseForm(forms.Form):
+    asset_type = forms.ChoiceField(label="Имущество", choices=ASSET_TYPES)
+    asset_price = forms.DecimalField(label="Стоимость, ₽", max_digits=14, decimal_places=2, min_value=1)
+    advance = forms.DecimalField(label="Аванс, ₽", max_digits=14, decimal_places=2, min_value=0)
+    term_months = forms.IntegerField(label="Срок, месяцев", min_value=12, max_value=84)
+    vat_basis = forms.ChoiceField(label="НДС", choices=VAT_BASES)
+
+    def clean(self):
+        data = super().clean()
+        price, advance = data.get("asset_price"), data.get("advance")
+        if price is not None and advance is not None and advance >= price:
+            self.add_error("advance", "Аванс должен быть меньше стоимости имущества.")
+        return data
+
+
+@admin.site.admin_view
+@never_cache
+@require_http_methods(["GET", "POST"])
+def create_financial_case(request):
+    # Internal calculations never assert consent or accept customer contacts.
+    if not (allowed(request.user, "add_lead") and
+            (allowed(request.user, "view_lead") or allowed(request.user, "change_lead"))):
+        raise PermissionDenied
+    form = FinancialCaseForm(request.POST if request.method == "POST" else None)
+    if request.method == "POST" and form.is_valid():
+        with transaction.atomic():
+            lead = Lead.objects.create(
+                request_key=uuid.uuid4(), source="broker_internal",
+                assigned_to=request.user, client_name="", phone="", email="",
+                company="", inn="", message="", consent_version="",
+                consent_text_sha256="", source_ip_digest="", **form.cleaned_data)
+            AuditEvent.objects.create(lead=lead,action="lead.internal_created",
+                actor=str(request.user.pk),details="financial_only")
+        return redirect("admin:intake_lead_change", lead.pk)
+    return render(request,"intake/financial_case.html",{"form":form})
