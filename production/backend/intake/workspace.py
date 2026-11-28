@@ -361,6 +361,7 @@ def case_workspace(request, layout, case_id):
         "stages":Lead.Stage.choices,"quotes":quotes,"rows":rows,"message":message,
         "can_add":can_add and lead.stage!=Lead.Stage.CLOSED,"can_stage":can_stage,
         "quote_allowed":quote_allowed,"quote_form":quote_form,"stage_form":stage_form,"events":events,
+        "legal_allowed":allowed(user,"view_contractreview") or allowed(user,"change_contractreview"),
         "task_allowed":allowed(user,"view_brokertask") or allowed(user,"change_brokertask"),
         "connect_allowed":allowed(user,"view_lenderrequest") or allowed(user,"change_lenderrequest"),
         "vault_enabled":settings.DOCUMENT_VAULT_ENABLED and lead.source!="broker_internal" and allowed(user,"view_originaldocument")},status=status)
