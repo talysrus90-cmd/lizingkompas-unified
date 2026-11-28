@@ -7,6 +7,7 @@ from django.urls import path, include
 from intake.document_views import original_document
 from intake.connect_views import connect_case
 from intake.task_views import task_case
+from intake.client_portal import client_status, client_login, client_home, client_logout
 from intake.workspace import workspace, create_financial_case, case_workspace, export_financial_cases
 
 def health(request):
@@ -24,6 +25,10 @@ def health(request):
 urlpatterns = [
     path("healthz", health, name="health"),
     path("", include("intake.urls")),
+    path("client/status/",client_status,name="client-status"),
+    path("client/login/",client_login,name="client-login"),
+    path("client/logout/",client_logout,name="client-logout"),
+    path("client/",client_home,name="client-home"),
     path("admin/workspace/", workspace, name="broker-workspace"),
     path("admin/workspace/new/", create_financial_case, name="broker-workspace-new"),
     path("admin/workspace/v/<str:layout>/", workspace, {"section":"home"}, name="broker-variant-home"),
