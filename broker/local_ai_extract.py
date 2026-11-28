@@ -18,7 +18,7 @@ FIELDS = ("asset_price", "advance", "term_months", "monthly_payment", "buyout",
           "upfront_fee", "recurring_monthly_fee", "insurance_total", "other_costs")
 MAX_TEXT = 12000
 MAX_RESPONSE = 131072
-AMOUNTS = re.compile(r"(?<![\d.,])(?:\d{1,3}(?:[ \u00a0\u202f]\d{3})+|\d+)(?:[.,]\d{1,2})?(?![\d.,])")
+AMOUNTS = re.compile(r"(?<![\d.,+\-−])(?:\d{1,3}(?:[ \u00a0\u202f]\d{3})+|\d+)(?:[.,]\d{1,2})?(?![\d.,]|\s*%)")
 MONEY = re.compile(r"(?:\d{1,3}(?:[ \u00a0\u202f]\d{3})+|\d+)(?:[.,]\d{1,2})?(?:\s*(?:RUB|руб\.?|₽))?", re.I)
 
 
